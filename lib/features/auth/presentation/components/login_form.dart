@@ -33,9 +33,9 @@ class LoginField extends StatefulWidget {
 class _LoginFieldState extends State<LoginField> {
   @override
   Widget build(BuildContext context) {
-    if (!widget.isPassword) {
-      return TextFormField(
+    return TextFormField(
         key: widget.key,
+        focusNode: !widget.isPassword ? null : widget.focusNode,
         textInputAction: widget.textInputAction,
         onEditingComplete: widget.onEditingComplete,
         validator: widget.validator,
@@ -43,30 +43,7 @@ class _LoginFieldState extends State<LoginField> {
         obscureText: widget.isSecure,
         style: TextStyle(fontSize: 16),
         decoration: InputDecoration(
-          labelText: widget.labelText,
-          labelStyle: TextStyle(color: kWhiteTextColor),
-          hintText: widget.hintText,
-          hintStyle: TextStyle(color: kTextColor),
-          enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kButtonColor),
-          ),
-          focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(color: kButtonColor),
-          ),
-        ),
-      );
-    } else {
-      return TextFormField(
-        key: widget.key,
-        textInputAction: widget.textInputAction,
-        onEditingComplete: widget.onEditingComplete,
-        focusNode: widget.focusNode,
-        validator: widget.validator,
-        controller: widget.controller,
-        obscureText: widget.isSecure,
-        style: TextStyle(fontSize: 16),
-        decoration: InputDecoration(
-          suffixIcon: GestureDetector(
+          suffixIcon: !widget.isPassword ? null : GestureDetector(
             onTap: () {
               setState(() {
                 widget.isSecure = !widget.isSecure;
@@ -89,6 +66,5 @@ class _LoginFieldState extends State<LoginField> {
           ),
         ),
       );
-    }
   }
 }
