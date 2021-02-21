@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/antho/Desktop/kabod_project/kabod_app/lib/core/presentation/res/constants.dart';
-import 'file:///C:/Users/antho/Desktop/kabod_project/kabod_app/lib/features/auth/presentation/screens/login_screen.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/screens/auth/screens/login_screen.dart';
 
 void main() {
   runApp(MyApp());
