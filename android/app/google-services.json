@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "135417827785",
+    "project_id": "kabod-crossfit",
+    "storage_bucket": "kabod-crossfit.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:135417827785:android:b4a790fef03f6e80535818",
+        "android_client_info": {
+          "package_name": "com.jeancuervo.kabod_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "135417827785-jgae5ktlqdgk3icuitlirri8ici5l886.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyU9yFJ6Op7GjXJ_hbIXJB9blTJPbDUXQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "135417827785-jgae5ktlqdgk3icuitlirri8ici5l886.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
