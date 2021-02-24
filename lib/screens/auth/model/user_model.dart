@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
-class UserRepository extends ChangeNotifier {
+class UserModel extends ChangeNotifier {
   FirebaseAuth _firebaseAuth;
   User _user;
   Status _status = Status.Uninitialized;
@@ -15,7 +15,7 @@ class UserRepository extends ChangeNotifier {
 
   String get error => _error;
 
-  UserRepository.instance() : _firebaseAuth = FirebaseAuth.instance {
+  UserModel.instance() : _firebaseAuth = FirebaseAuth.instance {
     _firebaseAuth.authStateChanges().listen(_onAuthStateChanged);
   }
 

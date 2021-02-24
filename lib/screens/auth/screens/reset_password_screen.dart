@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
-import 'package:kabod_app/screens/auth/data/user_repository.dart';
+import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/components/reusable_button.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -104,7 +104,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   _resetPassword() async {
-    final user = Provider.of<UserRepository>(context, listen: false);
+    final user = Provider.of<UserModel>(context, listen: false);
     print(_emailField.text);
     if (_formKey.currentState.validate()) {
       await user
@@ -114,113 +114,83 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   _showResetPasswordDialog(BuildContext context) async {
-    final user = Provider.of<UserRepository>(context, listen: false);
-    if (!await user.resetPassword(_emailField.text)) {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: kBackgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              content: Container(
-                height: 250.0,
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/incorrect.png',
-                      width: 65.0,
-                    ),
-                    SizedBox(height: 12.0),
-                    Text(
-                      'ERROR',
-                      style: TextStyle(
-                          color: kWhiteTextColor,
-                          fontSize: 38,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 12.0),
-                    Text(
-                      'Please enter a valid email',
-                      style:
-                          TextStyle(color: Colors.grey.shade500, fontSize: 16),
-                    ),
-                    SizedBox(height: 12.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: RaisedButton(
+    final user = Provider.of<UserModel>(context, listen: false);
+    bool resetPasswordResult = !await user.resetPassword(_emailField.text);
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            backgroundColor: kBackgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0),
+            ),
+            content: Container(
+              height: 250.0,
+              child: Column(
+                children: [
+                  resetPasswordResult
+                      ? Image.asset(
+                          'assets/images/incorrect.png',
+                          width: 65.0,
+                        )
+                      : Image.asset(
+                          'assets/images/verificated.png',
+                          width: 65.0,
+                        ),
+                  SizedBox(height: 12.0),
+                  resetPasswordResult
+                      ? Text(
+                          'ERROR',
+                          style: TextStyle(
+                              color: kWhiteTextColor,
+                              fontSize: 38,
+                              fontWeight: FontWeight.bold),
+                        )
+                      : Text(
+                          'Success!',
+                          style: TextStyle(
+                              color: kWhiteTextColor,
+                              fontSize: 38,
+                              fontWeight: FontWeight.bold),
+                        ),
+                  SizedBox(height: 12.0),
+                  resetPasswordResult
+                      ? Text(
+                          'Please enter a valid email',
+                          style: TextStyle(
+                              color: Colors.grey.shade500, fontSize: 16),
+                        )
+                      : Text(
+                          'We have sent a new reset link to your email',
+                        ),
+                  SizedBox(height: 12.0),
+                  SizedBox(
+                    width: double.infinity,
+                    child: RaisedButton(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         color: kButtonColor,
                         onPressed: () {
-                          Navigator.pop(context);
+                          if (resetPasswordResult) {
+                            Navigator.pop(context);
+                          } else {
+                            Navigator.pushReplacementNamed(
+                                context, AppRoutes.loginRoute);
+                          }
                         },
                         child: Text(
-                          'Try again',
+                          resetPasswordResult
+                              ? 'Try again'
+                              : 'Continue to sign in',
                           style: TextStyle(color: kWhiteTextColor),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
+                        )),
+                  )
+                ],
               ),
-            );
-          });
-    } else {
-      return showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              backgroundColor: kBackgroundColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              content: Container(
-                height: 260.0,
-                child: Column(
-                  children: [
-                    Image.asset(
-                      'assets/images/verificated.png',
-                      width: 65.0,
-                    ),
-                    SizedBox(height: 12.0),
-                    Text(
-                      'Success!',
-                      style: TextStyle(
-                          color: kWhiteTextColor,
-                          fontSize: 38,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 12.0),
-                    Text(
-                      'We have sent a new reset link to your email',
-                    ),
-                    SizedBox(height: 12.0),
-                    SizedBox(
-                      width: double.infinity,
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        color: kButtonColor,
-                        onPressed: () {
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.loginRoute);
-                        },
-                        child: Text(
-                          'Continue to sign in',
-                          style: TextStyle(color: kWhiteTextColor),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          });
-    }
+            ),
+          );
+        });
   }
 
   @override

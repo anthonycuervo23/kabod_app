@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 //my imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/auth/data/user_repository.dart';
+import 'package:kabod_app/screens/auth/model/user_model.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => UserRepository.instance(),
+      create: (_) => UserModel.instance(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(

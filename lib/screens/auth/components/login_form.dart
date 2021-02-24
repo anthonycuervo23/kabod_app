@@ -6,7 +6,7 @@ import 'package:kabod_app/screens/components/reusable_button.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/auth/data/user_repository.dart';
+import 'package:kabod_app/screens/auth/model/user_model.dart';
 
 class GetLoginForm extends StatefulWidget {
   @override
@@ -32,7 +32,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRepository>(context);
+    final user = Provider.of<UserModel>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
