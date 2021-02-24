@@ -18,6 +18,10 @@ dependencies:
 
   cupertino_icons: ^1.0.0
   cached_network_image: ^2.5.0
+  firebase_core: ^0.7.0
+  firebase_auth: ^0.20.1
+  firebase_storage: ^7.0.0
+  provider: ^4.3.3
 
 dev_dependencies:
   flutter_test:
@@ -30,10 +34,10 @@ flutter:
 
 
   assets:
-    - images/
-    - icons/
+    - assets/images/
+    - assets/icons/
 
   fonts:
   - family: Nunito
     fonts:
-    - asset: fonts/Nunito-Bold.ttf
+    - asset: assets/fonts/Nunito-Bold.ttf

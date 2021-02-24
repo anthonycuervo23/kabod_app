@@ -6,7 +6,7 @@ class GetLogo extends StatelessWidget {
     return Container(
       alignment: Alignment.topCenter,
       child: Image.asset(
-        'images/logo_white.png',
+        'assets/images/logo_white.png',
         width: MediaQuery.of(context).size.width * 0.3,
       ),
     );

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
+//my imports
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/auth/widgets/login_form.dart';
-import 'package:kabod_app/screens/auth/widgets/logo.dart';
+import 'package:kabod_app/screens/auth/components/login_form.dart';
+import 'package:kabod_app/screens/auth/components/logo.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -12,7 +14,7 @@ class LoginScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage('images/login_background.png'),
+                  image: AssetImage('assets/images/login_background.png'),
                   fit: BoxFit.cover),
             ),
           ),
