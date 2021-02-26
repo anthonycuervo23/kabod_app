@@ -3,20 +3,20 @@ import 'package:flutter/material.dart';
 class DividerBig extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DividerBig();
+    return SizedBox(height: 20);
   }
 }
 
 class DividerMedium extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DividerMedium();
+    return SizedBox(height: 15);
   }
 }
 
 class DividerSmall extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return DividerSmall();
+    return SizedBox(height: 12);
   }
 }
