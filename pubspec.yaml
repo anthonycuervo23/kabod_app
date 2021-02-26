@@ -20,6 +20,7 @@ dependencies:
   cached_network_image: ^2.5.0
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.1
+  cloud_firestore: ^0.16.0+1
   firebase_storage: ^7.0.0
   flutter_form_builder: ^4.2.0
   intl: ^0.16.1

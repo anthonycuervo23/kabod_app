@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:provider/provider.dart';
 
 //my imports
-import 'package:kabod_app/screens/components/reusable_button.dart';
+import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
@@ -56,7 +57,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                       FocusScope.of(context).requestFocus(_passwordField),
                 ),
               ),
-              SizedBox(height: 16),
+              DividerMedium(),
               Container(
                 margin: EdgeInsets.only(left: 40, right: 40),
                 child: LoginField(
@@ -78,7 +79,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   },
                 ),
               ),
-              SizedBox(height: 12),
+              DividerSmall(),
               InkWell(
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.ResetPasswordRoute),
@@ -87,7 +88,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   style: TextStyle(color: kWhiteTextColor),
                 ),
               ),
-              SizedBox(height: 20),
+              DividerBig(),
               user.status == Status.Authenticating
                   ? Center(child: CircularProgressIndicator())
                   : ReusableButton(

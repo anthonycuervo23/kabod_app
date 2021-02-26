@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
-import 'package:kabod_app/screens/components/reusable_button.dart';
+import 'package:kabod_app/screens/commons/reusable_button.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   @override
@@ -71,7 +72,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 18.0),
+                        DividerBig(),
                         Container(
                           margin: EdgeInsets.only(left: 40, right: 40),
                           child: LoginField(
@@ -85,12 +86,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             isPassword: false,
                           ),
                         ),
-                        SizedBox(height: 18.0),
+                        DividerBig(),
                       ],
                     ),
                   ),
                 ),
-                SizedBox(height: 20),
+                DividerBig(),
                 ReusableButton(
                   onPressed: () async {
                     await _resetPassword();
@@ -137,7 +138,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           'assets/images/verificated.png',
                           width: 65.0,
                         ),
-                  SizedBox(height: 12.0),
+                  DividerSmall(),
                   resetPasswordResult
                       ? Text(
                           'ERROR',
@@ -153,7 +154,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               fontSize: 38,
                               fontWeight: FontWeight.bold),
                         ),
-                  SizedBox(height: 12.0),
+                  DividerSmall(),
                   resetPasswordResult
                       ? Text(
                           'Please enter a valid email',
@@ -163,7 +164,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       : Text(
                           'We have sent a new reset link to your email',
                         ),
-                  SizedBox(height: 12.0),
+                  DividerSmall(),
                   SizedBox(
                     width: double.infinity,
                     child: RaisedButton(
