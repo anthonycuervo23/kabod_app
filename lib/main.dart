@@ -16,11 +16,13 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => UserModel.instance(),
+    return MultiProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          floatingActionButtonTheme: FloatingActionButtonThemeData(
+            backgroundColor: kButtonColor,
+          ),
           scaffoldBackgroundColor: kBackgroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
           primaryColor: kPrimaryColor,
@@ -30,6 +32,9 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: AppRoutes.generateRoute,
         initialRoute: AppRoutes.loginRoute,
       ),
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserModel.instance()),
+      ],
     );
   }
 }
