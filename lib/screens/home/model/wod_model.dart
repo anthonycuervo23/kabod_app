@@ -17,6 +17,4 @@ class Wod {
         description: data["wod_description"],
         date: data["wod_date"].toDate());
   }
-
-  //   date: DateTime.fromMillisecondsSinceEpoch(data['wod_date']));
 }
