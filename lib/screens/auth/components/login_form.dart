@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
