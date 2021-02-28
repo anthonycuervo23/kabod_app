@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
       ),
       providers: [
         ChangeNotifierProvider(create: (_) => UserModel.instance()),
+        Provider<WodRepository>(
+            create: (_) => WodRepository(FirebaseFirestore.instance)),
       ],
     );
   }
