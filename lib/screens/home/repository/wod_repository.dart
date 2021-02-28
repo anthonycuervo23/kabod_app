@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+//my imports
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 
 class WodRepository {
@@ -12,5 +14,9 @@ class WodRepository {
           .map((document) => Wod.fromFirestore(document))
           .toList();
     });
+  }
+
+  addWods(data) async {
+    await _firestore.collection('wods').add(data);
   }
 }

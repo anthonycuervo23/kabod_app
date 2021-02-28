@@ -8,3 +8,10 @@ const kBackgroundColor = Color(0xFF28292A);
 const kWhiteTextColor = Colors.white;
 
 const double kDefaultPadding = 20.0;
+
+const ContinuousRectangleBorder kAppBarShape = ContinuousRectangleBorder(
+  borderRadius: const BorderRadius.only(
+    bottomLeft: Radius.circular(10.0),
+    bottomRight: Radius.circular(10.0),
+  ),
+);

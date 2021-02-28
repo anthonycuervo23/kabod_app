@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // my imports
+import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
@@ -35,7 +36,8 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: MyAppBar(scaffoldKey: _scaffoldKey),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, AppRoutes.addWodRoute,
+            arguments: _calendarController.selectedDay),
         child: Icon(Icons.add),
       ),
       body: Column(
