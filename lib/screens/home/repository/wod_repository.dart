@@ -16,7 +16,7 @@ class WodRepository {
     });
   }
 
-  addWods(data) async {
-    await _firestore.collection('wods').add(data);
+  Future<void> addWod(data) {
+    return _firestore.collection('wods').add(data);
   }
 }
