@@ -107,7 +107,7 @@ class AddWodForm extends StatelessWidget {
                   _formKey.currentState.save();
                   final data =
                       Map<String, dynamic>.from(_formKey.currentState.value);
-                  context.read<WodRepository>().addWods(data);
+                  context.read<WodRepository>().addWod(data);
                   Navigator.pop(context);
                 }
               },
