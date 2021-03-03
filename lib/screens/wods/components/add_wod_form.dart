@@ -57,7 +57,7 @@ class AddWodForm extends StatelessWidget {
                   items: WodTypeOptions.values
                       .map(
                         (type) => DropdownMenuItem(
-                          value: type,
+                          value: wodTypeOptionsToString(type),
                           child: Text(wodTypeOptionsToString(type)),
                         ),
                       )
@@ -94,6 +94,16 @@ class AddWodForm extends StatelessWidget {
           ),
           DividerMedium(),
           ReusableButton(
+              // onPressed: () {
+              //   bool validated = _formKey.currentState.validate();
+              //   if (validated) {
+              //     _formKey.currentState.save();
+              //     final data =
+              //         Map<String, dynamic>.from(_formKey.currentState.value);
+              //     context.read<WodRepository>().addWod(data);
+              //     Navigator.pop(context);
+              //   }
+              // },
               onPressed: () async {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
