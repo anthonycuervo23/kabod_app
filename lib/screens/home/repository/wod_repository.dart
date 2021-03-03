@@ -16,7 +16,14 @@ class WodRepository {
     });
   }
 
-  addWods(data) async {
-    await _firestore.collection('wods').add(data);
+  Future<bool> addWods(Map<String, dynamic> data) async {
+    dynamic wodDate = data['wod_date'];
+    if (wodDate is DateTime) {
+      if (wodDate.isAfter(DateTime.now())) {
+        await _firestore.collection('wods').add(data);
+        return true;
+      }
+    }
+    return false;
   }
 }
