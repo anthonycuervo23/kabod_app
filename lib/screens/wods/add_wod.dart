@@ -15,13 +15,7 @@ class AddWodScreen extends StatefulWidget {
 
 class _AddWodScreenState extends State<AddWodScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-  var wodTypeOptions = [
-    'For Time',
-    'For Reps and Time',
-    'For Weight',
-    'AMRAP',
-    'Custom'
-  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

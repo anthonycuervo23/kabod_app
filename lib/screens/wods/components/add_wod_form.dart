@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -21,14 +22,6 @@ class AddWodForm extends StatelessWidget {
 
   final GlobalKey<FormBuilderState> _formKey;
   final AddWodScreen widget;
-
-  final wodTypeOptions = [
-    'For Time',
-    'For Reps and Time',
-    'For Weight',
-    'AMRAP',
-    'Custom'
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -61,11 +54,11 @@ class AddWodForm extends StatelessWidget {
                     labelStyle: TextStyle(color: kTextColor),
                     border: InputBorder.none,
                   ),
-                  items: wodTypeOptions
+                  items: WodTypeOptions.values
                       .map(
                         (type) => DropdownMenuItem(
-                          value: type,
-                          child: Text('$type'),
+                          value: wodTypeOptionsToString(type),
+                          child: Text(wodTypeOptionsToString(type)),
                         ),
                       )
                       .toList(),
@@ -101,14 +94,41 @@ class AddWodForm extends StatelessWidget {
           ),
           DividerMedium(),
           ReusableButton(
-              onPressed: () {
+              // onPressed: () {
+              //   bool validated = _formKey.currentState.validate();
+              //   if (validated) {
+              //     _formKey.currentState.save();
+              //     final data =
+              //         Map<String, dynamic>.from(_formKey.currentState.value);
+              //     context.read<WodRepository>().addWod(data);
+              //     Navigator.pop(context);
+              //   }
+              // },
+              onPressed: () async {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
                   _formKey.currentState.save();
                   final data =
                       Map<String, dynamic>.from(_formKey.currentState.value);
-                  context.read<WodRepository>().addWods(data);
-                  Navigator.pop(context);
+
+                  bool isSuccessful =
+                      await context.read<WodRepository>().addWods(data);
+                  if (isSuccessful) {
+                    Navigator.pop(context);
+                  } else {
+                    showDialog(
+                      context: context,
+                      builder: (_) => AlertDialog(
+                        title: Text('Alert'),
+                        content: Text('you can create a wod for a pass day'),
+                        actions: [
+                          FlatButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text('Close'))
+                        ],
+                      ),
+                    );
+                  }
                 }
               },
               text: 'SAVE')
