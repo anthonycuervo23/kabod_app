@@ -31,55 +31,9 @@ class _AddWodScreenState extends State<AddWodScreen> {
             onPressed: () =>
                 Navigator.pushReplacementNamed(context, AppRoutes.homeRoute)),
         actions: [
-          IconButton(
-            icon: widget.currentWod != null
-                ? Image.asset('assets/icons/trash_icon.png')
-                : Container(),
-            onPressed: () async {
-              final confirm = await showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      backgroundColor: kBackgroundColor,
-                      title: Text('Warning!',
-                          style: TextStyle(
-                              color: kButtonColor,
-                              fontSize: 30,
-                              fontWeight: FontWeight.bold)),
-                      content:
-                          Text('Are you sure you want to delete this WOD?'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, false),
-                          child: Text(
-                            'Cancel',
-                            style: TextStyle(
-                                color: kTextColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () => Navigator.pop(context, true),
-                          child: Text(
-                            'Delete',
-                            style: TextStyle(
-                                color: kButtonColor,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ) ??
-                  false;
-              if (confirm) {
-                await context
-                    .read<WodRepository>()
-                    .deleteWod(widget.currentWod.id);
-                Navigator.pop(context);
-              }
-            },
-          )
+          widget.currentWod != null
+              ? DeleteWodButton(widget: widget)
+              : Container()
         ],
       ),
       body: ListView(
