@@ -27,7 +27,7 @@ class AddWodForm extends StatelessWidget {
     'For Reps and Time',
     'For Weight',
     'AMRAP',
-    'Custom'
+    'Custom',
   ];
 
   @override
