@@ -33,7 +33,9 @@ class AddWodForm extends StatelessWidget {
             child: FormBuilderDateTimePicker(
               validator: FormBuilderValidators.required(context),
               name: 'wod_date',
-              initialValue: widget.selectedDay ?? DateTime.now(),
+              initialValue: widget.currentWod != null
+                  ? widget.currentWod.date
+                  : widget.selectedDay ?? DateTime.now(),
               inputType: InputType.date,
               format: DateFormat('EEEE, dd MMMM, yyyy'),
               decoration: InputDecoration(
@@ -46,7 +48,8 @@ class AddWodForm extends StatelessWidget {
             children: [
               DefaultCard(
                 child: FormBuilderDropdown(
-                  dropdownColor: kPrimaryColor,
+                  initialValue: widget.currentWod?.type,
+                  dropdownColor: kBackgroundColor,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_type',
                   decoration: InputDecoration(
@@ -67,6 +70,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
+                  initialValue: widget.currentWod?.title,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_name',
                   textInputAction: TextInputAction.next,
@@ -80,6 +84,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
+                  initialValue: widget.currentWod?.description,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_description',
                   maxLines: 8,
@@ -108,30 +113,25 @@ class AddWodForm extends StatelessWidget {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
                   _formKey.currentState.save();
-                  final data =
-                      Map<String, dynamic>.from(_formKey.currentState.value);
-
-                  bool isSuccessful =
-                      await context.read<WodRepository>().addWods(data);
-                  if (isSuccessful) {
+                  try {
+                    if (widget.currentWod != null) {
+                      final data = Map<String, dynamic>.from(
+                          _formKey.currentState.value);
+                      context
+                          .read<WodRepository>()
+                          .updateWod(widget.currentWod.id, data);
+                    } else {
+                      final data = Map<String, dynamic>.from(
+                          _formKey.currentState.value);
+                      context.read<WodRepository>().addWod(data);
+                    }
                     Navigator.pop(context);
-                  } else {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('Alert'),
-                        content: Text('you can create a wod for a pass day'),
-                        actions: [
-                          FlatButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Close'))
-                        ],
-                      ),
-                    );
+                  } catch (e) {
+                    print(e);
                   }
                 }
               },
-              text: 'SAVE')
+              text: widget.currentWod != null ? 'UPDATE' : 'SAVE')
         ],
       ),
     );

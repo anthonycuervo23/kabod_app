@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/screens/home/model/wod_model.dart';
 
 //my imports
+import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
 class PopupWodMenu extends StatelessWidget {
-  const PopupWodMenu({
-    Key key,
-  }) : super(key: key);
+  final Wod currentWod;
+  PopupWodMenu({this.currentWod});
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +58,10 @@ class PopupWodMenu extends StatelessWidget {
                     ],
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.editWodRoute,
+                      arguments: currentWod);
+                },
               ),
             ],
           ),

@@ -11,23 +11,22 @@ class WodRepository {
   Stream<List<Wod>> getWods() {
     return _firestore.collection('wods').snapshots().map((snapshot) {
       return snapshot.docs
-          .map((document) => Wod.fromFirestore(document))
+          .map(
+            (document) => Wod.fromMap(document.data(), document.id),
+          )
           .toList();
     });
   }
 
-  Future<bool> addWods(Map<String, dynamic> data) async {
-    DateTime now = DateTime.now();
-    dynamic wodDate = data['wod_date'];
-    if (wodDate is DateTime) {
-      DateTime oldDate = wodDate.toLocal();
-      if (oldDate.day >= now.day &&
-          oldDate.month >= now.month &&
-          oldDate.year >= now.year) {
-        await _firestore.collection('wods').add(data);
-        return true;
-      }
-    }
-    return false;
+  Future<void> addWod(Map data) {
+    return _firestore.collection('wods').add(data);
+  }
+
+  Future<void> deleteWod(String id) {
+    return _firestore.collection('wods').doc(id).delete();
+  }
+
+  Future<void> updateWod(String id, Map data) {
+    return _firestore.collection('wods').doc(id).update(data);
   }
 }

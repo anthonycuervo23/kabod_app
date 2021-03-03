@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(fontSize: 24)),
                                   subtitle: Text(wod.type,
                                       style: TextStyle(fontSize: 18)),
-                                  trailing: PopupWodMenu(),
+                                  trailing: PopupWodMenu(currentWod: wod),
                                 ),
                               ),
                               DividerSmall(),

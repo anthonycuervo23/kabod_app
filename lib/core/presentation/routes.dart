@@ -11,9 +11,13 @@ class AppRoutes {
   static const String ResetPasswordRoute = '/reset_password';
   static const String homeRoute = '/home';
   static const String addWodRoute = '/add_wod';
+  static const String editWodRoute = '/edit_wod';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case editWodRoute:
+        return MaterialPageRoute(
+            builder: (_) => AddWodScreen(currentWod: settings.arguments));
       case addWodRoute:
         return MaterialPageRoute(
             builder: (_) => AddWodScreen(selectedDay: settings.arguments));
