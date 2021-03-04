@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
+import 'package:kabod_app/core/model/wod_type_options.dart';
+import 'package:kabod_app/screens/wods/components/alert_dialog.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
@@ -99,35 +100,43 @@ class AddWodForm extends StatelessWidget {
           ),
           DividerMedium(),
           ReusableButton(
-              // onPressed: () {
-              //   bool validated = _formKey.currentState.validate();
-              //   if (validated) {
-              //     _formKey.currentState.save();
-              //     final data =
-              //         Map<String, dynamic>.from(_formKey.currentState.value);
-              //     context.read<WodRepository>().addWod(data);
-              //     Navigator.pop(context);
-              //   }
-              // },
               onPressed: () async {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
                   _formKey.currentState.save();
-                  try {
-                    if (widget.currentWod != null) {
-                      final data = Map<String, dynamic>.from(
-                          _formKey.currentState.value);
-                      context
-                          .read<WodRepository>()
-                          .updateWod(widget.currentWod.id, data);
+                  if (widget.currentWod != null) {
+                    final data =
+                        Map<String, dynamic>.from(_formKey.currentState.value);
+                    bool isSuccesful2 = await context
+                        .read<WodRepository>()
+                        .updateWod(widget.currentWod.id, data);
+                    if (isSuccesful2) {
+                      Navigator.pop(context);
                     } else {
-                      final data = Map<String, dynamic>.from(
-                          _formKey.currentState.value);
-                      context.read<WodRepository>().addWod(data);
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialogWod(
+                          content:
+                              'you cannot update a WOD from a day that has already passed',
+                        ),
+                      );
                     }
-                    Navigator.pop(context);
-                  } catch (e) {
-                    print(e);
+                  } else {
+                    final data =
+                        Map<String, dynamic>.from(_formKey.currentState.value);
+                    bool isSuccessful =
+                        await context.read<WodRepository>().addWod(data);
+                    if (isSuccessful) {
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialogWod(
+                          content:
+                              'you cannot create a WOD from a day that has already passed',
+                        ),
+                      );
+                    }
                   }
                 }
               },

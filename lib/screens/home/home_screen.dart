@@ -70,10 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16, color: kBackgroundColor),
                   ),
                   DividerBig(),
-                  // Text(
-                  //   'Calendar',
-                  //   style: TextStyle(fontSize: 26),
-                  // ),
                   WodCalendar(calendarController: _calendarController),
                   DividerSmall(),
                 ],
