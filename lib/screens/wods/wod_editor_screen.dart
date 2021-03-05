@@ -8,15 +8,15 @@ import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/screens/wods/components/delete_wod_button.dart';
 import 'package:kabod_app/screens/wods/components/add_wod_form.dart';
 
-class AddWodScreen extends StatefulWidget {
+class WodEditorScreen extends StatefulWidget {
   final Wod currentWod;
   final DateTime selectedDay;
-  AddWodScreen({this.selectedDay, this.currentWod});
+  WodEditorScreen({this.selectedDay, this.currentWod});
   @override
-  _AddWodScreenState createState() => _AddWodScreenState();
+  _WodEditorScreenState createState() => _WodEditorScreenState();
 }
 
-class _AddWodScreenState extends State<AddWodScreen> {
+class _WodEditorScreenState extends State<WodEditorScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
 
   @override
@@ -31,14 +31,17 @@ class _AddWodScreenState extends State<AddWodScreen> {
                 Navigator.pushReplacementNamed(context, AppRoutes.homeRoute)),
         actions: [
           widget.currentWod != null
-              ? DeleteWodButton(widget: widget)
+              ? DeleteWodButton(currentWodId: widget.currentWod.id)
               : Container()
         ],
       ),
       body: ListView(
         padding: EdgeInsets.all(kDefaultPadding),
         children: [
-          AddWodForm(formKey: _formKey, widget: widget),
+          AddWodForm(
+              formKey: _formKey,
+              selectedDay: widget.selectedDay,
+              currentWod: widget.currentWod),
         ],
       ),
     );

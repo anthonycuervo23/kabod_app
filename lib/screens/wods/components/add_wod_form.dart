@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
+import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:kabod_app/screens/wods/components/alert_dialog.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
@@ -11,18 +12,19 @@ import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
-import 'package:kabod_app/screens/wods/add_wod.dart';
 
 class AddWodForm extends StatelessWidget {
   AddWodForm({
     Key key,
     @required GlobalKey<FormBuilderState> formKey,
-    @required this.widget,
+    @required this.currentWod,
+    @required this.selectedDay,
   })  : _formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
-  final AddWodScreen widget;
+  final DateTime selectedDay;
+  final Wod currentWod;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +36,9 @@ class AddWodForm extends StatelessWidget {
             child: FormBuilderDateTimePicker(
               validator: FormBuilderValidators.required(context),
               name: 'wod_date',
-              initialValue: widget.currentWod != null
-                  ? widget.currentWod.date
-                  : widget.selectedDay ?? DateTime.now(),
+              initialValue: currentWod != null
+                  ? currentWod.date
+                  : selectedDay ?? DateTime.now(),
               inputType: InputType.date,
               format: DateFormat('EEEE, dd MMMM, yyyy'),
               decoration: InputDecoration(
@@ -49,7 +51,7 @@ class AddWodForm extends StatelessWidget {
             children: [
               DefaultCard(
                 child: FormBuilderDropdown(
-                  initialValue: widget.currentWod?.type,
+                  initialValue: currentWod?.type,
                   dropdownColor: kBackgroundColor,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_type',
@@ -71,7 +73,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
-                  initialValue: widget.currentWod?.title,
+                  initialValue: currentWod?.title,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_name',
                   textInputAction: TextInputAction.next,
@@ -85,7 +87,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
-                  initialValue: widget.currentWod?.description,
+                  initialValue: currentWod?.description,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_description',
                   maxLines: 8,
@@ -104,13 +106,13 @@ class AddWodForm extends StatelessWidget {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
                   _formKey.currentState.save();
-                  if (widget.currentWod != null) {
+                  if (currentWod != null) {
                     final data =
                         Map<String, dynamic>.from(_formKey.currentState.value);
-                    bool isSuccesful2 = await context
+                    bool isSuccessful = await context
                         .read<WodRepository>()
-                        .updateWod(widget.currentWod.id, data);
-                    if (isSuccesful2) {
+                        .updateWod(currentWod.id, data);
+                    if (isSuccessful) {
                       Navigator.pop(context);
                     } else {
                       showDialog(
@@ -140,7 +142,7 @@ class AddWodForm extends StatelessWidget {
                   }
                 }
               },
-              text: widget.currentWod != null ? 'UPDATE' : 'SAVE')
+              text: currentWod != null ? 'UPDATE' : 'SAVE')
         ],
       ),
     );

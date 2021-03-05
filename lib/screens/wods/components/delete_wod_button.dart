@@ -4,15 +4,13 @@ import 'package:provider/provider.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
-import 'package:kabod_app/screens/wods/add_wod.dart';
 
 class DeleteWodButton extends StatelessWidget {
+  final String currentWodId;
   const DeleteWodButton({
+    this.currentWodId,
     Key key,
-    @required this.widget,
   }) : super(key: key);
-
-  final AddWodScreen widget;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +53,7 @@ class DeleteWodButton extends StatelessWidget {
             ) ??
             false;
         if (confirm) {
-          await context.read<WodRepository>().deleteWod(widget.currentWod.id);
+          await context.read<WodRepository>().deleteWod(currentWodId);
           Navigator.pop(context);
         }
       },

@@ -115,9 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }).toList(),
-                      //separatorBuilder: (context, index) {
-                      //return DividerSmall();
-                      //  },
                     );
                 }
               },
