@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
+import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/core/model/wod_type_options.dart';
+import 'package:kabod_app/screens/wods/components/alert_dialog.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
-import 'package:kabod_app/screens/wods/add_wod.dart';
 
 class AddWodForm extends StatelessWidget {
   AddWodForm({
     Key key,
     @required GlobalKey<FormBuilderState> formKey,
-    @required this.widget,
+    @required this.currentWod,
+    @required this.selectedDay,
   })  : _formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
-  final AddWodScreen widget;
+  final DateTime selectedDay;
+  final Wod currentWod;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,9 @@ class AddWodForm extends StatelessWidget {
             child: FormBuilderDateTimePicker(
               validator: FormBuilderValidators.required(context),
               name: 'wod_date',
-              initialValue: widget.selectedDay ?? DateTime.now(),
+              initialValue: currentWod != null
+                  ? currentWod.date
+                  : selectedDay ?? DateTime.now(),
               inputType: InputType.date,
               format: DateFormat('EEEE, dd MMMM, yyyy'),
               decoration: InputDecoration(
@@ -46,7 +51,8 @@ class AddWodForm extends StatelessWidget {
             children: [
               DefaultCard(
                 child: FormBuilderDropdown(
-                  dropdownColor: kPrimaryColor,
+                  initialValue: currentWod?.type,
+                  dropdownColor: kBackgroundColor,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_type',
                   decoration: InputDecoration(
@@ -67,6 +73,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
+                  initialValue: currentWod?.title,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_name',
                   textInputAction: TextInputAction.next,
@@ -80,6 +87,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
+                  initialValue: currentWod?.description,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_description',
                   maxLines: 8,
@@ -94,44 +102,47 @@ class AddWodForm extends StatelessWidget {
           ),
           DividerMedium(),
           ReusableButton(
-              // onPressed: () {
-              //   bool validated = _formKey.currentState.validate();
-              //   if (validated) {
-              //     _formKey.currentState.save();
-              //     final data =
-              //         Map<String, dynamic>.from(_formKey.currentState.value);
-              //     context.read<WodRepository>().addWod(data);
-              //     Navigator.pop(context);
-              //   }
-              // },
               onPressed: () async {
                 bool validated = _formKey.currentState.validate();
                 if (validated) {
                   _formKey.currentState.save();
-                  final data =
-                      Map<String, dynamic>.from(_formKey.currentState.value);
-
-                  bool isSuccessful =
-                      await context.read<WodRepository>().addWods(data);
-                  if (isSuccessful) {
-                    Navigator.pop(context);
+                  if (currentWod != null) {
+                    final data =
+                        Map<String, dynamic>.from(_formKey.currentState.value);
+                    bool isSuccessful = await context
+                        .read<WodRepository>()
+                        .updateWod(currentWod.id, data);
+                    if (isSuccessful) {
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialogWod(
+                          content:
+                              'you cannot update a WOD from a day that has already passed',
+                        ),
+                      );
+                    }
                   } else {
-                    showDialog(
-                      context: context,
-                      builder: (_) => AlertDialog(
-                        title: Text('Alert'),
-                        content: Text('you can create a wod for a pass day'),
-                        actions: [
-                          FlatButton(
-                              onPressed: () => Navigator.pop(context),
-                              child: Text('Close'))
-                        ],
-                      ),
-                    );
+                    final data =
+                        Map<String, dynamic>.from(_formKey.currentState.value);
+                    bool isSuccessful =
+                        await context.read<WodRepository>().addWod(data);
+                    if (isSuccessful) {
+                      Navigator.pop(context);
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialogWod(
+                          content:
+                              'you cannot create a WOD from a day that has already passed',
+                        ),
+                      );
+                    }
                   }
                 }
               },
-              text: 'SAVE')
+              text: currentWod != null ? 'UPDATE' : 'SAVE')
         ],
       ),
     );

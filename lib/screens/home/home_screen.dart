@@ -70,10 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(fontSize: 16, color: kBackgroundColor),
                   ),
                   DividerBig(),
-                  // Text(
-                  //   'Calendar',
-                  //   style: TextStyle(fontSize: 26),
-                  // ),
                   WodCalendar(calendarController: _calendarController),
                   DividerSmall(),
                 ],
@@ -109,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(fontSize: 24)),
                                   subtitle: Text(wod.type,
                                       style: TextStyle(fontSize: 18)),
-                                  trailing: PopupWodMenu(),
+                                  trailing: PopupWodMenu(currentWod: wod),
                                 ),
                               ),
                               DividerSmall(),
@@ -119,9 +115,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       }).toList(),
-                      //separatorBuilder: (context, index) {
-                      //return DividerSmall();
-                      //  },
                     );
                 }
               },

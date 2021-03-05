@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
