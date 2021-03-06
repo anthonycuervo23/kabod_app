@@ -22,11 +22,22 @@ class _HomeScreenState extends State<HomeScreen> {
   CalendarController _calendarController = CalendarController();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Stream<List<Wod>> _wodsStream;
+  Map<DateTime, List<Wod>> _data;
 
   @override
   void initState() {
     super.initState();
     _wodsStream = context.read<WodRepository>().getWods();
+  }
+
+  _groupWods(List<Wod> wods) {
+    _data = {};
+    wods.forEach((wod) {
+      DateTime date =
+          DateTime.utc(wod.date.year, wod.date.month, wod.date.day, 12);
+      if (_data[date] == null) _data[date] = [];
+      _data[date].add(wod);
+    });
   }
 
   @override
@@ -40,60 +51,71 @@ class _HomeScreenState extends State<HomeScreen> {
             arguments: _calendarController.selectedDay),
         child: Icon(Icons.add),
       ),
-      body: Column(
-        children: [
-          Material(
-            color: kPrimaryColor,
-            elevation: 3,
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(10),
-              bottomLeft: Radius.circular(10),
-            ),
-            child: Container(
-              margin: EdgeInsets.only(
-                  left: kDefaultPadding, right: kDefaultPadding),
-              height: size.height * 0.3,
-              width: size.width,
-              decoration: BoxDecoration(
-                color: kPrimaryColor,
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(10),
-                  bottomLeft: Radius.circular(10),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: StreamBuilder<List<Wod>>(
+          stream: _wodsStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              final List<Wod> wods = snapshot.data;
+              _groupWods(wods);
+              DateTime selectedDate = _calendarController.selectedDay;
+              List<Wod> _selectedWod = _data[selectedDate] ?? [];
+              void _onDaySelected(DateTime day, List wods, List holidays) {
+                setState(() {
+                  _selectedWod = wods;
+                });
+              }
+
+              return Column(
                 children: [
-                  Text(
-                    'Welcome Back, Jean.!',
-                    style: TextStyle(fontSize: 16, color: kBackgroundColor),
+                  Material(
+                    color: kPrimaryColor,
+                    elevation: 3,
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10),
+                    ),
+                    child: Container(
+                      margin: EdgeInsets.only(
+                          left: kDefaultPadding, right: kDefaultPadding),
+                      height: size.height * 0.3,
+                      width: size.width,
+                      decoration: BoxDecoration(
+                        color: kPrimaryColor,
+                        borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(10),
+                          bottomLeft: Radius.circular(10),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Welcome Back, Jean.!',
+                            style: TextStyle(
+                                fontSize: 16, color: kBackgroundColor),
+                          ),
+                          DividerBig(),
+                          WodCalendar(
+                              calendarController: _calendarController,
+                              data: _data,
+                              selectedDay: _onDaySelected),
+                          DividerSmall(),
+                        ],
+                      ),
+                    ),
                   ),
-                  DividerBig(),
-                  WodCalendar(calendarController: _calendarController),
-                  DividerSmall(),
-                ],
-              ),
-            ),
-          ),
-          DividerMedium(),
-          Text('Today\'s WOD',
-              style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
-          DividerMedium(),
-          Expanded(
-            child: StreamBuilder<List<Wod>>(
-              stream: _wodsStream,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                if (!snapshot.hasData)
-                  return Center(child: CircularProgressIndicator());
-                switch (snapshot.connectionState) {
-                  case ConnectionState.waiting:
-                    return Center(child: CircularProgressIndicator());
-                  default:
-                    return ListView(
+                  DividerMedium(),
+                  Text('Today\'s WOD',
+                      style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
+                  DividerMedium(),
+                  Expanded(
+                    child: ListView.builder(
                       shrinkWrap: true,
                       physics: AlwaysScrollableScrollPhysics(),
-                      children: snapshot.data.map<Widget>((Wod wod) {
+                      itemCount: _selectedWod.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        Wod wod = _selectedWod[index];
                         return DefaultCard(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,14 +136,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         );
-                      }).toList(),
-                    );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+                      },
+                    ),
+                  ),
+                ],
+              );
+            }
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              default:
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+            }
+          }),
     );
   }
 }
