@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 // my imports
+import 'package:kabod_app/core/model/calendar_modifier.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
@@ -19,29 +21,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CalendarController _calendarController = CalendarController();
+  CalendarController _calendarController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  CalendarModifier calendarModifierProvider;
   Stream<List<Wod>> _wodsStream;
-  Map<DateTime, List<Wod>> _data;
+  DateTime today;
+  DateTime firstDate;
+  DateTime lastDate;
 
   @override
   void initState() {
     super.initState();
-    _wodsStream = context.read<WodRepository>().getWods();
-  }
-
-  _groupWods(List<Wod> wods) {
-    _data = {};
-    wods.forEach((wod) {
-      DateTime date =
-          DateTime.utc(wod.date.year, wod.date.month, wod.date.day, 12);
-      if (_data[date] == null) _data[date] = [];
-      _data[date].add(wod);
-    });
+    today = DateTime.now();
+    firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
+    lastDate = endOfDay(lastDayOfMonth(today));
+    _calendarController = CalendarController();
+    _wodsStream = context.read<WodRepository>().getWods(
+        firstDate.millisecondsSinceEpoch, lastDate.millisecondsSinceEpoch);
   }
 
   @override
   Widget build(BuildContext context) {
+    calendarModifierProvider = Provider.of<CalendarModifier>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
@@ -56,14 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final List<Wod> wods = snapshot.data;
-              _groupWods(wods);
-              DateTime selectedDate = _calendarController.selectedDay;
-              List<Wod> _selectedWod = _data[selectedDate] ?? [];
-              void _onDaySelected(DateTime day, List wods, List holidays) {
-                setState(() {
-                  _selectedWod = wods;
-                });
-              }
+              calendarModifierProvider.groupWods(wods);
 
               return Column(
                 children: [
@@ -96,10 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontSize: 16, color: kBackgroundColor),
                           ),
                           DividerBig(),
-                          WodCalendar(
-                              calendarController: _calendarController,
-                              data: _data,
-                              selectedDay: _onDaySelected),
+                          WodCalendar(calendarController: _calendarController),
                           DividerSmall(),
                         ],
                       ),
@@ -113,9 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                       shrinkWrap: true,
                       physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: _selectedWod.length,
+                      itemCount: calendarModifierProvider.selectedWods.length,
                       itemBuilder: (BuildContext context, int index) {
-                        Wod wod = _selectedWod[index];
+                        Wod wod = calendarModifierProvider.selectedWods[index];
                         return DefaultCard(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

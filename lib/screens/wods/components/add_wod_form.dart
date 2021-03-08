@@ -109,6 +109,8 @@ class AddWodForm extends StatelessWidget {
                   if (currentWod != null) {
                     final data =
                         Map<String, dynamic>.from(_formKey.currentState.value);
+                    data['wod_date'] =
+                        (data['wod_date'] as DateTime).millisecondsSinceEpoch;
                     bool isSuccessful = await context
                         .read<WodRepository>()
                         .updateWod(currentWod.id, data);
@@ -126,6 +128,8 @@ class AddWodForm extends StatelessWidget {
                   } else {
                     final data =
                         Map<String, dynamic>.from(_formKey.currentState.value);
+                    data['wod_date'] =
+                        (data['wod_date'] as DateTime).millisecondsSinceEpoch;
                     bool isSuccessful =
                         await context.read<WodRepository>().addWod(data);
                     if (isSuccessful) {

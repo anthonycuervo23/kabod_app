@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/core/model/calendar_modifier.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
       ),
       providers: [
         ChangeNotifierProvider(create: (_) => UserModel.instance()),
+        ChangeNotifierProvider(create: (_) => CalendarModifier()),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),
       ],

@@ -1,34 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 //my imports
+import 'package:kabod_app/core/model/calendar_modifier.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
 class WodCalendar extends StatefulWidget {
   const WodCalendar({
-    this.data,
-    this.selectedDay,
     Key key,
     @required CalendarController calendarController,
   })  : _calendarController = calendarController,
         super(key: key);
 
   final CalendarController _calendarController;
-  final Map<DateTime, List<Wod>> data;
-  final Function selectedDay;
 
   @override
   _WodCalendarState createState() => _WodCalendarState();
 }
 
 class _WodCalendarState extends State<WodCalendar> {
+  CalendarModifier calendarModifierProvider;
+
   @override
   Widget build(BuildContext context) {
+    calendarModifierProvider = Provider.of<CalendarModifier>(context);
     return TableCalendar(
-      events: widget.data,
-      onDaySelected: widget.selectedDay,
+      events: calendarModifierProvider.wods,
+      onDaySelected: (day, wods, _) {
+        calendarModifierProvider.whenSelectedDay(wod: wods);
+      },
       calendarController: widget._calendarController,
       headerVisible: true,
       headerStyle: HeaderStyle(

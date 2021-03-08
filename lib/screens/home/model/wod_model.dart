@@ -11,6 +11,6 @@ class Wod {
       : title = data['wod_name'],
         type = data['wod_type'],
         description = data['wod_description'],
-        date = data['wod_date'].toDate(),
+        date = DateTime.fromMillisecondsSinceEpoch(data['wod_date']),
         id = id;
 }
