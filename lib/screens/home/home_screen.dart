@@ -100,36 +100,53 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('Today\'s WOD',
                       style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
                   DividerMedium(),
-                  Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: calendarModifierProvider.selectedWods.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Wod wod = calendarModifierProvider.selectedWods[index];
-                        return DefaultCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  calendarModifierProvider
+                              .wods[_calendarController.selectedDay] ==
+                          null
+                      ? Expanded(
+                          child: ListView(
                             children: [
-                              ListTileTheme(
-                                contentPadding: EdgeInsets.all(0),
-                                child: ListTile(
-                                  title: Text(wod.title,
-                                      style: TextStyle(fontSize: 24)),
-                                  subtitle: Text(wod.type,
-                                      style: TextStyle(fontSize: 18)),
-                                  trailing: PopupWodMenu(currentWod: wod),
+                              Container(
+                                child: Image.asset(
+                                  'assets/images/rest_day.jpg',
+                                  fit: BoxFit.cover,
                                 ),
                               ),
-                              DividerSmall(),
-                              Text(wod.description),
-                              DividerSmall(),
                             ],
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                        )
+                      : Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount:
+                                calendarModifierProvider.selectedWods.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Wod wod =
+                                  calendarModifierProvider.selectedWods[index];
+                              return DefaultCard(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTileTheme(
+                                      contentPadding: EdgeInsets.all(0),
+                                      child: ListTile(
+                                        title: Text(wod.title,
+                                            style: TextStyle(fontSize: 24)),
+                                        subtitle: Text(wod.type,
+                                            style: TextStyle(fontSize: 18)),
+                                        trailing: PopupWodMenu(currentWod: wod),
+                                      ),
+                                    ),
+                                    DividerSmall(),
+                                    Text(wod.description),
+                                    DividerSmall(),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                 ],
               );
             }
