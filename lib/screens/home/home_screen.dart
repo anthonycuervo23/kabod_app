@@ -22,9 +22,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  CalendarController _calendarController;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   CalendarModifier calendarModifierProvider;
+  CalendarController _controller;
   Stream<List<Wod>> _wodsStream;
   DateTime today;
   DateTime firstDate;
@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    _calendarController = CalendarController();
+    _controller = context.read<CalendarModifier>().calendarController;
     _wodsStream = context.read<WodRepository>().getWods(
         firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch);
   }
@@ -47,8 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       key: _scaffoldKey,
       appBar: MyAppBar(scaffoldKey: _scaffoldKey),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.addWodRoute,
-            arguments: _calendarController.selectedDay),
+        onPressed: () => Navigator.pushNamed(context, AppRoutes.addWodRoute),
         child: Icon(
           Icons.add,
           color: kBackgroundColor,
@@ -92,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(fontSize: 16, color: kTextColor),
                           ),
                           DividerBig(),
-                          WodCalendar(calendarController: _calendarController),
+                          WodCalendar(),
                           DividerSmall(),
                         ],
                       ),
@@ -101,88 +100,88 @@ class _HomeScreenState extends State<HomeScreen> {
                   DividerMedium(),
                   Text('Today\'s WOD',
                       style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
-                  DividerMedium(),(_calendarController.selectedDay == null)
+                  DividerMedium(),
+                  (_controller.selectedDay == null)
                       ? Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount:
-                      calendarModifierProvider.selectedWods.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        Wod wod =
-                        calendarModifierProvider.selectedWods[index];
-                        return DefaultCard(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ListTileTheme(
-                                contentPadding: EdgeInsets.all(0),
-                                child: ListTile(
-                                  title: Text(wod.title,
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          color: kWhiteTextColor)),
-                                  subtitle: Text(wod.type,
-                                      style: TextStyle(fontSize: 18)),
-                                  trailing: PopupWodMenu(currentWod: wod),
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: AlwaysScrollableScrollPhysics(),
+                            itemCount:
+                                calendarModifierProvider.selectedWods.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Wod wod =
+                                  calendarModifierProvider.selectedWods[index];
+                              return DefaultCard(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTileTheme(
+                                      contentPadding: EdgeInsets.all(0),
+                                      child: ListTile(
+                                        title: Text(wod.title,
+                                            style: TextStyle(
+                                                fontSize: 24,
+                                                color: kWhiteTextColor)),
+                                        subtitle: Text(wod.type,
+                                            style: TextStyle(fontSize: 18)),
+                                        trailing: PopupWodMenu(currentWod: wod),
+                                      ),
+                                    ),
+                                    DividerSmall(),
+                                    Text(wod.description),
+                                    DividerSmall(),
+                                  ],
                                 ),
-                              ),
-                              DividerSmall(),
-                              Text(wod.description),
-                              DividerSmall(),
-                            ],
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  )
-                      : (_calendarController.selectedDay.weekday == 6 ||
-                      _calendarController.selectedDay.weekday == 7)
-                      ? RestDayMessage()
-                      : (calendarModifierProvider
-                      .wods[_calendarController.selectedDay] ==
-                      null)
-                      ? WodNotAvailable(
-                      calendarController: _calendarController)
-                      : Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: AlwaysScrollableScrollPhysics(),
-                      itemCount: calendarModifierProvider
-                          .selectedWods.length,
-                      itemBuilder:
-                          (BuildContext context, int index) {
-                        Wod wod = calendarModifierProvider
-                            .selectedWods[index];
-                        return DefaultCard(
-                          child: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              ListTileTheme(
-                                contentPadding: EdgeInsets.all(0),
-                                child: ListTile(
-                                  title: Text(wod.title,
-                                      style: TextStyle(
-                                          fontSize: 24,
-                                          color:
-                                          kWhiteTextColor)),
-                                  subtitle: Text(wod.type,
-                                      style: TextStyle(
-                                          fontSize: 18)),
-                                  trailing: PopupWodMenu(
-                                      currentWod: wod),
+                        )
+                      : (_controller.selectedDay.weekday == 6 ||
+                              _controller.selectedDay.weekday == 7)
+                          ? RestDayMessage()
+                          : (calendarModifierProvider
+                                      .wods[_controller.selectedDay] ==
+                                  null)
+                              ? WodNotAvailable()
+                              : Expanded(
+                                  child: ListView.builder(
+                                    shrinkWrap: true,
+                                    physics: AlwaysScrollableScrollPhysics(),
+                                    itemCount: calendarModifierProvider
+                                        .selectedWods.length,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      Wod wod = calendarModifierProvider
+                                          .selectedWods[index];
+                                      return DefaultCard(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ListTileTheme(
+                                              contentPadding: EdgeInsets.all(0),
+                                              child: ListTile(
+                                                title: Text(wod.title,
+                                                    style: TextStyle(
+                                                        fontSize: 24,
+                                                        color:
+                                                            kWhiteTextColor)),
+                                                subtitle: Text(wod.type,
+                                                    style: TextStyle(
+                                                        fontSize: 18)),
+                                                trailing: PopupWodMenu(
+                                                    currentWod: wod),
+                                              ),
+                                            ),
+                                            DividerSmall(),
+                                            Text(wod.description),
+                                            DividerSmall(),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                              DividerSmall(),
-                              Text(wod.description),
-                              DividerSmall(),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                 ],
               );
             }

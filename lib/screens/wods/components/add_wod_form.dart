@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
+import 'package:kabod_app/core/model/calendar_modifier.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:kabod_app/screens/wods/components/alert_dialog.dart';
@@ -18,12 +19,10 @@ class AddWodForm extends StatelessWidget {
     Key key,
     @required GlobalKey<FormBuilderState> formKey,
     @required this.currentWod,
-    @required this.selectedDay,
   })  : _formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
-  final DateTime selectedDay;
   final Wod currentWod;
 
   @override
@@ -38,7 +37,10 @@ class AddWodForm extends StatelessWidget {
               name: 'wod_date',
               initialValue: currentWod != null
                   ? currentWod.date
-                  : selectedDay ?? DateTime.now(),
+                  : Provider.of<CalendarModifier>(context)
+                          .calendarController
+                          .selectedDay ??
+                      DateTime.now(),
               inputType: InputType.date,
               format: DateFormat('EEEE, dd MMMM, yyyy'),
               decoration: InputDecoration(

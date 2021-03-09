@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
+import 'package:kabod_app/core/model/calendar_modifier.dart';
 import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 
@@ -44,19 +45,17 @@ class RestDayMessage extends StatelessWidget {
 class WodNotAvailable extends StatelessWidget {
   const WodNotAvailable({
     Key key,
-    @required CalendarController calendarController,
-  })  : _calendarController = calendarController,
-        super(key: key);
-
-  final CalendarController _calendarController;
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _controller =
+        Provider.of<CalendarModifier>(context).calendarController;
     final today = DateTime.now();
     final firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
     final df = DateFormat('dd/MM/yyyy');
-    return Text(_calendarController.selectedDay.isBefore(firstDate)
+    return Text(_controller.selectedDay.isBefore(firstDate)
         ? 'THIS WOD IS NOT AVAILABLE ANYMORE'
-        : 'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(_calendarController.selectedDay)}');
+        : 'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(_controller.selectedDay)}');
   }
 }

@@ -2,8 +2,18 @@ import 'package:flutter/foundation.dart';
 
 //my imports
 import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarModifier extends ChangeNotifier {
+  CalendarController _calendarController = CalendarController();
+
+  CalendarController get calendarController => _calendarController;
+
+  set calendarController(CalendarController val) {
+    _calendarController = val;
+    notifyListeners();
+  }
+
   Map<DateTime, List<Wod>> _wods = {};
 
   List<Wod> _selectedWods = [];

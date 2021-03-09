@@ -10,8 +10,7 @@ import 'package:kabod_app/screens/wods/components/add_wod_form.dart';
 
 class WodEditorScreen extends StatefulWidget {
   final Wod currentWod;
-  final DateTime selectedDay;
-  WodEditorScreen({this.selectedDay, this.currentWod});
+  WodEditorScreen({this.currentWod});
   @override
   _WodEditorScreenState createState() => _WodEditorScreenState();
 }
@@ -38,10 +37,7 @@ class _WodEditorScreenState extends State<WodEditorScreen> {
       body: ListView(
         padding: EdgeInsets.all(kDefaultPadding),
         children: [
-          AddWodForm(
-              formKey: _formKey,
-              selectedDay: widget.selectedDay,
-              currentWod: widget.currentWod),
+          AddWodForm(formKey: _formKey, currentWod: widget.currentWod),
         ],
       ),
     );

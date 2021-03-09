@@ -10,11 +10,7 @@ import 'package:kabod_app/core/presentation/constants.dart';
 class WodCalendar extends StatefulWidget {
   const WodCalendar({
     Key key,
-    @required CalendarController calendarController,
-  })  : _calendarController = calendarController,
-        super(key: key);
-
-  final CalendarController _calendarController;
+  }) : super(key: key);
 
   @override
   _WodCalendarState createState() => _WodCalendarState();
@@ -31,7 +27,7 @@ class _WodCalendarState extends State<WodCalendar> {
       onDaySelected: (day, wods, _) {
         calendarModifierProvider.whenSelectedDay(wod: wods);
       },
-      calendarController: widget._calendarController,
+      calendarController: calendarModifierProvider.calendarController,
       headerVisible: true,
       headerStyle: HeaderStyle(
           titleTextStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
