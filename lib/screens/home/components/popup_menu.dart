@@ -68,7 +68,7 @@ class PopupWodMenu extends StatelessWidget {
         )
       ],
       child: Icon(
-        Icons.add_box,
+        Icons.arrow_drop_down_circle,
         size: 40,
         color: kButtonColor,
       ),

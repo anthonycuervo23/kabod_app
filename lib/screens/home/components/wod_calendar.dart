@@ -34,7 +34,7 @@ class _WodCalendarState extends State<WodCalendar> {
       calendarController: widget._calendarController,
       headerVisible: true,
       headerStyle: HeaderStyle(
-          titleTextStyle: TextStyle(fontSize: 26),
+          titleTextStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
           titleTextBuilder: (date, locale) =>
               DateFormat.MMMM(locale).format(date),
           formatButtonVisible: false,
@@ -43,13 +43,16 @@ class _WodCalendarState extends State<WodCalendar> {
       initialCalendarFormat: CalendarFormat.week,
       availableGestures: AvailableGestures.horizontalSwipe,
       calendarStyle: CalendarStyle(
+        markersMaxAmount: 1,
+        markersColor: kButtonColor,
+        eventDayStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
         contentPadding: EdgeInsets.only(top: 20),
-        weekdayStyle: TextStyle(fontSize: 26),
-        weekendStyle: TextStyle(fontSize: 26),
+        weekdayStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
+        weekendStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
-        weekendStyle: TextStyle(color: kBackgroundColor),
-        weekdayStyle: TextStyle(color: kBackgroundColor),
+        weekendStyle: TextStyle(color: kTextColor),
+        weekdayStyle: TextStyle(color: kTextColor),
       ),
       builders: CalendarBuilders(
         selectedDayBuilder: (context, date, events) => Container(

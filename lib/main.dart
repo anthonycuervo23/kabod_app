@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: kButtonColor,
+            elevation: 0,
           ),
           scaffoldBackgroundColor: kBackgroundColor,
           visualDensity: VisualDensity.adaptivePlatformDensity,
