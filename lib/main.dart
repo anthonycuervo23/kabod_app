@@ -38,7 +38,8 @@ class MyApp extends StatelessWidget {
       ),
       providers: [
         ChangeNotifierProvider(create: (_) => UserModel.instance()),
-        ChangeNotifierProvider(create: (_) => CalendarModifier()),
+        ChangeNotifierProvider(
+            create: (_) => MainScreenModel(selectedDate: DateTime.now())),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),
       ],

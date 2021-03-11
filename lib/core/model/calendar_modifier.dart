@@ -2,17 +2,11 @@ import 'package:flutter/foundation.dart';
 
 //my imports
 import 'package:kabod_app/screens/home/model/wod_model.dart';
-import 'package:table_calendar/table_calendar.dart';
 
-class CalendarModifier extends ChangeNotifier {
-  CalendarController _calendarController = CalendarController();
+class MainScreenModel extends ChangeNotifier {
+  MainScreenModel({this.selectedDate});
 
-  CalendarController get calendarController => _calendarController;
-
-  set calendarController(CalendarController val) {
-    _calendarController = val;
-    notifyListeners();
-  }
+  DateTime selectedDate;
 
   Map<DateTime, List<Wod>> _wods = {};
 
@@ -42,8 +36,9 @@ class CalendarModifier extends ChangeNotifier {
     });
   }
 
-  whenSelectedDay({wod}) {
-    selectedWods = wod.cast<Wod>();
+  whenSelectedDay(day) {
+    selectedDate = day;
+    //selectedWods = wod.cast<Wod>();
     notifyListeners();
   }
 }

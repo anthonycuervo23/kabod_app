@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 // my imports
 import 'package:kabod_app/core/utils/calendar.dart';
@@ -23,8 +22,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  CalendarModifier calendarModifierProvider;
-  CalendarController _controller;
+  //MainScreenModel calendarModifierProvider;
+  // CalendarController _controller;
   Stream<List<Wod>> _wodsStream;
   DateTime today;
   DateTime firstDate;
@@ -34,14 +33,15 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    _controller = context.read<CalendarModifier>().calendarController;
+    // _controller = context.read<CalendarModifier>().calendarController;
     _wodsStream = context.read<WodRepository>().getWods(
         firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch);
   }
 
   @override
   Widget build(BuildContext context) {
-    calendarModifierProvider = Provider.of<CalendarModifier>(context);
+    final MainScreenModel mainScreenModel =
+        Provider.of<MainScreenModel>(context);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: _scaffoldKey,
@@ -59,8 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final List<Wod> wods = snapshot.data;
-              calendarModifierProvider.groupWods(wods);
-
+              mainScreenModel.groupWods(wods);
               return Column(
                 children: [
                   Material(
@@ -101,87 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('Today\'s WOD',
                       style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
                   DividerMedium(),
-                  (_controller.selectedDay == null)
-                      ? Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            physics: AlwaysScrollableScrollPhysics(),
-                            itemCount:
-                                calendarModifierProvider.selectedWods.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              Wod wod =
-                                  calendarModifierProvider.selectedWods[index];
-                              return DefaultCard(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ListTileTheme(
-                                      contentPadding: EdgeInsets.all(0),
-                                      child: ListTile(
-                                        title: Text(wod.title,
-                                            style: TextStyle(
-                                                fontSize: 24,
-                                                color: kWhiteTextColor)),
-                                        subtitle: Text(wod.type,
-                                            style: TextStyle(fontSize: 18)),
-                                        trailing: PopupWodMenu(currentWod: wod),
-                                      ),
-                                    ),
-                                    DividerSmall(),
-                                    Text(wod.description),
-                                    DividerSmall(),
-                                  ],
-                                ),
-                              );
-                            },
-                          ),
-                        )
-                      : (_controller.selectedDay.weekday == 6 ||
-                              _controller.selectedDay.weekday == 7)
-                          ? RestDayMessage()
-                          : (calendarModifierProvider
-                                      .wods[_controller.selectedDay] ==
-                                  null)
-                              ? WodNotAvailable()
-                              : Expanded(
-                                  child: ListView.builder(
-                                    shrinkWrap: true,
-                                    physics: AlwaysScrollableScrollPhysics(),
-                                    itemCount: calendarModifierProvider
-                                        .selectedWods.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      Wod wod = calendarModifierProvider
-                                          .selectedWods[index];
-                                      return DefaultCard(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ListTileTheme(
-                                              contentPadding: EdgeInsets.all(0),
-                                              child: ListTile(
-                                                title: Text(wod.title,
-                                                    style: TextStyle(
-                                                        fontSize: 24,
-                                                        color:
-                                                            kWhiteTextColor)),
-                                                subtitle: Text(wod.type,
-                                                    style: TextStyle(
-                                                        fontSize: 18)),
-                                                trailing: PopupWodMenu(
-                                                    currentWod: wod),
-                                              ),
-                                            ),
-                                            DividerSmall(),
-                                            Text(wod.description),
-                                            DividerSmall(),
-                                          ],
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
+                  displayWodList(mainScreenModel)
                 ],
               );
             }
@@ -196,6 +115,51 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
             }
           }),
+    );
+  }
+
+  Widget displayWodList(MainScreenModel mainScreenModel) {
+    List<Wod> wod = [];
+    if (mainScreenModel.selectedDate.weekday == 6 ||
+        mainScreenModel.selectedDate.weekday == 7) return RestDayMessage();
+
+    if (mainScreenModel.selectedDate == null) {
+      wod = mainScreenModel.selectedWods;
+    } else {
+      wod = mainScreenModel.wods[mainScreenModel.selectedDate];
+    }
+
+    if (mainScreenModel.wods == null)
+      return WodNotAvailable(mainScreenModel.selectedDate);
+
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        physics: AlwaysScrollableScrollPhysics(),
+        itemCount: mainScreenModel.selectedWods.length,
+        itemBuilder: (BuildContext context, int index) {
+          Wod wod = mainScreenModel.selectedWods[index];
+          return DefaultCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTileTheme(
+                  contentPadding: EdgeInsets.all(0),
+                  child: ListTile(
+                    title: Text(wod.title,
+                        style: TextStyle(fontSize: 24, color: kWhiteTextColor)),
+                    subtitle: Text(wod.type, style: TextStyle(fontSize: 18)),
+                    trailing: PopupWodMenu(currentWod: wod),
+                  ),
+                ),
+                DividerSmall(),
+                Text(wod.description),
+                DividerSmall(),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }

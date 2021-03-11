@@ -17,17 +17,30 @@ class WodCalendar extends StatefulWidget {
 }
 
 class _WodCalendarState extends State<WodCalendar> {
-  CalendarModifier calendarModifierProvider;
+  CalendarController _calendarController;
+  MainScreenModel mainScreenModel;
+
+  @override
+  void initState() {
+    _calendarController = CalendarController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _calendarController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    calendarModifierProvider = Provider.of<CalendarModifier>(context);
+    mainScreenModel = Provider.of<MainScreenModel>(context);
     return TableCalendar(
-      events: calendarModifierProvider.wods,
+      events: mainScreenModel.wods,
       onDaySelected: (day, wods, _) {
-        calendarModifierProvider.whenSelectedDay(wod: wods);
+        mainScreenModel.whenSelectedDay(day);
       },
-      calendarController: calendarModifierProvider.calendarController,
+      calendarController: _calendarController,
       headerVisible: true,
       headerStyle: HeaderStyle(
           titleTextStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),

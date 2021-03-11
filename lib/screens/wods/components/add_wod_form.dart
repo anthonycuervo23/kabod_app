@@ -37,9 +37,7 @@ class AddWodForm extends StatelessWidget {
               name: 'wod_date',
               initialValue: currentWod != null
                   ? currentWod.date
-                  : Provider.of<CalendarModifier>(context)
-                          .calendarController
-                          .selectedDay ??
+                  : Provider.of<MainScreenModel>(context).selectedDate ??
                       DateTime.now(),
               inputType: InputType.date,
               format: DateFormat('EEEE, dd MMMM, yyyy'),
