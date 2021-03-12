@@ -36,9 +36,9 @@ class MainScreenModel extends ChangeNotifier {
     });
   }
 
-  whenSelectedDay(day) {
+  whenSelectedDay(day, wod) {
     selectedDate = day;
-    //selectedWods = wod.cast<Wod>();
+    selectedWods = wod.cast<Wod>();
     notifyListeners();
   }
 }

@@ -16,7 +16,8 @@ class AppRoutes {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case editWodRoute:
-        return MaterialPageRoute(builder: (_) => WodEditorScreen());
+        return MaterialPageRoute(
+            builder: (_) => WodEditorScreen(currentWod: settings.arguments));
       case addWodRoute:
         return MaterialPageRoute(builder: (_) => WodEditorScreen());
       case loginRoute:

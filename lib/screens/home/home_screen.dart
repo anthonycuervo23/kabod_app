@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 // my imports
 import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
-import 'package:kabod_app/core/model/calendar_modifier.dart';
+import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
@@ -22,8 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  //MainScreenModel calendarModifierProvider;
-  // CalendarController _controller;
   Stream<List<Wod>> _wodsStream;
   DateTime today;
   DateTime firstDate;
@@ -33,7 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    // _controller = context.read<CalendarModifier>().calendarController;
     _wodsStream = context.read<WodRepository>().getWods(
         firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch);
   }
@@ -119,47 +117,49 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget displayWodList(MainScreenModel mainScreenModel) {
-    List<Wod> wod = [];
+    final df = DateFormat('dd/MM/yyyy');
     if (mainScreenModel.selectedDate.weekday == 6 ||
-        mainScreenModel.selectedDate.weekday == 7) return RestDayMessage();
-
-    if (mainScreenModel.selectedDate == null) {
-      wod = mainScreenModel.selectedWods;
+        mainScreenModel.selectedDate.weekday == 7) {
+      return RestDayMessage();
+    } else if (mainScreenModel.selectedDate.isBefore(firstDate)) {
+      return Center(child: Text('THIS WOD IS NO LONGER AVAILABLE'));
+    } else if (mainScreenModel.selectedDate
+        .isAfter(today.add(Duration(days: 1)))) {
+      return Center(
+        child: Text(
+            'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}'),
+      );
     } else {
-      wod = mainScreenModel.wods[mainScreenModel.selectedDate];
-    }
-
-    if (mainScreenModel.wods == null)
-      return WodNotAvailable(mainScreenModel.selectedDate);
-
-    return Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
-        itemCount: mainScreenModel.selectedWods.length,
-        itemBuilder: (BuildContext context, int index) {
-          Wod wod = mainScreenModel.selectedWods[index];
-          return DefaultCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTileTheme(
-                  contentPadding: EdgeInsets.all(0),
-                  child: ListTile(
-                    title: Text(wod.title,
-                        style: TextStyle(fontSize: 24, color: kWhiteTextColor)),
-                    subtitle: Text(wod.type, style: TextStyle(fontSize: 18)),
-                    trailing: PopupWodMenu(currentWod: wod),
+      return Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: AlwaysScrollableScrollPhysics(),
+          itemCount: mainScreenModel.selectedWods.length,
+          itemBuilder: (BuildContext context, int index) {
+            Wod wod = mainScreenModel.selectedWods[index];
+            return DefaultCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTileTheme(
+                    contentPadding: EdgeInsets.all(0),
+                    child: ListTile(
+                      title: Text(wod.title,
+                          style:
+                              TextStyle(fontSize: 24, color: kWhiteTextColor)),
+                      subtitle: Text(wod.type, style: TextStyle(fontSize: 18)),
+                      trailing: PopupWodMenu(currentWod: wod),
+                    ),
                   ),
-                ),
-                DividerSmall(),
-                Text(wod.description),
-                DividerSmall(),
-              ],
-            ),
-          );
-        },
-      ),
-    );
+                  DividerSmall(),
+                  Text(wod.description),
+                  DividerSmall(),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    }
   }
 }

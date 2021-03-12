@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
 //my imports
-import 'package:kabod_app/core/model/calendar_modifier.dart';
+import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:kabod_app/screens/wods/components/alert_dialog.dart';

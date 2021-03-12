@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 //my imports
-import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 
 class RestDayMessage extends StatelessWidget {
@@ -37,23 +35,5 @@ class RestDayMessage extends StatelessWidget {
         ],
       ),
     );
-  }
-}
-
-class WodNotAvailable extends StatelessWidget {
-  final DateTime selectedDay;
-  const WodNotAvailable(
-    this.selectedDay, {
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final today = DateTime.now();
-    final firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    final df = DateFormat('dd/MM/yyyy');
-    return Text(selectedDay.isBefore(firstDate)
-        ? 'THIS WOD IS NOT AVAILABLE ANYMORE'
-        : 'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(selectedDay)}');
   }
 }

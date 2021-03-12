@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 //my imports
-import 'package:kabod_app/core/model/calendar_modifier.dart';
+import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
 class WodCalendar extends StatefulWidget {
@@ -38,7 +38,7 @@ class _WodCalendarState extends State<WodCalendar> {
     return TableCalendar(
       events: mainScreenModel.wods,
       onDaySelected: (day, wods, _) {
-        mainScreenModel.whenSelectedDay(day);
+        mainScreenModel.whenSelectedDay(day, wods);
       },
       calendarController: _calendarController,
       headerVisible: true,
