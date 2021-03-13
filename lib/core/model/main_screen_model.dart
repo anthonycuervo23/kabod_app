@@ -2,17 +2,20 @@ import 'package:flutter/foundation.dart';
 
 //my imports
 import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 
 class MainScreenModel extends ChangeNotifier {
-  MainScreenModel({this.selectedDate});
+  MainScreenModel({this.selectedDate, this.wodStream});
 
   DateTime selectedDate;
+  Stream<List<Wod>> wodStream;
 
   Map<DateTime, List<Wod>> _wods = {};
 
   List<Wod> _selectedWods = [];
 
   Map<DateTime, List<Wod>> get wods => _wods;
+
 
   List<Wod> get selectedWods => _selectedWods;
 

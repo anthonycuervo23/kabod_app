@@ -23,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  Stream<List<Wod>> _wodsStream;
   DateTime today;
   DateTime firstDate;
 
@@ -32,8 +31,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    _wodsStream = context.read<WodRepository>().getWods(
-        firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch);
+    /*_wodsStream = context.read<WodRepository>().getWods(
+        firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch); */
+    //WodRepository repo = context.read<WodRepository>();
   }
 
   @override
@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       body: StreamBuilder<List<Wod>>(
-          stream: _wodsStream,
+          stream: mainScreenModel.wodStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
               final List<Wod> wods = snapshot.data;
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('Today\'s WOD',
                       style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
                   DividerMedium(),
-                  displayWodList(mainScreenModel)
+                  displayWodList(wods, mainScreenModel)
                 ],
               );
             }
@@ -116,8 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget displayWodList(MainScreenModel mainScreenModel) {
+  Widget displayWodList(List<Wod> allWods, MainScreenModel mainScreenModel) {
     final df = DateFormat('dd/MM/yyyy');
+    List<Wod> selectedWods = allWods.where((element) => mainScreenModel.selectedDate.day == element.date.day).toList();
+
     if (mainScreenModel.selectedDate.weekday == 6 ||
         mainScreenModel.selectedDate.weekday == 7) {
       return RestDayMessage();
@@ -134,9 +136,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: ListView.builder(
           shrinkWrap: true,
           physics: AlwaysScrollableScrollPhysics(),
-          itemCount: mainScreenModel.selectedWods.length,
+          itemCount: selectedWods.length,
           itemBuilder: (BuildContext context, int index) {
-            Wod wod = mainScreenModel.selectedWods[index];
+            Wod wod = selectedWods[index];
             return DefaultCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
