@@ -8,9 +8,11 @@ class WodRepository {
 
   WodRepository(this._firestore) : assert(_firestore != null);
 
-  Stream<List<Wod>> getWods() {
+  Stream<List<Wod>> getWods(int firstDate, int lastDate) {
     return _firestore.collection('wods').snapshots().map((snapshot) {
       return snapshot.docs
+          .where((doc) => doc['wod_date'] >= firstDate)
+          .where((doc) => doc['wod_date'] <= lastDate)
           .map(
             (document) => Wod.fromMap(document.data(), document.id),
           )
@@ -21,11 +23,12 @@ class WodRepository {
   Future<bool> addWod(Map<String, dynamic> data) async {
     DateTime now = DateTime.now();
     dynamic wodDate = data['wod_date'];
-    if (wodDate is DateTime) {
-      DateTime oldDate = wodDate.toLocal();
-      if (oldDate.day >= now.day &&
-          oldDate.month >= now.month &&
-          oldDate.year >= now.year) {
+    DateTime convertedTime =
+        DateTime.fromMillisecondsSinceEpoch(wodDate, isUtc: true).toLocal();
+    if (convertedTime is DateTime) {
+      if (convertedTime.day >= now.day &&
+          convertedTime.month >= now.month &&
+          convertedTime.year >= now.year) {
         await _firestore.collection('wods').add(data);
         return true;
       }
@@ -36,11 +39,12 @@ class WodRepository {
   Future<bool> updateWod(String id, Map data) async {
     DateTime now = DateTime.now();
     dynamic wodDate = data['wod_date'];
-    if (wodDate is DateTime) {
-      DateTime oldDate = wodDate.toLocal();
-      if (oldDate.day >= now.day &&
-          oldDate.month >= now.month &&
-          oldDate.year >= now.year) {
+    DateTime convertedTime =
+        DateTime.fromMillisecondsSinceEpoch(wodDate, isUtc: true).toLocal();
+    if (convertedTime is DateTime) {
+      if (convertedTime.day >= now.day &&
+          convertedTime.month >= now.month &&
+          convertedTime.year >= now.year) {
         await _firestore.collection('wods').doc(id).update(data);
         return true;
       }

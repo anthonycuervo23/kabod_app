@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
 
 //my imports
+import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
@@ -68,7 +68,7 @@ class PopupWodMenu extends StatelessWidget {
         )
       ],
       child: Icon(
-        Icons.add_box,
+        Icons.arrow_drop_down_circle,
         size: 40,
         color: kButtonColor,
       ),

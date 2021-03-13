@@ -13,7 +13,7 @@ class DefaultCard extends StatelessWidget {
       padding:
           const EdgeInsets.only(left: kDefaultPadding, right: kDefaultPadding),
       child: Card(
-        elevation: 3,
+        elevation: 0,
         color: kPrimaryColor,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all((Radius.circular(10)))),

@@ -19,8 +19,7 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) => WodEditorScreen(currentWod: settings.arguments));
       case addWodRoute:
-        return MaterialPageRoute(
-            builder: (_) => WodEditorScreen(selectedDay: settings.arguments));
+        return MaterialPageRoute(builder: (_) => WodEditorScreen());
       case loginRoute:
         return MaterialPageRoute(builder: (_) => HomePage());
       case ResetPasswordRoute:

@@ -14,10 +14,14 @@ class ReusableButton extends StatelessWidget {
       height: 50,
       width: double.infinity,
       margin: EdgeInsets.only(left: 40, right: 40),
-      child: RaisedButton(
-        color: kButtonColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all<Color>(kButtonColor),
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
+          ),
         ),
         onPressed: onPressed,
         child: Text(

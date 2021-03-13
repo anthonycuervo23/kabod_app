@@ -27,7 +27,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        resizeToAvoidBottomPadding: true,
+        // resizeToAvoidBottomPadding: true,
         appBar: AppBar(
           backgroundColor: kBackgroundColor,
           elevation: 0,
@@ -167,11 +167,16 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   DividerSmall(),
                   SizedBox(
                     width: double.infinity,
-                    child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(kButtonColor),
+                          shape: MaterialStateProperty.all<OutlinedBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
                         ),
-                        color: kButtonColor,
                         onPressed: () {
                           if (resetPasswordResult) {
                             Navigator.pop(context);
