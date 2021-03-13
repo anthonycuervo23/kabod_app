@@ -8,7 +8,6 @@ import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
@@ -31,9 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
-    /*_wodsStream = context.read<WodRepository>().getWods(
-        firstDate.millisecondsSinceEpoch, today.millisecondsSinceEpoch); */
-    //WodRepository repo = context.read<WodRepository>();
   }
 
   @override
@@ -118,7 +114,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget displayWodList(List<Wod> allWods, MainScreenModel mainScreenModel) {
     final df = DateFormat('dd/MM/yyyy');
-    List<Wod> selectedWods = allWods.where((element) => mainScreenModel.selectedDate.day == element.date.day).toList();
+    List<Wod> selectedWods = allWods
+        .where(
+            (element) => mainScreenModel.selectedDate.day == element.date.day)
+        .toList();
 
     if (mainScreenModel.selectedDate.weekday == 6 ||
         mainScreenModel.selectedDate.weekday == 7) {

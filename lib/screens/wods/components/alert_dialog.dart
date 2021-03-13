@@ -22,7 +22,7 @@ class AlertDialogWod extends StatelessWidget {
               color: kButtonColor, fontSize: 30, fontWeight: FontWeight.bold)),
       content: Text(content),
       actions: [
-        FlatButton(
+        TextButton(
             onPressed: () => Navigator.pop(context), child: Text('Close'))
       ],
     );
