@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
@@ -24,7 +25,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.pushNamed(context, AppRoutes.classesRoute);
+          },
           child: Padding(
             padding:
                 const EdgeInsets.only(right: 20, top: 15, left: 8, bottom: 8),
