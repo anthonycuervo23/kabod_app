@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/core/model/classes_model.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/classes_repository.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -56,7 +57,9 @@ class _ClassesScreenState extends State<ClassesScreen> {
                     itemBuilder: (context, index) {
                       final String currentClassHour = classHours[index];
                       return InkWell(
-                        onTap: () {},
+                        onTap: () => Navigator.pushNamed(
+                            context, AppRoutes.classDetailsRoute,
+                            arguments: [currentClass[0], index]),
                         child: DefaultCard(
                           child: Row(
                             children: [
