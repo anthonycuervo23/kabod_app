@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/core/repository/classes_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -54,6 +55,8 @@ class MyApp extends StatelessWidget {
         }),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),
+        Provider<ClassesRepository>(
+            create: (_) => ClassesRepository(FirebaseFirestore.instance)),
       ],
     );
   }

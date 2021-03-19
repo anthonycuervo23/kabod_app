@@ -72,7 +72,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   onEditingComplete: () async {
                     if (_formKey.currentState.validate()) {
                       if (!await user.signIn(_email.text, _password.text))
-                        Scaffold.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(user.error),
                         ));
                     }
@@ -95,7 +95,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           if (!await user.signIn(_email.text, _password.text))
-                            Scaffold.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               content: Text(user.error),
                             ));
                         }

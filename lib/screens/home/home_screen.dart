@@ -153,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   DividerSmall(),
-                  Text(wod.description),
+                  Text(wod.description, style: TextStyle(fontSize: 20)),
                   DividerSmall(),
                 ],
               ),
