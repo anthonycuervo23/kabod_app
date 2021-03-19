@@ -20,7 +20,7 @@ class _ClassesScreenState extends State<ClassesScreen> {
   @override
   void initState() {
     super.initState();
-    _classesStream = context.read<ClassesRepository>().getClasses();
+    _classesStream = context.read<ClassesRepository>().getClassesOfTheDay();
   }
 
   @override
@@ -79,9 +79,8 @@ class _ClassesScreenState extends State<ClassesScreen> {
                               Flexible(
                                 child: ListTile(
                                   title: Text(
-                                    currentClass[0].startingHours[index] !=
-                                            DateTime.fromMillisecondsSinceEpoch(
-                                                1616065200000)
+                                    currentClass[0].startingHours[index].hour !=
+                                            12
                                         ? 'CrossFit Class'
                                         : 'Open Box',
                                     style: TextStyle(

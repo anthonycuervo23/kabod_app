@@ -8,7 +8,7 @@ class ClassesRepository {
 
   ClassesRepository(this._firestore) : assert(_firestore != null);
 
-  Stream<List<Classes>> getClasses() {
+  Stream<List<Classes>> getClassesOfTheDay() {
     return _firestore.collection('classes').snapshots().map((snapshot) {
       return snapshot.docs
           .where((doc) =>
