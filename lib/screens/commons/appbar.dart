@@ -6,15 +6,19 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     Key key,
     @required GlobalKey<ScaffoldState> scaffoldKey,
     this.shape,
+    this.title,
   })  : _scaffoldKey = scaffoldKey,
         super(key: key);
 
   final GlobalKey<ScaffoldState> _scaffoldKey;
   final ShapeBorder shape;
+  final Text title;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      title: title,
+      centerTitle: true,
       shape: shape,
       elevation: 0,
       leading: IconButton(
