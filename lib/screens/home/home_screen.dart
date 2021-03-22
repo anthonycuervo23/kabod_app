@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:provider/provider.dart';
 
 // my imports
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
@@ -89,8 +88,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.hasData) {
                     final List<Classes> classes = snapshot.data;
                     mainScreenModel.groupClasses(classes);
-                    // final List<String> classHours =
-                    //     classes[1].classAthletes.keys.toList();
                     return displayHoursList(classes, mainScreenModel);
                   }
                   switch (snapshot.connectionState) {
@@ -136,17 +133,20 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) =>
             mainScreenModel.selectedDate.day == element.classDate.day)
         .toList();
+    if (selectedClasses.length < 1) {
+      return Center(child: Text('Not classes today'));
+    }
     final List<String> classHours =
-        selectedClasses[1].classAthletes.keys.toList();
+        selectedClasses[0].classAthletes.keys.toList();
     return Expanded(
       child: ListView.builder(
-          itemCount: selectedClasses[1].startingHours.length,
+          itemCount: selectedClasses[0].startingHours.length,
           itemBuilder: (BuildContext context, int index) {
             final String currentClassHour = classHours[index];
             return InkWell(
               onTap: () => Navigator.pushNamed(
                   context, AppRoutes.classDetailsRoute,
-                  arguments: [selectedClasses[1], index]),
+                  arguments: [selectedClasses[0], index]),
               child: DefaultCard(
                 child: Row(
                   children: [
@@ -154,28 +154,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           DateFormat.jm()
-                              .format(selectedClasses[1].startingHours[index])
+                              .format(selectedClasses[0].startingHours[index])
                               .toString()
                               .toLowerCase(),
                           style:
                               TextStyle(fontSize: 22, color: kWhiteTextColor),
                         ),
                         Text(DateFormat('E d, MMM')
-                            .format(selectedClasses[1].classDate)
+                            .format(selectedClasses[0].classDate)
                             .toString()),
                       ],
                     ),
                     Flexible(
                       child: ListTile(
                         title: Text(
-                          selectedClasses[1].startingHours[index].hour != 12
+                          selectedClasses[0].startingHours[index].hour != 12
                               ? 'CrossFit Class'
                               : 'Open Box',
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
                         ),
                         subtitle: Text(
-                          '${selectedClasses[1].classAthletes[currentClassHour].length} / ${selectedClasses[1].maxAthletes} Participants',
+                          '${selectedClasses[0].classAthletes[currentClassHour].length} / ${selectedClasses[0].maxAthletes} Participants',
                           style: TextStyle(color: kTextColor),
                         ),
                         trailing: Icon(
@@ -191,63 +191,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }),
     );
-    // if (mainScreenModel.classes != null) {
-    //   return Expanded(
-    //     child: ListView.builder(
-    //         itemCount: selectedClasses[1].startingHours.length,
-    //         itemBuilder: (BuildContext context, int index) {
-    //           final String currentClassHour = classHours[index];
-    //           return InkWell(
-    //             onTap: () => Navigator.pushNamed(
-    //                 context, AppRoutes.classDetailsRoute,
-    //                 arguments: [selectedClasses[1], index]),
-    //             child: DefaultCard(
-    //               child: Row(
-    //                 children: [
-    //                   Column(
-    //                     children: [
-    //                       Text(
-    //                         DateFormat.jm()
-    //                             .format(selectedClasses[1].startingHours[index])
-    //                             .toString()
-    //                             .toLowerCase(),
-    //                         style:
-    //                         TextStyle(fontSize: 22, color: kWhiteTextColor),
-    //                       ),
-    //                       Text(DateFormat('E d, MMM')
-    //                           .format(selectedClasses[1].classDate)
-    //                           .toString()),
-    //                     ],
-    //                   ),
-    //                   Flexible(
-    //                     child: ListTile(
-    //                       title: Text(
-    //                         selectedClasses[1].startingHours[index].hour != 12
-    //                             ? 'CrossFit Class'
-    //                             : 'Open Box',
-    //                         style:
-    //                         TextStyle(fontSize: 24, color: kWhiteTextColor),
-    //                       ),
-    //                       subtitle: Text(
-    //                         '${selectedClasses[1].classAthletes[currentClassHour].length} / ${selectedClasses[1].maxAthletes} Participants',
-    //                         style: TextStyle(color: kTextColor),
-    //                       ),
-    //                       trailing: Icon(
-    //                         Icons.arrow_forward_ios,
-    //                         size: 28,
-    //                         color: kButtonColor,
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ],
-    //               ),
-    //             ),
-    //           );
-    //         }),
-    //   );
-    // } else {
-    //   return Center(child: Text('WRONG'));
-    // }
   }
 
   Widget displayWodList(List<Wod> allWods, MainScreenModel mainScreenModel) {

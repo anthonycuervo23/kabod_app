@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kabod_app/screens/auth/screens/login_screens_controller.dart';
 import 'package:kabod_app/screens/auth/screens/reset_password_screen.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
-import 'package:kabod_app/screens/classes/classes_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
 import 'package:kabod_app/screens/wods/wod_editor_screen.dart';
 
@@ -14,7 +13,6 @@ class AppRoutes {
   static const String homeRoute = '/home';
   static const String addWodRoute = '/add_wod';
   static const String editWodRoute = '/edit_wod';
-  static const String classesRoute = '/classes';
   static const String classDetailsRoute = 'class_details';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -24,8 +22,6 @@ class AppRoutes {
         return MaterialPageRoute(
             builder: (_) =>
                 ClassDetailScreen(currentClass: args[0], index: args[1]));
-      case classesRoute:
-        return MaterialPageRoute(builder: (_) => ClassesScreen());
       case editWodRoute:
         return MaterialPageRoute(
             builder: (_) => WodEditorScreen(currentWod: settings.arguments));

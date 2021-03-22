@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
     Key key,

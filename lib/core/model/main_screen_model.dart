@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
-import 'package:kabod_app/screens/classes/model/classes_model.dart';
 
 //my imports
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 
 class MainScreenModel extends ChangeNotifier {
