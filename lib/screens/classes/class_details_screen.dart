@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/core/model/classes_model.dart';
+
+//My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
+import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 
 class ClassDetailScreen extends StatefulWidget {
@@ -83,7 +86,20 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 'Registered Athletes',
                 style: TextStyle(fontSize: 24, color: kWhiteTextColor),
               ),
-            )
+            ),
+            Expanded(
+                child: ListView.builder(
+              itemCount:
+                  widget.currentClass.classAthletes[currentClassHour].length,
+              itemBuilder: (BuildContext context, int index) {
+                return Center(
+                  child: Text(widget
+                      .currentClass.classAthletes[currentClassHour][index]),
+                );
+              },
+            )),
+            ReusableButton(onPressed: () {}, text: 'BOOK'),
+            DividerMedium()
           ],
         ));
   }

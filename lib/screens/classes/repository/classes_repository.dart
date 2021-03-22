@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 //My imports
-import 'package:kabod_app/core/model/classes_model.dart';
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
 
 class ClassesRepository {
   final FirebaseFirestore _firestore;
