@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:kabod_app/core/repository/classes_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
+import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
@@ -44,14 +45,25 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserModel.instance()),
         ChangeNotifierProvider(create: (_) {
           DateTime today = DateTime.now();
+          final firstDayOfTheWeek = today
+              .subtract(Duration(days: today.weekday))
+              .millisecondsSinceEpoch;
+          final lastDayOfTheWeek = today
+              .add(Duration(days: 7 - today.weekday))
+              .millisecondsSinceEpoch;
           DateTime firstDate =
               beginningOfDay(DateTime(today.year, today.month, 1));
+          Stream<List<Classes>> _classesStream =
+              ClassesRepository(FirebaseFirestore.instance)
+                  .getClassesOfTheDay(firstDayOfTheWeek, lastDayOfTheWeek);
           Stream<List<Wod>> _wodsStream =
               WodRepository(FirebaseFirestore.instance).getWods(
                   firstDate.millisecondsSinceEpoch,
                   today.millisecondsSinceEpoch);
           return MainScreenModel(
-              selectedDate: DateTime.now(), wodStream: _wodsStream);
+              selectedDate: DateTime.now(),
+              wodStream: _wodsStream,
+              classesStream: _classesStream);
         }),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),

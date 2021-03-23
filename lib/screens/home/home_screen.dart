@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 // my imports
+import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/calendar.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
@@ -11,7 +12,7 @@ import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
-import 'package:kabod_app/screens/home/components/wod_calendar.dart';
+import 'package:kabod_app/screens/home/components/main_calendar.dart';
 import 'package:kabod_app/screens/home/components/popup_menu.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
@@ -37,77 +38,180 @@ class _HomeScreenState extends State<HomeScreen> {
     final MainScreenModel mainScreenModel =
         Provider.of<MainScreenModel>(context);
     Size size = MediaQuery.of(context).size;
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: MyAppBar(scaffoldKey: _scaffoldKey),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.pushNamed(context, AppRoutes.addWodRoute),
-        child: Icon(
-          Icons.add,
-          color: kBackgroundColor,
-          size: 40,
-        ),
-      ),
-      body: StreamBuilder<List<Wod>>(
-          stream: mainScreenModel.wodStream,
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              final List<Wod> wods = snapshot.data;
-              mainScreenModel.groupWods(wods);
-              return Column(
-                children: [
-                  Material(
-                    color: kPrimaryColor,
-                    elevation: 0,
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(10),
-                      bottomLeft: Radius.circular(10),
-                    ),
-                    child: Container(
-                      margin: EdgeInsets.only(
-                          left: kDefaultPadding, right: kDefaultPadding),
-                      height: size.height * 0.3,
-                      width: size.width,
-                      decoration: BoxDecoration(
-                        color: kPrimaryColor,
-                        borderRadius: BorderRadius.only(
-                          bottomRight: Radius.circular(10),
-                          bottomLeft: Radius.circular(10),
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Welcome Back, Jean.!',
-                            style: TextStyle(fontSize: 16, color: kTextColor),
-                          ),
-                          DividerBig(),
-                          WodCalendar(),
-                          DividerSmall(),
-                        ],
-                      ),
+
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+          key: _scaffoldKey,
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(size.height * 0.42),
+            child: MyAppBar(
+              scaffoldKey: _scaffoldKey,
+              flexibleSpace: FlexibleSpaceBar(
+                centerTitle: true,
+                title: Padding(
+                  padding: const EdgeInsets.all(kDefaultPadding),
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Welcome back, Jean!',
+                            style: TextStyle(color: kTextColor)),
+                        DividerBig(),
+                        WodCalendar(),
+                        DividerSmall(),
+                      ],
                     ),
                   ),
-                  DividerMedium(),
-                  Text('Today\'s WOD',
-                      style: TextStyle(fontSize: 28, color: kWhiteTextColor)),
-                  DividerMedium(),
-                  displayWodList(wods, mainScreenModel)
-                ],
-              );
-            }
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              default:
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-            }
+                ),
+              ),
+              bottom: TabBar(
+                  indicatorColor: kButtonColor,
+                  tabs: [Tab(text: 'Schedule'), Tab(text: 'WOD')]),
+            ),
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () =>
+                Navigator.pushNamed(context, AppRoutes.addWodRoute),
+            child: Icon(
+              Icons.add,
+              color: kBackgroundColor,
+              size: 40,
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              StreamBuilder<List<Classes>>(
+                stream: mainScreenModel.classesStream,
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    final List<Classes> classes = snapshot.data;
+                    mainScreenModel.groupClasses(classes);
+                    return Column(
+                      children: [
+                        DividerMedium(),
+                        Text(
+                            DateFormat('EEEE, d MMM of y')
+                                .format(mainScreenModel.selectedDate)
+                                .toString(),
+                            style: TextStyle(
+                                fontSize: 28, color: kWhiteTextColor)),
+                        DividerMedium(),
+                        displayHoursList(classes, mainScreenModel)
+                      ],
+                    );
+                  }
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return Center(child: CircularProgressIndicator());
+                    default:
+                      return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+              StreamBuilder<List<Wod>>(
+                  stream: mainScreenModel.wodStream,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      final List<Wod> wods = snapshot.data;
+                      mainScreenModel.groupWods(wods);
+                      return Column(
+                        children: [
+                          DividerMedium(),
+                          Text(
+                              DateFormat('EEEE, d MMM of y')
+                                  .format(mainScreenModel.selectedDate)
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 28, color: kWhiteTextColor)),
+                          DividerMedium(),
+                          displayWodList(wods, mainScreenModel)
+                        ],
+                      );
+                    }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Center(child: CircularProgressIndicator());
+                      default:
+                        return Center(child: CircularProgressIndicator());
+                    }
+                  }),
+            ],
+          )),
+    );
+  }
+
+  Widget displayHoursList(
+      List<Classes> allClasses, MainScreenModel mainScreenModel) {
+    List<Classes> selectedClasses = allClasses
+        .where((element) =>
+            mainScreenModel.selectedDate.day == element.classDate.day)
+        .toList();
+    if (selectedClasses.length < 1) {
+      return Center(
+          child: Text(
+        'THE SCHEDULE IS NOT AVAILABLE',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
+    } else if (selectedClasses[0].classDate.weekday == 6 ||
+        selectedClasses[0].classDate.weekday == 7) {
+      return Center(
+          child: Text(
+        'NO CLASSES TODAY',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
+    }
+    return Expanded(
+      child: ListView.builder(
+          itemCount: selectedClasses[0].startingHours.length,
+          itemBuilder: (BuildContext context, int index) {
+            final List<String> classHours =
+                selectedClasses[0].classAthletes.keys.toList();
+            final String currentClassHour = classHours[index];
+            print(classHours);
+            return InkWell(
+              onTap: () => Navigator.pushNamed(
+                  context, AppRoutes.classDetailsRoute,
+                  arguments: [selectedClasses[0], index]),
+              child: DefaultCard(
+                child: Row(
+                  children: [
+                    Text(
+                      DateFormat.jm()
+                          .format(selectedClasses[0].startingHours[index])
+                          .toString()
+                          .toLowerCase(),
+                      style: TextStyle(fontSize: 22, color: kWhiteTextColor),
+                    ),
+                    Flexible(
+                      child: ListTile(
+                        title: Text(
+                          selectedClasses[0].startingHours[index].hour != 12
+                              ? 'CrossFit Class'
+                              : 'Open Box',
+                          style:
+                              TextStyle(fontSize: 24, color: kWhiteTextColor),
+                          textAlign: TextAlign.center,
+                        ),
+                        subtitle: Text(
+                          '${selectedClasses[0].classAthletes[currentClassHour].length} / ${selectedClasses[0].maxAthletes} Participants',
+                          style: TextStyle(color: kTextColor),
+                          textAlign: TextAlign.center,
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 28,
+                          color: kButtonColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }),
     );
   }
@@ -123,12 +227,20 @@ class _HomeScreenState extends State<HomeScreen> {
         mainScreenModel.selectedDate.weekday == 7) {
       return RestDayMessage();
     } else if (mainScreenModel.selectedDate.isBefore(firstDate)) {
-      return Center(child: Text('THIS WOD IS NO LONGER AVAILABLE'));
+      return Center(
+          child: Text(
+        'THIS WOD IS NO LONGER AVAILABLE',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
     } else if (mainScreenModel.selectedDate
         .isAfter(today.add(Duration(days: 1)))) {
       return Center(
         child: Text(
-            'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}'),
+          'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}',
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
       );
     } else {
       return Expanded(
