@@ -12,7 +12,7 @@ import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
-import 'package:kabod_app/screens/home/components/wod_calendar.dart';
+import 'package:kabod_app/screens/home/components/main_calendar.dart';
 import 'package:kabod_app/screens/home/components/popup_menu.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 
@@ -164,7 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
         textAlign: TextAlign.center,
       ));
     }
-    print(selectedClasses[0].classDate.weekday);
     return Expanded(
       child: ListView.builder(
           itemCount: selectedClasses[0].startingHours.length,

@@ -36,7 +36,6 @@ class _WodCalendarState extends State<WodCalendar> {
   Widget build(BuildContext context) {
     mainScreenModel = Provider.of<MainScreenModel>(context);
     return TableCalendar(
-      //events: mainScreenModel.wods,
       onDaySelected: (day, events, _) {
         mainScreenModel.whenSelectedDay(day);
       },
