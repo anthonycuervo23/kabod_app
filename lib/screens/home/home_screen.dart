@@ -88,7 +88,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.hasData) {
                     final List<Classes> classes = snapshot.data;
                     mainScreenModel.groupClasses(classes);
-                    return displayHoursList(classes, mainScreenModel);
+                    return Column(
+                      children: [
+                        DividerMedium(),
+                        Text(
+                            DateFormat('EEEE, d MMM of y')
+                                .format(mainScreenModel.selectedDate)
+                                .toString(),
+                            style: TextStyle(
+                                fontSize: 28, color: kWhiteTextColor)),
+                        DividerMedium(),
+                        displayHoursList(classes, mainScreenModel)
+                      ],
+                    );
                   }
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
@@ -107,7 +119,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       return Column(
                         children: [
                           DividerMedium(),
-                          Text('Today\'s WOD',
+                          Text(
+                              DateFormat('EEEE, d MMM of y')
+                                  .format(mainScreenModel.selectedDate)
+                                  .toString(),
                               style: TextStyle(
                                   fontSize: 28, color: kWhiteTextColor)),
                           DividerMedium(),
@@ -134,15 +149,30 @@ class _HomeScreenState extends State<HomeScreen> {
             mainScreenModel.selectedDate.day == element.classDate.day)
         .toList();
     if (selectedClasses.length < 1) {
-      return Center(child: Text('Not classes today'));
+      return Center(
+          child: Text(
+        'THE SCHEDULE IS NOT AVAILABLE',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
+    } else if (selectedClasses[0].classDate.weekday == 6 ||
+        selectedClasses[0].classDate.weekday == 7) {
+      return Center(
+          child: Text(
+        'NO CLASSES TODAY',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
     }
-    final List<String> classHours =
-        selectedClasses[0].classAthletes.keys.toList();
+    print(selectedClasses[0].classDate.weekday);
     return Expanded(
       child: ListView.builder(
           itemCount: selectedClasses[0].startingHours.length,
           itemBuilder: (BuildContext context, int index) {
+            final List<String> classHours =
+                selectedClasses[0].classAthletes.keys.toList();
             final String currentClassHour = classHours[index];
+            print(classHours);
             return InkWell(
               onTap: () => Navigator.pushNamed(
                   context, AppRoutes.classDetailsRoute,
@@ -150,20 +180,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: DefaultCard(
                 child: Row(
                   children: [
-                    Column(
-                      children: [
-                        Text(
-                          DateFormat.jm()
-                              .format(selectedClasses[0].startingHours[index])
-                              .toString()
-                              .toLowerCase(),
-                          style:
-                              TextStyle(fontSize: 22, color: kWhiteTextColor),
-                        ),
-                        Text(DateFormat('E d, MMM')
-                            .format(selectedClasses[0].classDate)
-                            .toString()),
-                      ],
+                    Text(
+                      DateFormat.jm()
+                          .format(selectedClasses[0].startingHours[index])
+                          .toString()
+                          .toLowerCase(),
+                      style: TextStyle(fontSize: 22, color: kWhiteTextColor),
                     ),
                     Flexible(
                       child: ListTile(
@@ -173,10 +195,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               : 'Open Box',
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
+                          textAlign: TextAlign.center,
                         ),
                         subtitle: Text(
                           '${selectedClasses[0].classAthletes[currentClassHour].length} / ${selectedClasses[0].maxAthletes} Participants',
                           style: TextStyle(color: kTextColor),
+                          textAlign: TextAlign.center,
                         ),
                         trailing: Icon(
                           Icons.arrow_forward_ios,
@@ -204,12 +228,20 @@ class _HomeScreenState extends State<HomeScreen> {
         mainScreenModel.selectedDate.weekday == 7) {
       return RestDayMessage();
     } else if (mainScreenModel.selectedDate.isBefore(firstDate)) {
-      return Center(child: Text('THIS WOD IS NO LONGER AVAILABLE'));
+      return Center(
+          child: Text(
+        'THIS WOD IS NO LONGER AVAILABLE',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
     } else if (mainScreenModel.selectedDate
         .isAfter(today.add(Duration(days: 1)))) {
       return Center(
         child: Text(
-            'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}'),
+          'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}',
+          style: TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
+        ),
       );
     } else {
       return Expanded(
