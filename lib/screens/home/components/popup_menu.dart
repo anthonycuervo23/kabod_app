@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //my imports
 import 'package:kabod_app/screens/home/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
 class PopupWodMenu extends StatelessWidget {
   final Wod currentWod;
@@ -11,6 +13,7 @@ class PopupWodMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserRepository user = Provider.of<UserRepository>(context);
     return PopupMenuButton(
       color: kBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -47,22 +50,24 @@ class PopupWodMenu extends StatelessWidget {
                 onTap: () {},
               ),
               Divider(),
-              InkWell(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Image.asset('assets/icons/edit_icon.png'),
-                      SizedBox(width: 10),
-                      Text('Edit WOD'),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.editWodRoute,
-                      arguments: currentWod);
-                },
-              ),
+              user.userModel.admin == true
+                  ? InkWell(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Image.asset('assets/icons/edit_icon.png'),
+                            SizedBox(width: 10),
+                            Text('Edit WOD'),
+                          ],
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.editWodRoute,
+                            arguments: currentWod);
+                      },
+                    )
+                  : Container(),
             ],
           ),
         )

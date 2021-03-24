@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 // my imports
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/calendar.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
@@ -37,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final MainScreenModel mainScreenModel =
         Provider.of<MainScreenModel>(context);
+    final UserRepository user = Provider.of<UserRepository>(context);
     Size size = MediaQuery.of(context).size;
 
     return DefaultTabController(
@@ -56,7 +58,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Welcome back, Jean!',
+                        Text(
+                            user.userModel.name == null
+                                ? 'Welcome back, Athlete'
+                                : 'Welcome back, ${user.userModel.name}.!',
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),
@@ -71,15 +76,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   tabs: [Tab(text: 'Schedule'), Tab(text: 'WOD')]),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, AppRoutes.addWodRoute),
-            child: Icon(
-              Icons.add,
-              color: kBackgroundColor,
-              size: 40,
-            ),
-          ),
+          floatingActionButton: user.userModel.admin == true
+              ? FloatingActionButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.addWodRoute),
+                  child: Icon(
+                    Icons.add,
+                    color: kBackgroundColor,
+                    size: 40,
+                  ),
+                )
+              : Container(),
           body: TabBarView(
             children: [
               StreamBuilder<List<Classes>>(

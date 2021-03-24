@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 //My imports
+import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -19,6 +23,7 @@ class ClassDetailScreen extends StatefulWidget {
 class _ClassDetailScreenState extends State<ClassDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    final UserRepository user = Provider.of<UserRepository>(context);
     final List<String> classHours =
         widget.currentClass.classAthletes.keys.toList();
     final String currentClassHour = classHours[widget.index];
@@ -98,7 +103,18 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 );
               },
             )),
-            ReusableButton(onPressed: () {}, text: 'BOOK'),
+            ReusableButton(
+                onPressed: () async {
+                  final Map<String, dynamic> data = {
+                    'class_athletes': {
+                      currentClassHour: FieldValue.arrayUnion([user.user.uid])
+                    }
+                  };
+                  await context
+                      .read<ClassesRepository>()
+                      .addUserToClass(widget.currentClass.id, data);
+                },
+                text: 'BOOK'),
             DividerMedium()
           ],
         ));

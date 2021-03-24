@@ -6,7 +6,7 @@ import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
-import 'package:kabod_app/screens/auth/model/user_model.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -105,7 +105,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   _resetPassword() async {
-    final user = Provider.of<UserModel>(context, listen: false);
+    final user = Provider.of<UserRepository>(context, listen: false);
     print(_emailField.text);
     if (_formKey.currentState.validate()) {
       await user
@@ -115,7 +115,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   _showResetPasswordDialog(BuildContext context) async {
-    final user = Provider.of<UserModel>(context, listen: false);
+    final user = Provider.of<UserRepository>(context, listen: false);
     bool resetPasswordResult = !await user.resetPassword(_emailField.text);
     return showDialog(
         context: context,

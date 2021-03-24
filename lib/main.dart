@@ -11,7 +11,7 @@ import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/auth/model/user_model.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
 import 'core/utils/calendar.dart';
 
@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.loginRoute,
       ),
       providers: [
-        ChangeNotifierProvider(create: (_) => UserModel.instance()),
+        ChangeNotifierProvider(create: (_) => UserRepository.instance()),
         ChangeNotifierProvider(create: (_) {
           DateTime today = DateTime.now();
           final firstDayOfTheWeek = today
