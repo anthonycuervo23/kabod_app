@@ -26,7 +26,6 @@ class UserModel {
     id = id;
     name = data['name'];
     admin = data['admin'];
-    //admin = data['admin'];
     phone = data['phone'];
     address = data['address'];
     email = data['email'];

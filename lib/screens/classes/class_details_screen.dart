@@ -21,12 +21,26 @@ class ClassDetailScreen extends StatefulWidget {
 }
 
 class _ClassDetailScreenState extends State<ClassDetailScreen> {
+  bool _isAthleteSubscribe(String userId) {
+    List allAthletes = widget.currentClass.classAthletes.values.toList();
+    for (var i = 0; i < widget.currentClass.classAthletes.length; i++) {
+      List listOfAthletes = allAthletes[i];
+      for (var j = 0; j < listOfAthletes.length; j++) {
+        if (userId == listOfAthletes[j]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final UserRepository user = Provider.of<UserRepository>(context);
+    final UserRepository userRepository = Provider.of<UserRepository>(context);
     final List<String> classHours =
         widget.currentClass.classAthletes.keys.toList();
     final String currentClassHour = classHours[widget.index];
+    final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
     return Scaffold(
         appBar: AppBar(
           shape: kAppBarShape,
@@ -103,18 +117,21 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 );
               },
             )),
-            ReusableButton(
-                onPressed: () async {
-                  final Map<String, dynamic> data = {
-                    'class_athletes': {
-                      currentClassHour: FieldValue.arrayUnion([user.user.uid])
-                    }
-                  };
-                  await context
-                      .read<ClassesRepository>()
-                      .addUserToClass(widget.currentClass.id, data);
-                },
-                text: 'BOOK'),
+            if (widget.currentClass.classDate.isAfter(DateTime.now()) &&
+                !userSubscribed)
+              ReusableButton(
+                  onPressed: () async {
+                    final Map<String, dynamic> data = {
+                      'class_athletes': {
+                        currentClassHour:
+                            FieldValue.arrayUnion([userRepository.user.uid])
+                      }
+                    };
+                    await context
+                        .read<ClassesRepository>()
+                        .addUserToClass(widget.currentClass.id, data);
+                  },
+                  text: 'BOOK'),
             DividerMedium()
           ],
         ));
