@@ -8,6 +8,7 @@ class UserModel {
   DateTime lastLoggedIn;
   DateTime registrationDate;
   String photoUrl;
+  DateTime birthDate;
   bool introSeen;
 
   UserModel(
@@ -17,6 +18,7 @@ class UserModel {
       this.admin,
       this.email,
       this.address,
+      this.birthDate,
       this.lastLoggedIn,
       this.registrationDate,
       this.photoUrl,
@@ -28,6 +30,7 @@ class UserModel {
     admin = data['admin'];
     phone = data['phone'];
     address = data['address'];
+    birthDate = DateTime.fromMillisecondsSinceEpoch(data['birth_date']);
     email = data['email'];
     lastLoggedIn = data['last_logged_in']?.toDate();
     registrationDate = data['registration_date']?.toDate();
@@ -42,6 +45,7 @@ class UserModel {
     data['admin'] = admin;
     data['phone'] = phone;
     data['address'] = address;
+    data['birth_date'] = birthDate;
     data['email'] = email;
     data['last_logged_in'] = lastLoggedIn;
     data['registration_date'] = registrationDate;

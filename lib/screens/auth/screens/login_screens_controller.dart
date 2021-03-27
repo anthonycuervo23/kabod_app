@@ -6,7 +6,7 @@ import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/screens/auth/screens/login_screen.dart';
 import 'package:kabod_app/screens/auth/screens/splash.dart';
 import 'package:kabod_app/screens/home//home_screen.dart';
-import 'package:kabod_app/screens/home//intro_screen.dart';
+import 'package:kabod_app/screens/auth/screens/intro_screen.dart';
 
 class HomePage extends StatelessWidget {
   @override

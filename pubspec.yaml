@@ -18,14 +18,18 @@ dependencies:
 
   cupertino_icons: ^1.0.0
   cached_network_image: ^2.5.0
+  cloud_firestore: ^0.16.0+1
   firebase_core: ^0.7.0
   firebase_auth: ^0.20.1
-  cloud_firestore: ^0.16.0+1
   firebase_storage: ^7.0.0
   flutter_form_builder: 5.0.0-alpha.1
+  form_builder_phone_field: ^0.2.0
   intl: ^0.17.0
-  table_calendar: ^2.3.3
+  image_picker:
+  image_cropper: ^1.4.0
   provider: ^4.3.3
+  table_calendar: ^2.3.3
+
 
 dev_dependencies:
   flutter_test:

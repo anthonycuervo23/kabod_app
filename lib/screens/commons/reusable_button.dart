@@ -5,8 +5,8 @@ import 'package:kabod_app/core/presentation/constants.dart';
 
 class ReusableButton extends StatelessWidget {
   final Function onPressed;
-  final String text;
-  ReusableButton({@required this.onPressed, @required this.text});
+  final Widget child;
+  ReusableButton({@required this.onPressed, @required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +24,7 @@ class ReusableButton extends StatelessWidget {
           ),
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: TextStyle(
-              color: kWhiteTextColor,
-              // fontWeight: FontWeight.bold,
-              fontSize: 16),
-        ),
+        child: child,
       ),
     );
   }

@@ -96,7 +96,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   onPressed: () async {
                     await _resetPassword();
                   },
-                  text: 'SEND',
+                  child: Text('SEND', style: kTextButtonStyle),
                 ),
               ],
             ),

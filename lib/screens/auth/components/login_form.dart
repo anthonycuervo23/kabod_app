@@ -100,7 +100,8 @@ class _GetLoginFormState extends State<GetLoginForm> {
                             ));
                         }
                       },
-                      text: 'SIGN IN'),
+                      child: Text('SIGN IN', style: kTextButtonStyle),
+                    ),
               SizedBox(height: 30),
             ],
           ),

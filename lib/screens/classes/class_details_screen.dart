@@ -14,8 +14,9 @@ import 'package:kabod_app/screens/commons/reusable_card.dart';
 
 class ClassDetailScreen extends StatefulWidget {
   final Classes currentClass;
+  final List<DateTime> listOfHours;
   final int index;
-  ClassDetailScreen({this.currentClass, this.index});
+  ClassDetailScreen({this.currentClass, this.listOfHours, this.index});
   @override
   _ClassDetailScreenState createState() => _ClassDetailScreenState();
 }
@@ -37,9 +38,11 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final UserRepository userRepository = Provider.of<UserRepository>(context);
-    final List<String> classHours =
-        widget.currentClass.classAthletes.keys.toList();
-    final String currentClassHour = classHours[widget.index];
+    print(widget.index);
+    List keys = widget.currentClass.classAthletes.keys.toList();
+    keys.sort((a, b) {
+      return a.compareTo(b);
+    });
     final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
     return Scaffold(
         appBar: AppBar(
@@ -72,9 +75,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.currentClass.startingHours[widget.index]
-                                      .hour !=
-                                  12
+                          widget.listOfHours[widget.index].hour != 12
                               ? 'CrossFit Class'
                               : 'Open Box',
                           style:
@@ -82,8 +83,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                         ),
                         Text(
                             DateFormat.jm()
-                                .format(widget
-                                    .currentClass.startingHours[widget.index])
+                                .format(widget.listOfHours[widget.index])
                                 .toString()
                                 .toLowerCase(),
                             style: TextStyle(
@@ -92,7 +92,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                     ),
                     DividerBig(),
                     Text(
-                        '${widget.currentClass.classAthletes[currentClassHour].length} of ${widget.currentClass.maxAthletes}',
+                        '${widget.currentClass.classAthletes[keys[widget.index]].length} of ${widget.currentClass.maxAthletes}',
                         style: TextStyle(fontSize: 24)),
                   ],
                 ),
@@ -109,11 +109,11 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             Expanded(
                 child: ListView.builder(
               itemCount:
-                  widget.currentClass.classAthletes[currentClassHour].length,
+                  widget.currentClass.classAthletes[keys[widget.index]].length,
               itemBuilder: (BuildContext context, int index) {
                 return Center(
                   child: Text(widget
-                      .currentClass.classAthletes[currentClassHour][index]),
+                      .currentClass.classAthletes[keys[widget.index]][index]),
                 );
               },
             )),
@@ -123,7 +123,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   onPressed: () async {
                     final Map<String, dynamic> data = {
                       'class_athletes': {
-                        currentClassHour:
+                        keys[widget.index]:
                             FieldValue.arrayUnion([userRepository.user.uid])
                       }
                     };
@@ -131,7 +131,10 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                         .read<ClassesRepository>()
                         .addUserToClass(widget.currentClass.id, data);
                   },
-                  text: 'BOOK'),
+                  child: Text(
+                    'BOOK',
+                    style: kTextButtonStyle,
+                  )),
             DividerMedium()
           ],
         ));

@@ -20,8 +20,8 @@ class AppRoutes {
       case classDetailsRoute:
         List<dynamic> args = settings.arguments;
         return MaterialPageRoute(
-            builder: (_) =>
-                ClassDetailScreen(currentClass: args[0], index: args[1]));
+            builder: (_) => ClassDetailScreen(
+                currentClass: args[0], listOfHours: args[1], index: args[2]));
       case editWodRoute:
         return MaterialPageRoute(
             builder: (_) => WodEditorScreen(currentWod: settings.arguments));
