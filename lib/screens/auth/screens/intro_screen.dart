@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +23,6 @@ class IntroScreen extends StatefulWidget {
 
 enum AppState {
   free,
-  picked,
   cropped,
 }
 
@@ -85,8 +84,8 @@ class _IntroScreenState extends State<IntroScreen> {
                                 0.4,
                               ),
                               child: _image == null
-                                  ? Icon(
-                                      Icons.person,
+                                  ? FaIcon(
+                                      FontAwesomeIcons.user,
                                       color: kWhiteTextColor,
                                       size: size.width * 0.1,
                                     )
@@ -141,18 +140,19 @@ class _IntroScreenState extends State<IntroScreen> {
                                 data['birth_date'] =
                                     (data['birth_date'] as DateTime)
                                         .millisecondsSinceEpoch;
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(userRepository.user.uid)
-                                    .update(data);
+                                await introScreenProvider.addProfileInfo(
+                                    data, userRepository.user.uid);
                                 introScreenProvider.finishIntroScreen(
                                     context, userRepository.user.uid);
+                                setState(() {
+                                  _processing = true;
+                                });
                               }
                               if (validated &&
                                   (_image != null &&
                                       state == AppState.cropped)) {
                                 setState(() {
-                                  _processing = false;
+                                  _processing = true;
                                 });
                                 String path =
                                     '${'users'}/${userRepository.user.uid}/${Path.basename(_image.path)}';
@@ -166,17 +166,10 @@ class _IntroScreenState extends State<IntroScreen> {
                                 _uploadedFileURL = await introScreenProvider
                                     .uploadFile(path, _image);
                                 data['photo_url'] = _uploadedFileURL;
-                                await FirebaseFirestore.instance
-                                    .collection('users')
-                                    .doc(userRepository.user.uid)
-                                    .update(data);
+                                await introScreenProvider.addProfileInfo(
+                                    data, userRepository.user.uid);
                                 introScreenProvider.finishIntroScreen(
                                     context, userRepository.user.uid);
-                              }
-                              if (mounted) {
-                                setState(() {
-                                  _processing = true;
-                                });
                               }
                             },
                     ),

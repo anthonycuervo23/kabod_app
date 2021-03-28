@@ -166,15 +166,16 @@ class _HomeScreenState extends State<HomeScreen> {
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
-    } else if (selectedClasses[0].classDate.weekday == 6 ||
-        selectedClasses[0].classDate.weekday == 7) {
-      return Center(
-          child: Text(
-        'NO CLASSES TODAY',
-        style: TextStyle(fontSize: 20),
-        textAlign: TextAlign.center,
-      ));
     }
+    // else if (selectedClasses[0].classDate.weekday == 6 ||
+    //     selectedClasses[0].classDate.weekday == 7) {
+    //   return Center(
+    //       child: Text(
+    //     'NO CLASSES TODAY',
+    //     style: TextStyle(fontSize: 20),
+    //     textAlign: TextAlign.center,
+    //   ));
+    // }
     return Expanded(
       child: ListView.builder(
           itemCount: selectedClasses[0].classAthletes.keys.length,

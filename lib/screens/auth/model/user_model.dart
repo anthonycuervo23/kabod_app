@@ -4,7 +4,7 @@ class UserModel {
   String phone;
   bool admin;
   String email;
-  String address;
+  String gender;
   DateTime lastLoggedIn;
   DateTime registrationDate;
   String photoUrl;
@@ -16,8 +16,8 @@ class UserModel {
       this.name,
       this.phone,
       this.admin,
+      this.gender,
       this.email,
-      this.address,
       this.birthDate,
       this.lastLoggedIn,
       this.registrationDate,
@@ -29,7 +29,7 @@ class UserModel {
     name = data['name'];
     admin = data['admin'];
     phone = data['phone'];
-    address = data['address'];
+    gender = data['gender'];
     birthDate = DateTime.fromMillisecondsSinceEpoch(data['birth_date']);
     email = data['email'];
     lastLoggedIn = data['last_logged_in']?.toDate();
@@ -44,8 +44,8 @@ class UserModel {
     data['name'] = name;
     data['admin'] = admin;
     data['phone'] = phone;
-    data['address'] = address;
-    data['birth_date'] = birthDate;
+    data['gender'] = gender;
+    data['birth_date'] = 0;
     data['email'] = email;
     data['last_logged_in'] = lastLoggedIn;
     data['registration_date'] = registrationDate;

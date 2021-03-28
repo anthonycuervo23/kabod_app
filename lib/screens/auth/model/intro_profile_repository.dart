@@ -23,4 +23,8 @@ class IntroRepository extends ChangeNotifier {
     await uploadTask;
     return ref.getDownloadURL();
   }
+
+  Future<void> addProfileInfo(Map<String, dynamic> data, String id) async {
+    await _firestore.collection('users').doc(id).update(data);
+  }
 }

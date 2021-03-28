@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+//My imports
 import 'package:kabod_app/screens/auth/components/text_fields_input.dart';
 
 class IntroProfileForm extends StatelessWidget {
@@ -17,12 +20,18 @@ class IntroProfileForm extends StatelessWidget {
       key: _formKey,
       child: Column(
         children: [
+          GenderPickerFieldInput(
+            name: 'gender',
+            hint: 'Select Gender',
+            icon: FontAwesomeIcons.venusMars,
+            validator: FormBuilderValidators.required(context),
+          ),
           TextFieldInput(
             name: 'name',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(context),
             ]),
-            icon: Icons.person,
+            icon: FontAwesomeIcons.user,
             hint: 'Name',
             inputType: TextInputType.name,
             inputAction: TextInputAction.next,
@@ -30,13 +39,13 @@ class IntroProfileForm extends StatelessWidget {
           TextDatePickerFieldInput(
             validator: FormBuilderValidators.required(context),
             name: 'birth_date',
-            icon: Icons.date_range,
+            icon: FontAwesomeIcons.calendarAlt,
             hint: 'Birth date',
             inputAction: TextInputAction.done,
           ),
           TextFieldInput(
             name: 'phone',
-            icon: Icons.phone,
+            icon: FontAwesomeIcons.phoneAlt,
             hint: 'Phone Number',
             inputType: TextInputType.phone,
             inputAction: TextInputAction.next,
@@ -45,13 +54,6 @@ class IntroProfileForm extends StatelessWidget {
               FormBuilderValidators.minLength(context, 7),
               FormBuilderValidators.maxLength(context, 11),
             ]),
-          ),
-          TextFieldInput(
-            name: 'address',
-            icon: Icons.home,
-            hint: 'Address',
-            inputType: TextInputType.streetAddress,
-            inputAction: TextInputAction.next,
           ),
         ],
       ),

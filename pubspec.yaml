@@ -23,7 +23,7 @@ dependencies:
   firebase_auth: ^0.20.1
   firebase_storage: ^7.0.0
   flutter_form_builder: 5.0.0-alpha.1
-  form_builder_phone_field: ^0.2.0
+  font_awesome_flutter: ^9.0.0
   intl: ^0.17.0
   image_picker:
   image_cropper: ^1.4.0
