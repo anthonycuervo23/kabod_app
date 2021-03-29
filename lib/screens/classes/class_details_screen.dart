@@ -1,7 +1,12 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 //My imports
+import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -10,18 +15,36 @@ import 'package:kabod_app/screens/commons/reusable_card.dart';
 
 class ClassDetailScreen extends StatefulWidget {
   final Classes currentClass;
+  final List<DateTime> listOfHours;
   final int index;
-  ClassDetailScreen({this.currentClass, this.index});
+  ClassDetailScreen({this.currentClass, this.listOfHours, this.index});
   @override
   _ClassDetailScreenState createState() => _ClassDetailScreenState();
 }
 
 class _ClassDetailScreenState extends State<ClassDetailScreen> {
+  bool _isAthleteSubscribe(String userId) {
+    List allAthletes = widget.currentClass.classAthletes.values.toList();
+    for (var i = 0; i < widget.currentClass.classAthletes.length; i++) {
+      List listOfAthletes = allAthletes[i];
+      for (var j = 0; j < listOfAthletes.length; j++) {
+        if (userId == listOfAthletes[j]) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final List<String> classHours =
-        widget.currentClass.classAthletes.keys.toList();
-    final String currentClassHour = classHours[widget.index];
+    final UserRepository userRepository = Provider.of<UserRepository>(context);
+    print(widget.index);
+    List keys = widget.currentClass.classAthletes.keys.toList();
+    keys.sort((a, b) {
+      return a.compareTo(b);
+    });
+    final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
     return Scaffold(
         appBar: AppBar(
           shape: kAppBarShape,
@@ -53,9 +76,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.currentClass.startingHours[widget.index]
-                                      .hour !=
-                                  12
+                          widget.listOfHours[widget.index].hour != 12
                               ? 'CrossFit Class'
                               : 'Open Box',
                           style:
@@ -63,8 +84,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                         ),
                         Text(
                             DateFormat.jm()
-                                .format(widget
-                                    .currentClass.startingHours[widget.index])
+                                .format(widget.listOfHours[widget.index])
                                 .toString()
                                 .toLowerCase(),
                             style: TextStyle(
@@ -73,7 +93,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                     ),
                     DividerBig(),
                     Text(
-                        '${widget.currentClass.classAthletes[currentClassHour].length} of ${widget.currentClass.maxAthletes}',
+                        '${widget.currentClass.classAthletes[keys[widget.index]].length} of ${widget.currentClass.maxAthletes}',
                         style: TextStyle(fontSize: 24)),
                   ],
                 ),
@@ -88,17 +108,71 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-              itemCount:
-                  widget.currentClass.classAthletes[currentClassHour].length,
-              itemBuilder: (BuildContext context, int index) {
-                return Center(
-                  child: Text(widget
-                      .currentClass.classAthletes[currentClassHour][index]),
-                );
-              },
-            )),
-            ReusableButton(onPressed: () {}, text: 'BOOK'),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3),
+                itemCount: widget
+                    .currentClass.classAthletes[keys[widget.index]].length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      CircleAvatar(
+                        // backgroundImage:
+                        // ,
+                        radius: MediaQuery.of(context).size.width * 0.12,
+                        backgroundColor: Colors.grey[400].withOpacity(
+                          0.4,
+                        ),
+                        child: FaIcon(
+                          FontAwesomeIcons.user,
+                          color: kWhiteTextColor,
+                          size: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                      ),
+                      Text(
+                        'user name',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            widget.listOfHours[widget.index].isAfter(DateTime.now().toUtc()) &&
+                    widget.currentClass.classAthletes[keys[widget.index]]
+                            .length <
+                        10
+                ? ReusableButton(
+                    onPressed: !userSubscribed
+                        ? () async {
+                            final Map<String, dynamic> data = {
+                              'class_athletes': {
+                                keys[widget.index]: FieldValue.arrayUnion(
+                                    [userRepository.user.uid])
+                              }
+                            };
+                            await context
+                                .read<ClassesRepository>()
+                                .addUserToClass(widget.currentClass.id, data);
+                            Navigator.pop(context);
+                          }
+                        : () async {
+                            final Map<String, dynamic> data = {
+                              'class_athletes.${keys[widget.index]}':
+                                  FieldValue.arrayRemove(
+                                      [userRepository.user.uid])
+                            };
+                            await context
+                                .read<ClassesRepository>()
+                                .removeUserFromClass(
+                                    widget.currentClass.id, data);
+                            Navigator.pop(context);
+                          },
+                    child: Text(
+                      !userSubscribed ? 'BOOK' : 'CANCEL BOOKING',
+                      style: kTextButtonStyle,
+                    ))
+                : Container(),
             DividerMedium()
           ],
         ));

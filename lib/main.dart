@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/auth/model/intro_profile_repository.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
 import 'package:kabod_app/screens/home/model/wod_model.dart';
@@ -11,7 +13,7 @@ import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/screens/home/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/auth/model/user_model.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
 import 'core/utils/calendar.dart';
 
@@ -42,7 +44,10 @@ class MyApp extends StatelessWidget {
         initialRoute: AppRoutes.loginRoute,
       ),
       providers: [
-        ChangeNotifierProvider(create: (_) => UserModel.instance()),
+        ChangeNotifierProvider(
+            create: (_) => IntroRepository(
+                FirebaseFirestore.instance, FirebaseStorage.instance)),
+        ChangeNotifierProvider(create: (_) => UserRepository.instance()),
         ChangeNotifierProvider(create: (_) {
           DateTime today = DateTime.now();
           final firstDayOfTheWeek = today

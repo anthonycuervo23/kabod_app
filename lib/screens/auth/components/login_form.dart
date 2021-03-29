@@ -7,7 +7,7 @@ import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/auth/model/user_model.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
 class GetLoginForm extends StatefulWidget {
   @override
@@ -33,7 +33,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserModel>(context);
+    final user = Provider.of<UserRepository>(context);
     return Scaffold(
       backgroundColor: Colors.transparent,
       body: Center(
@@ -100,7 +100,8 @@ class _GetLoginFormState extends State<GetLoginForm> {
                             ));
                         }
                       },
-                      text: 'SIGN IN'),
+                      child: Text('SIGN IN', style: kTextButtonStyle),
+                    ),
               SizedBox(height: 30),
             ],
           ),

@@ -146,7 +146,10 @@ class AddWodForm extends StatelessWidget {
                   }
                 }
               },
-              text: currentWod != null ? 'UPDATE' : 'SAVE')
+              child: Text(
+                currentWod != null ? 'UPDATE' : 'SAVE',
+                style: kTextButtonStyle,
+              ))
         ],
       ),
     );

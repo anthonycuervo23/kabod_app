@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 // my imports
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/calendar.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
@@ -37,8 +38,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final MainScreenModel mainScreenModel =
         Provider.of<MainScreenModel>(context);
+    final UserRepository userRepository = Provider.of<UserRepository>(context);
     Size size = MediaQuery.of(context).size;
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -56,7 +57,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Welcome back, Jean!',
+                        DividerBig(),
+                        DividerBig(),
+                        Text(
+                            userRepository.userModel.lastLoggedIn.day >
+                                    userRepository
+                                        .userModel.registrationDate.day
+                                ? 'Welcome back, ${userRepository.userModel.name}'
+                                : 'Hello, ${userRepository.userModel.name}',
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),
@@ -71,15 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   tabs: [Tab(text: 'Schedule'), Tab(text: 'WOD')]),
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () =>
-                Navigator.pushNamed(context, AppRoutes.addWodRoute),
-            child: Icon(
-              Icons.add,
-              color: kBackgroundColor,
-              size: 40,
-            ),
-          ),
+          floatingActionButton: userRepository.userModel.admin == true
+              ? FloatingActionButton(
+                  onPressed: () =>
+                      Navigator.pushNamed(context, AppRoutes.addWodRoute),
+                  child: Icon(
+                    Icons.add,
+                    color: kBackgroundColor,
+                    size: 40,
+                  ),
+                )
+              : Container(),
           body: TabBarView(
             children: [
               StreamBuilder<List<Classes>>(
@@ -98,7 +108,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: TextStyle(
                                 fontSize: 28, color: kWhiteTextColor)),
                         DividerMedium(),
-                        displayHoursList(classes, mainScreenModel)
+                        displayHoursList(
+                            classes, mainScreenModel, userRepository)
                       ],
                     );
                   }
@@ -142,12 +153,13 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget displayHoursList(
-      List<Classes> allClasses, MainScreenModel mainScreenModel) {
+  Widget displayHoursList(List<Classes> allClasses,
+      MainScreenModel mainScreenModel, UserRepository userRepository) {
     List<Classes> selectedClasses = allClasses
         .where((element) =>
             mainScreenModel.selectedDate.day == element.classDate.day)
         .toList();
+
     if (selectedClasses.length < 1) {
       return Center(
           child: Text(
@@ -166,41 +178,77 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return Expanded(
       child: ListView.builder(
-          itemCount: selectedClasses[0].startingHours.length,
+          itemCount: selectedClasses[0].classAthletes.keys.length,
           itemBuilder: (BuildContext context, int index) {
-            final List<String> classHours =
+            List<String> listOfClasses =
                 selectedClasses[0].classAthletes.keys.toList();
-            final String currentClassHour = classHours[index];
-            print(classHours);
+
+            listOfClasses.sort((a, b) {
+              return a.compareTo(b);
+            });
+
+            List<DateTime> listOfHours = [];
+
+            for (int i = 0; i < listOfClasses.length; i++) {
+              String key = listOfClasses[i];
+              int dateInt = int.parse(key);
+              DateTime date = DateTime.fromMillisecondsSinceEpoch(dateInt);
+              listOfHours.add(date);
+            }
             return InkWell(
               onTap: () => Navigator.pushNamed(
                   context, AppRoutes.classDetailsRoute,
-                  arguments: [selectedClasses[0], index]),
+                  arguments: [
+                    selectedClasses[0],
+                    listOfHours,
+                    index,
+                  ]),
               child: DefaultCard(
                 child: Row(
                   children: [
-                    Text(
-                      DateFormat.jm()
-                          .format(selectedClasses[0].startingHours[index])
-                          .toString()
-                          .toLowerCase(),
-                      style: TextStyle(fontSize: 22, color: kWhiteTextColor),
+                    Column(
+                      children: [
+                        Text(
+                          DateFormat.jm()
+                              .format(listOfHours[index])
+                              .toString()
+                              .toLowerCase(),
+                          style:
+                              TextStyle(fontSize: 22, color: kWhiteTextColor),
+                        ),
+                        // selectedClasses[0]
+                        //         .classAthletes[listOfClasses[index]]
+                        //         .contains('3')
+                        //     ? Text('Registered')
+                        //     : Container(),
+                      ],
                     ),
                     Flexible(
                       child: ListTile(
                         title: Text(
-                          selectedClasses[0].startingHours[index].hour != 12
+                          listOfHours[index].hour != 12
                               ? 'CrossFit Class'
                               : 'Open Box',
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
                           textAlign: TextAlign.center,
                         ),
-                        subtitle: Text(
-                          '${selectedClasses[0].classAthletes[currentClassHour].length} / ${selectedClasses[0].maxAthletes} Participants',
-                          style: TextStyle(color: kTextColor),
-                          textAlign: TextAlign.center,
-                        ),
+                        subtitle: selectedClasses[0]
+                                    .classAthletes[listOfClasses[index]]
+                                    .length ==
+                                selectedClasses[0].maxAthletes
+                            ? Text(
+                                'COMPLETED',
+                                style: TextStyle(
+                                    color: kButtonColor,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              )
+                            : Text(
+                                '${selectedClasses[0].classAthletes[listOfClasses[index]].length} / ${selectedClasses[0].maxAthletes} Participants',
+                                style: TextStyle(color: kTextColor),
+                                textAlign: TextAlign.center,
+                              ),
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 28,

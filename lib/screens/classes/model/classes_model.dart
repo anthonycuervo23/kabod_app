@@ -2,31 +2,30 @@ class Classes {
   String id;
   DateTime classDate;
   int maxAthletes;
-  List<dynamic> startingHours;
   Map<String, List<dynamic>> classAthletes;
 
-  Classes(
-      {this.id,
-      this.classDate,
-      this.maxAthletes,
-      this.startingHours,
-      this.classAthletes});
+  Classes({this.id, this.classDate, this.maxAthletes, this.classAthletes});
 
   Classes.fromMap(Map<String, dynamic> data, String id) {
     this.id = id;
     classDate = DateTime.fromMillisecondsSinceEpoch(data['class_date']);
     maxAthletes = data['max_athletes'];
-    startingHours = convertedDateTime(data);
+    //classAthletes = mapClassAthletes(data);
     classAthletes = Map<String, List<dynamic>>.from(data['class_athletes']);
   }
 
-  convertedDateTime(Map<String, dynamic> data) {
-    List<dynamic> currentList = data['class_starting_hours'];
-    List<DateTime> newList = [];
-    for (int i = 0; i < currentList.length; i++) {
-      DateTime hour = DateTime.fromMillisecondsSinceEpoch(currentList[i]);
-      newList.add(hour);
-    }
-    return newList;
-  }
+  // Map<DateTime, List<String>> mapClassAthletes(Map<String, dynamic> data) {
+  //   List keys = data['class_athletes'].keys.toList;
+  //   Map<DateTime, List<String>> newClassAndAthletes = {};
+  //
+  //   for (int i = 0; i < keys.length; i++) {
+  //     String key = keys[i];
+  //     int dateInt = int.parse(key);
+  //     DateTime date = DateTime.fromMillisecondsSinceEpoch(dateInt);
+  //     Map<String, List<String>> originalClassAndAthletes = data['class_athletes'];
+  //     newClassAndAthletes[date] = originalClassAndAthletes[key];
+  //   }
+  //   return newClassAndAthletes;
+  // }
+
 }

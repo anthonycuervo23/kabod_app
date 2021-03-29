@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:provider/provider.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
@@ -21,6 +23,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = Provider.of<UserRepository>(context);
     return AppBar(
       bottom: bottom,
       flexibleSpace: flexibleSpace,
@@ -36,7 +39,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          onTap: () {},
+          onTap: () => user.signOut(),
           child: Padding(
             padding:
                 const EdgeInsets.only(right: 20, top: 15, left: 8, bottom: 8),
