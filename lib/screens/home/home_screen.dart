@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Provider.of<MainScreenModel>(context);
     final UserRepository userRepository = Provider.of<UserRepository>(context);
     Size size = MediaQuery.of(context).size;
-
     return DefaultTabController(
       length: 2,
       child: Scaffold(
@@ -61,9 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         DividerBig(),
                         DividerBig(),
                         Text(
-                            userRepository.userModel.name == null
-                                ? 'Welcome back, Athlete.!'
-                                : 'Welcome back, ${userRepository.userModel.name}.!',
+                            userRepository.userModel.lastLoggedIn.day >
+                                    userRepository
+                                        .userModel.registrationDate.day
+                                ? 'Welcome back, ${userRepository.userModel.name}'
+                                : 'Hello, ${userRepository.userModel.name}',
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),
@@ -166,16 +167,15 @@ class _HomeScreenState extends State<HomeScreen> {
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
+    } else if (selectedClasses[0].classDate.weekday == 6 ||
+        selectedClasses[0].classDate.weekday == 7) {
+      return Center(
+          child: Text(
+        'NO CLASSES TODAY',
+        style: TextStyle(fontSize: 20),
+        textAlign: TextAlign.center,
+      ));
     }
-    // else if (selectedClasses[0].classDate.weekday == 6 ||
-    //     selectedClasses[0].classDate.weekday == 7) {
-    //   return Center(
-    //       child: Text(
-    //     'NO CLASSES TODAY',
-    //     style: TextStyle(fontSize: 20),
-    //     textAlign: TextAlign.center,
-    //   ));
-    // }
     return Expanded(
       child: ListView.builder(
           itemCount: selectedClasses[0].classAthletes.keys.length,
@@ -206,12 +206,22 @@ class _HomeScreenState extends State<HomeScreen> {
               child: DefaultCard(
                 child: Row(
                   children: [
-                    Text(
-                      DateFormat.jm()
-                          .format(listOfHours[index])
-                          .toString()
-                          .toLowerCase(),
-                      style: TextStyle(fontSize: 22, color: kWhiteTextColor),
+                    Column(
+                      children: [
+                        Text(
+                          DateFormat.jm()
+                              .format(listOfHours[index])
+                              .toString()
+                              .toLowerCase(),
+                          style:
+                              TextStyle(fontSize: 22, color: kWhiteTextColor),
+                        ),
+                        // selectedClasses[0]
+                        //         .classAthletes[listOfClasses[index]]
+                        //         .contains('3')
+                        //     ? Text('Registered')
+                        //     : Container(),
+                      ],
                     ),
                     Flexible(
                       child: ListTile(
@@ -223,11 +233,22 @@ class _HomeScreenState extends State<HomeScreen> {
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
                           textAlign: TextAlign.center,
                         ),
-                        subtitle: Text(
-                          '${selectedClasses[0].classAthletes[listOfClasses[index]].length} / ${selectedClasses[0].maxAthletes} Participants',
-                          style: TextStyle(color: kTextColor),
-                          textAlign: TextAlign.center,
-                        ),
+                        subtitle: selectedClasses[0]
+                                    .classAthletes[listOfClasses[index]]
+                                    .length ==
+                                selectedClasses[0].maxAthletes
+                            ? Text(
+                                'COMPLETED',
+                                style: TextStyle(
+                                    color: kButtonColor,
+                                    fontWeight: FontWeight.bold),
+                                textAlign: TextAlign.center,
+                              )
+                            : Text(
+                                '${selectedClasses[0].classAthletes[listOfClasses[index]].length} / ${selectedClasses[0].maxAthletes} Participants',
+                                style: TextStyle(color: kTextColor),
+                                textAlign: TextAlign.center,
+                              ),
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 28,

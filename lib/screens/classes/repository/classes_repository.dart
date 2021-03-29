@@ -27,4 +27,8 @@ class ClassesRepository {
         .doc(id)
         .set(data, SetOptions(merge: true));
   }
+
+  Future<void> removeUserFromClass(String id, Map data) async {
+    return await _firestore.collection('classes').doc(id).update(data);
+  }
 }

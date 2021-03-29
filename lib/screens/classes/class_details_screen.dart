@@ -1,3 +1,4 @@
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -107,34 +108,71 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
               ),
             ),
             Expanded(
-                child: ListView.builder(
-              itemCount:
-                  widget.currentClass.classAthletes[keys[widget.index]].length,
-              itemBuilder: (BuildContext context, int index) {
-                return Center(
-                  child: Text(widget
-                      .currentClass.classAthletes[keys[widget.index]][index]),
-                );
-              },
-            )),
-            if (widget.currentClass.classDate.isAfter(DateTime.now()) &&
-                !userSubscribed)
-              ReusableButton(
-                  onPressed: () async {
-                    final Map<String, dynamic> data = {
-                      'class_athletes': {
-                        keys[widget.index]:
-                            FieldValue.arrayUnion([userRepository.user.uid])
-                      }
-                    };
-                    await context
-                        .read<ClassesRepository>()
-                        .addUserToClass(widget.currentClass.id, data);
-                  },
-                  child: Text(
-                    'BOOK',
-                    style: kTextButtonStyle,
-                  )),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3),
+                itemCount: widget
+                    .currentClass.classAthletes[keys[widget.index]].length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Column(
+                    children: [
+                      CircleAvatar(
+                        // backgroundImage:
+                        // ,
+                        radius: MediaQuery.of(context).size.width * 0.12,
+                        backgroundColor: Colors.grey[400].withOpacity(
+                          0.4,
+                        ),
+                        child: FaIcon(
+                          FontAwesomeIcons.user,
+                          color: kWhiteTextColor,
+                          size: MediaQuery.of(context).size.width * 0.1,
+                        ),
+                      ),
+                      Text(
+                        'user name',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            ),
+            widget.listOfHours[widget.index].isAfter(DateTime.now().toUtc()) &&
+                    widget.currentClass.classAthletes[keys[widget.index]]
+                            .length <
+                        10
+                ? ReusableButton(
+                    onPressed: !userSubscribed
+                        ? () async {
+                            final Map<String, dynamic> data = {
+                              'class_athletes': {
+                                keys[widget.index]: FieldValue.arrayUnion(
+                                    [userRepository.user.uid])
+                              }
+                            };
+                            await context
+                                .read<ClassesRepository>()
+                                .addUserToClass(widget.currentClass.id, data);
+                            Navigator.pop(context);
+                          }
+                        : () async {
+                            final Map<String, dynamic> data = {
+                              'class_athletes.${keys[widget.index]}':
+                                  FieldValue.arrayRemove(
+                                      [userRepository.user.uid])
+                            };
+                            await context
+                                .read<ClassesRepository>()
+                                .removeUserFromClass(
+                                    widget.currentClass.id, data);
+                            Navigator.pop(context);
+                          },
+                    child: Text(
+                      !userSubscribed ? 'BOOK' : 'CANCEL BOOKING',
+                      style: kTextButtonStyle,
+                    ))
+                : Container(),
             DividerMedium()
           ],
         ));

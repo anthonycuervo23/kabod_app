@@ -163,7 +163,7 @@ class GenderPickerFieldInput extends StatelessWidget {
             dropdownColor: kBackgroundColor,
             validator: validator,
             name: name,
-            style: TextStyle(fontSize: 22, color: Colors.white, height: 1.5),
+            style: TextStyle(fontSize: 20, color: Colors.white, height: 1.5),
             decoration: InputDecoration(
               border: InputBorder.none,
               suffixIcon: Icon(Icons.keyboard_arrow_down_outlined,
