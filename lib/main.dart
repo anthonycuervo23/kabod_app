@@ -8,14 +8,14 @@ import 'package:provider/provider.dart';
 import 'package:kabod_app/screens/auth/model/intro_profile_repository.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
+import 'package:kabod_app/screens/wods/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
-import 'core/utils/calendar.dart';
+import 'core/utils/general_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

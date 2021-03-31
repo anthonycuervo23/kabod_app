@@ -5,14 +5,14 @@ import 'package:intl/intl.dart';
 
 //my imports
 import 'package:kabod_app/core/model/main_screen_model.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:kabod_app/screens/wods/components/alert_dialog.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
+import 'package:kabod_app/screens/wods/repository/wod_repository.dart';
 
 class AddWodForm extends StatelessWidget {
   AddWodForm({

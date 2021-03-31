@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/auth/model/user_repository.dart';

@@ -4,12 +4,12 @@ import 'package:provider/provider.dart';
 
 // my imports
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
-import 'package:kabod_app/core/utils/calendar.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
@@ -59,12 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DividerBig(),
                         DividerBig(),
-                        Text(
-                            userRepository.userModel.lastLoggedIn.day >
-                                    userRepository
-                                        .userModel.registrationDate.day
-                                ? 'Welcome back, ${userRepository.userModel.name}'
-                                : 'Hello, ${userRepository.userModel.name}',
+                        Text('Welcome, ${userRepository.userModel.name}',
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),
@@ -187,14 +182,8 @@ class _HomeScreenState extends State<HomeScreen> {
               return a.compareTo(b);
             });
 
-            List<DateTime> listOfHours = [];
+            List<DateTime> listOfHours = dateTimeFromStrings(listOfClasses);
 
-            for (int i = 0; i < listOfClasses.length; i++) {
-              String key = listOfClasses[i];
-              int dateInt = int.parse(key);
-              DateTime date = DateTime.fromMillisecondsSinceEpoch(dateInt);
-              listOfHours.add(date);
-            }
             return InkWell(
               onTap: () => Navigator.pushNamed(
                   context, AppRoutes.classDetailsRoute,
@@ -216,11 +205,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           style:
                               TextStyle(fontSize: 22, color: kWhiteTextColor),
                         ),
-                        // selectedClasses[0]
-                        //         .classAthletes[listOfClasses[index]]
-                        //         .contains('3')
-                        //     ? Text('Registered')
-                        //     : Container(),
+                        selectedClasses[0]
+                                .classAthletes[listOfClasses[index]]
+                                .contains(userRepository.user.uid.toString())
+                            ? Text('Registered')
+                            : Container(),
                       ],
                     ),
                     Flexible(

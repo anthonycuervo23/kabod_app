@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 //my imports
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/screens/wods/components/delete_wod_button.dart';
 import 'package:kabod_app/screens/wods/components/add_wod_form.dart';
 
