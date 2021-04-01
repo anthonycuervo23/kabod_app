@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/results/model/results_form_notifier.dart';
+import 'package:kabod_app/screens/results/repository/results_repository.dart';
 import 'package:kabod_app/screens/auth/model/intro_profile_repository.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
@@ -12,10 +14,9 @@ import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/screens/wods/repository/wod_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/model/user_repository.dart';
-
-import 'core/utils/general_utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -74,6 +75,9 @@ class MyApp extends StatelessWidget {
             create: (_) => WodRepository(FirebaseFirestore.instance)),
         Provider<ClassesRepository>(
             create: (_) => ClassesRepository(FirebaseFirestore.instance)),
+        Provider<ResultRepository>(
+            create: (_) => ResultRepository(FirebaseFirestore.instance)),
+        ChangeNotifierProvider(create: (_) => ResultFormNotifier()),
       ],
     );
   }

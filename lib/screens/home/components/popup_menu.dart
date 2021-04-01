@@ -33,7 +33,10 @@ class PopupWodMenu extends StatelessWidget {
                     ],
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.addWodResultsRoute,
+                      arguments: currentWod);
+                },
               ),
               Divider(),
               InkWell(

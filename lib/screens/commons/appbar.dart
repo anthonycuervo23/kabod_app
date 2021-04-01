@@ -36,6 +36,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: Image.asset('assets/icons/drawer_icon.png'),
         onPressed: () {
+          Navigator.pop(context);
           _scaffoldKey.currentState.openDrawer();
         },
       ),
