@@ -4,19 +4,20 @@ import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 //My imports
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/results/model/results_form_notifier.dart';
 
 class AddResultsForm extends StatelessWidget {
-  const AddResultsForm({
-    Key key,
-    @required GlobalKey<FormBuilderState> formKey,
-  })  : _formKey = formKey,
+  const AddResultsForm(
+      {Key key, @required GlobalKey<FormBuilderState> formKey, this.currentWod})
+      : _formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
+  final Wod currentWod;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +34,6 @@ class AddResultsForm extends StatelessWidget {
             name: 'rx',
             onChanged: (value) {
               resultFormNotifier.changeRxValue(value);
-              //print(value);
-              print(resultFormNotifier.rx);
             },
             title: Text(
               'RX',
@@ -55,100 +54,103 @@ class AddResultsForm extends StatelessWidget {
             ),
           ),
           DividerMedium(),
-          TextFormField(
-            cursorColor: kButtonColor,
-            readOnly: true,
-            onTap: () {
-              selectTime(context);
-              print(formatTime(resultFormNotifier.initialTimer));
-            },
-            decoration: InputDecoration(
-              hintText: formatTime(resultFormNotifier.initialTimer) ==
-                      formatTime(nullTime)
-                  ? 'Time'
-                  : formatTime(resultFormNotifier.initialTimer),
-              hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
+          if (currentWod.type == 'For Time')
+            TextFormField(
+              cursorColor: kButtonColor,
+              readOnly: true,
+              onTap: () {
+                selectTime(context);
+                print(stringFromDuration(resultFormNotifier.initialTimer));
+              },
+              decoration: InputDecoration(
+                hintText: stringFromDuration(resultFormNotifier.initialTimer) ==
+                        stringFromDuration(nullTime)
+                    ? 'Time'
+                    : stringFromDuration(resultFormNotifier.initialTimer),
+                hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+              ),
             ),
-          ),
+          DividerMedium(),
+          if (currentWod.type == 'AMRAP') ...[
+            FormBuilderTextField(
+              keyboardType: TextInputType.number,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.integer(context),
+                FormBuilderValidators.maxLength(context, 2)
+              ]),
+              name: 'rounds',
+              style: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                labelText: 'Rounds',
+                labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              ),
+            ),
+            DividerMedium(),
+            FormBuilderTextField(
+              keyboardType: TextInputType.number,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.integer(context),
+                FormBuilderValidators.maxLength(context, 3)
+              ]),
+              name: 'reps',
+              style: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                labelText: 'Reps',
+                labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              ),
+            ),
+            DividerMedium(),
+          ],
+          if (currentWod.type == 'For Weight')
+            FormBuilderTextField(
+              keyboardType: TextInputType.number,
+              validator: FormBuilderValidators.compose([
+                FormBuilderValidators.numeric(context),
+                FormBuilderValidators.maxLength(context, 6)
+              ]),
+              name: 'weight',
+              style: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                labelText: 'Weight',
+                labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              ),
+            ),
+          DividerMedium(),
+          if (currentWod.type == 'Custom')
+            FormBuilderTextField(
+              name: 'custom_score',
+              style: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              textInputAction: TextInputAction.next,
+              decoration: InputDecoration(
+                enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: kButtonColor)),
+                labelText: 'Score',
+                labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+              ),
+            ),
           DividerMedium(),
           FormBuilderTextField(
-            //initialValue: currentWod?.title,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.integer(context),
-              FormBuilderValidators.maxLength(context, 2)
-            ]),
-            name: 'rounds',
-            style: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Rounds',
-              labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            ),
-          ),
-          DividerMedium(),
-          FormBuilderTextField(
-            //initialValue: currentWod?.title,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.integer(context),
-              FormBuilderValidators.maxLength(context, 3)
-            ]),
-            name: 'reps',
-            style: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Reps',
-              labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            ),
-          ),
-          DividerMedium(),
-          FormBuilderTextField(
-            //initialValue: currentWod?.title,
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.numeric(context),
-              FormBuilderValidators.maxLength(context, 6)
-            ]),
-            name: 'weight',
-            style: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Weight',
-              labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            ),
-          ),
-          DividerMedium(),
-          FormBuilderTextField(
-            //initialValue: currentWod?.title,
-            name: 'custom_score',
-            style: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            textInputAction: TextInputAction.next,
-            decoration: InputDecoration(
-              enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Score',
-              labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-            ),
-          ),
-          DividerMedium(),
-          FormBuilderTextField(
-            //initialValue: currentWod?.description,
             name: 'result_comment',
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             maxLines: 8,

@@ -1,23 +1,24 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
 
 //My imports
+import 'package:kabod_app/core/repository/intro_profile_repository.dart';
+import 'package:kabod_app/core/presentation/results_repository.dart';
 import 'package:kabod_app/screens/results/components/add_results_form.dart';
 import 'package:kabod_app/screens/results/model/results_form_notifier.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
-import 'package:kabod_app/screens/auth/model/intro_profile_repository.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
-import 'package:kabod_app/screens/results/repository/results_repository.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
 
 class AddResultsScreen extends StatefulWidget {
@@ -28,6 +29,8 @@ class AddResultsScreen extends StatefulWidget {
 }
 
 class _AddResultsScreenState extends State<AddResultsScreen> {
+  bool _processing;
+
   File _image;
 
   String _uploadedFileURL;
@@ -41,12 +44,17 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    _processing = false;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ResultRepository resultRepository = Provider.of<ResultRepository>(context);
-    UserRepository userRepository = Provider.of<UserRepository>(context);
     return Scaffold(
       appBar: MyAppBar(
         scaffoldKey: _scaffoldKey,
+        shape: kAppBarShape,
         title: Text('Add WOD Result'),
       ),
       body: ListView(
@@ -61,6 +69,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                     style: TextStyle(fontSize: 24, color: kWhiteTextColor)),
                 AddResultsForm(
                   formKey: _formKey,
+                  currentWod: widget.currentWod,
                 ),
                 Row(
                   children: [
@@ -69,7 +78,9 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                       children: [
                         Icon(Icons.calendar_today_outlined, color: kTextColor),
                         SizedBox(width: 8),
-                        Text('Mar 31, 2021')
+                        Text(DateFormat('MMM d, yyy')
+                            .format(widget.currentWod.date)
+                            .toString())
                       ],
                     )),
                     Expanded(
@@ -97,41 +108,53 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
           ),
           DividerBig(),
           ReusableButton(
-              onPressed: () async {
-                bool validated = _formKey.currentState.validate();
-                if (validated && _image != null) {
-                  _formKey.currentState.save();
-                  String path =
-                      '${'users'}/${userRepository.user.uid}/${'result_photos'}/${Path.basename(_image.path)}';
-                  _uploadedFileURL = await Provider.of<IntroRepository>(context)
-                      .uploadFile(path, _image);
-                  final data =
-                      Map<String, dynamic>.from(_formKey.currentState.value);
-                  data['time'] = formatTime(
-                      Provider.of<ResultFormNotifier>(context, listen: false)
-                          .initialTimer);
-                  data['result_date'] = widget.currentWod.date;
-                  data['result_photo'] = _uploadedFileURL;
-                  resultRepository.addResult(data, userRepository.user.uid);
-                  Navigator.pop(context);
-                } else if (validated && _image == null) {
-                  _formKey.currentState.save();
-                  final data =
-                      Map<String, dynamic>.from(_formKey.currentState.value);
-                  data['time'] = formatTime(initialTimer);
-                  data['result_date'] = widget.currentWod.date;
-                  resultRepository.addResult(data, userRepository.user.uid);
-                  Navigator.pop(context);
-                }
-              },
-              child: Text(
-                'SAVE RESULT',
-                style: kTextButtonStyle,
-              )),
+            onPressed: _processing ? null : _saveWodResultsButtonPressed,
+            child: _processing
+                ? CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
+                  )
+                : Text('SAVE RESULT', style: kTextButtonStyle),
+          ),
           DividerMedium(),
         ],
       ),
     );
+  }
+
+  _saveWodResultsButtonPressed() async {
+    ResultRepository resultRepository =
+        Provider.of<ResultRepository>(context, listen: false);
+    UserRepository userRepository =
+        Provider.of<UserRepository>(context, listen: false);
+    bool validated = _formKey.currentState.validate();
+    if (validated && _image != null) {
+      _formKey.currentState.save();
+      setState(() {
+        _processing = true;
+      });
+      String path =
+          '${'users'}/${userRepository.user.uid}/${'result_photos'}/${Path.basename(_image.path)}';
+      _uploadedFileURL =
+          await Provider.of<IntroRepository>(context, listen: false)
+              .uploadFile(path, _image);
+      final data = Map<String, dynamic>.from(_formKey.currentState.value);
+      data['time'] = stringFromDuration(
+          Provider.of<ResultFormNotifier>(context, listen: false).initialTimer);
+      data['result_date'] = widget.currentWod.date;
+      data['result_photo'] = _uploadedFileURL;
+      resultRepository.addResult(data, userRepository.user.uid);
+      Navigator.pop(context);
+    } else if (validated && _image == null) {
+      _formKey.currentState.save();
+      setState(() {
+        _processing = true;
+      });
+      final data = Map<String, dynamic>.from(_formKey.currentState.value);
+      data['time'] = stringFromDuration(initialTimer);
+      data['result_date'] = widget.currentWod.date;
+      resultRepository.addResult(data, userRepository.user.uid);
+      Navigator.pop(context);
+    }
   }
 
   void _pickImageButtonPressed() async {

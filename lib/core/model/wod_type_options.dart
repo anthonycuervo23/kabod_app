@@ -1,4 +1,4 @@
-enum WodTypeOptions { time, weight, repAndTime, amrap, custom }
+enum WodTypeOptions { time, weight, amrap, custom }
 
 String wodTypeOptionsToString(WodTypeOptions value) {
   switch (value) {
@@ -8,8 +8,6 @@ String wodTypeOptionsToString(WodTypeOptions value) {
       return 'AMRAP';
     case WodTypeOptions.weight:
       return 'For Weight';
-    case WodTypeOptions.repAndTime:
-      return 'For Reps and Time';
     case WodTypeOptions.custom:
     default:
       return 'Custom';

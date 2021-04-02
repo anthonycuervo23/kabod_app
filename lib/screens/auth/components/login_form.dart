@@ -7,7 +7,7 @@ import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 
 class GetLoginForm extends StatefulWidget {
   @override
@@ -90,7 +90,10 @@ class _GetLoginFormState extends State<GetLoginForm> {
               ),
               DividerBig(),
               user.status == Status.Authenticating
-                  ? Center(child: CircularProgressIndicator())
+                  ? Center(
+                      child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(kBackgroundColor)))
                   : ReusableButton(
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {

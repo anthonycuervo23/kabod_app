@@ -9,12 +9,12 @@ import 'package:provider/provider.dart';
 import 'package:path/path.dart' as Path;
 
 //My imports
+import 'package:kabod_app/core/repository/intro_profile_repository.dart';
 import 'package:kabod_app/screens/auth/components/intro_profile_form.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/auth/components/background_image.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
-import 'package:kabod_app/screens/auth/model/intro_profile_repository.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -125,7 +125,9 @@ class _IntroScreenState extends State<IntroScreen> {
                     ),
                     ReusableButton(
                       child: _processing
-                          ? CircularProgressIndicator()
+                          ? CircularProgressIndicator(
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  kBackgroundColor))
                           : Text('CONTINUE', style: kTextButtonStyle),
                       onPressed: _processing
                           ? null

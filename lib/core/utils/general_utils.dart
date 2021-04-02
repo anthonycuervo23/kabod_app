@@ -12,14 +12,14 @@ List<DateTime> dateTimeFromStrings(List<String> listOfClasses) {
   return listOfHours;
 }
 
-String formatTime(Duration initialTimer) {
+String stringFromDuration(Duration initialTimer) {
   Duration duration = initialTimer;
   return [duration.inHours, duration.inMinutes, duration.inSeconds]
       .map((seg) => seg.remainder(60).toString().padLeft(2, '0'))
       .join(':');
 }
 
-Duration parseDuration(String s) {
+Duration durationFromString(String s) {
   int hours = 0;
   int minutes = 0;
   int micros;
@@ -32,4 +32,9 @@ Duration parseDuration(String s) {
   }
   micros = (double.parse(parts[parts.length - 1]) * 1000000).round();
   return Duration(hours: hours, minutes: minutes, microseconds: micros);
+}
+
+double doubleFromString(String s) {
+  double d = double.parse(s.replaceAll(',', '.'));
+  return d;
 }

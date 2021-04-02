@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 
 class PopupWodMenu extends StatelessWidget {
   final Wod currentWod;
