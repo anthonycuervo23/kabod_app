@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/screens/home/repository/wod_repository.dart';
+import 'package:kabod_app/screens/wods/repository/wod_repository.dart';
 
 class DeleteWodButton extends StatelessWidget {
   final String currentWodId;

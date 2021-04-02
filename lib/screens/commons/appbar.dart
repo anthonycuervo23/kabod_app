@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
 import 'package:provider/provider.dart';
+
+//My imports
+import 'package:kabod_app/screens/auth/model/user_repository.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
@@ -23,7 +25,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserRepository>(context);
+    final userRepository = Provider.of<UserRepository>(context);
     return AppBar(
       bottom: bottom,
       flexibleSpace: flexibleSpace,
@@ -39,13 +41,15 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          onTap: () => user.signOut(),
+          onTap: () => userRepository.signOut(),
           child: Padding(
             padding:
-                const EdgeInsets.only(right: 20, top: 15, left: 8, bottom: 8),
+                const EdgeInsets.only(right: 20, top: 10, left: 8, bottom: 5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(60),
-              child: Image.asset('assets/images/profile_image.jpg'),
+              child: userRepository.userModel.photoUrl != null
+                  ? Image.network(userRepository.userModel.photoUrl)
+                  : Image.asset('assets/images/profile_image.jpg'),
             ),
           ),
         ),

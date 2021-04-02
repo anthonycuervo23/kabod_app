@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 //my imports
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
-import 'package:kabod_app/screens/home/model/wod_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
 
 class MainScreenModel extends ChangeNotifier {
   MainScreenModel({this.selectedDate, this.wodStream, this.classesStream});
