@@ -11,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:kabod_app/core/repository/intro_profile_repository.dart';
 import 'package:kabod_app/core/presentation/results_repository.dart';
 import 'package:kabod_app/screens/results/components/add_results_form.dart';
-import 'package:kabod_app/screens/results/model/results_form_notifier.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
@@ -38,7 +37,6 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
   Duration initialTimer = Duration();
 
   bool rx = false;
-
   final _formKey = GlobalKey<FormBuilderState>();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -70,6 +68,12 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                 AddResultsForm(
                   formKey: _formKey,
                   currentWod: widget.currentWod,
+                  initialTimer: initialTimer,
+                  onTimerDurationChanged: (value) {
+                    setState(() {
+                      initialTimer = value;
+                    });
+                  },
                 ),
                 Row(
                   children: [
@@ -138,8 +142,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
           await Provider.of<IntroRepository>(context, listen: false)
               .uploadFile(path, _image);
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      data['time'] = stringFromDuration(
-          Provider.of<ResultFormNotifier>(context, listen: false).initialTimer);
+      data['time'] = stringFromDuration(initialTimer);
       data['result_date'] = widget.currentWod.date;
       data['result_photo'] = _uploadedFileURL;
       resultRepository.addResult(data, userRepository.user.uid);

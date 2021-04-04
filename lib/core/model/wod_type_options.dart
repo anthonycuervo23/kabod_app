@@ -13,3 +13,18 @@ String wodTypeOptionsToString(WodTypeOptions value) {
       return 'Custom';
   }
 }
+
+WodTypeOptions enumFromString(String s) {
+  switch (s) {
+    case 'For Time':
+      return WodTypeOptions.time;
+    case 'AMRAP':
+      return WodTypeOptions.amrap;
+    case 'For Weight':
+      return WodTypeOptions.weight;
+    case 'Custom':
+      return WodTypeOptions.custom;
+    default:
+      return WodTypeOptions.time;
+  }
+}
