@@ -9,7 +9,7 @@ class Result {
   bool rx;
   String comment;
   String photoUrl;
-  String userId;
+  String wodId;
 
   Result(
       {this.time,
@@ -18,7 +18,7 @@ class Result {
       this.date,
       this.id,
       this.photoUrl,
-      this.userId,
+      this.wodId,
       this.weight,
       this.comment,
       this.customScore,
@@ -29,7 +29,7 @@ class Result {
         reps = data['reps'],
         rounds = data['rounds'],
         photoUrl = data['result_photo'],
-        userId = data['user_id'],
+        wodId = data['wod_id'],
         weight = data['weight'],
         comment = data['comment'],
         customScore = data['custom_score'],
@@ -39,7 +39,7 @@ class Result {
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['user_id'] = userId;
+    data['wod_id'] = wodId;
     data['time'] = time;
     data['reps'] = reps;
     data['rounds'] = rounds;

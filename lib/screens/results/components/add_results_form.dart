@@ -85,12 +85,6 @@ class _AddResultsFormState extends State<AddResultsForm> {
               onTap: () {
                 selectTime(context);
               },
-              validator: (text) {
-                if (text == null || text.isEmpty) {
-                  return 'Value Can\'t be Empty';
-                }
-                return null;
-              },
               decoration: InputDecoration(
                 hintText: stringFromDuration(widget.initialTimer) ==
                         stringFromDuration(nullTime)

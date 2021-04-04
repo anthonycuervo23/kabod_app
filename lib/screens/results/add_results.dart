@@ -145,6 +145,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['time'] = stringFromDuration(initialTimer);
       data['result_date'] = widget.currentWod.date;
       data['result_photo'] = _uploadedFileURL;
+      data['wod_id'] = widget.currentWod.id;
       resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     } else if (validated && _image == null) {
@@ -155,6 +156,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
       data['time'] = stringFromDuration(initialTimer);
       data['result_date'] = widget.currentWod.date;
+      data['wod_id'] = widget.currentWod.id;
       resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     }
