@@ -85,6 +85,12 @@ class _AddResultsFormState extends State<AddResultsForm> {
               onTap: () {
                 selectTime(context);
               },
+              validator: (text) {
+                if (text == null || text.isEmpty) {
+                  return 'Value Can\'t be Empty';
+                }
+                return null;
+              },
               decoration: InputDecoration(
                 hintText: stringFromDuration(widget.initialTimer) ==
                         stringFromDuration(nullTime)
@@ -103,6 +109,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
               keyboardType: TextInputType.number,
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.integer(context),
+                FormBuilderValidators.required(context),
                 FormBuilderValidators.maxLength(context, 2)
               ]),
               name: 'rounds',
@@ -143,6 +150,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
               keyboardType: TextInputType.number,
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.numeric(context),
+                FormBuilderValidators.required(context),
                 FormBuilderValidators.maxLength(context, 6)
               ]),
               name: 'weight',
@@ -222,11 +230,5 @@ class _AddResultsFormState extends State<AddResultsForm> {
       _selectedTimer = picked;
       _controllerTimer.text = stringFromDuration(_selectedTimer);
     }
-  }
-
-  @override
-  void dispose() {
-    _controllerTimer.dispose();
-    super.dispose();
   }
 }
