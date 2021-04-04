@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/auth/screens/login_screen.dart';
 import 'package:kabod_app/screens/auth/screens/splash.dart';
 import 'package:kabod_app/screens/home//home_screen.dart';

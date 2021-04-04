@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //My imports
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
@@ -36,6 +38,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: Image.asset('assets/icons/drawer_icon.png'),
         onPressed: () {
+          Navigator.pop(context);
           _scaffoldKey.currentState.openDrawer();
         },
       ),
@@ -48,7 +51,11 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(60),
               child: userRepository.userModel.photoUrl != null
-                  ? Image.network(userRepository.userModel.photoUrl)
+                  ? CachedNetworkImage(
+                      imageUrl: userRepository.userModel.photoUrl,
+                      placeholder: (context, url) => CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(kButtonColor)))
                   : Image.asset('assets/images/profile_image.jpg'),
             ),
           ),

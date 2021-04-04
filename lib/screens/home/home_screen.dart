@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 // my imports
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
@@ -110,9 +110,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   switch (snapshot.connectionState) {
                     case ConnectionState.waiting:
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(kButtonColor)));
                     default:
-                      return Center(child: CircularProgressIndicator());
+                      return Center(
+                          child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(kButtonColor),
+                      ));
                   }
                 },
               ),
@@ -138,9 +144,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     switch (snapshot.connectionState) {
                       case ConnectionState.waiting:
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    kButtonColor)));
                       default:
-                        return Center(child: CircularProgressIndicator());
+                        return Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    kButtonColor)));
                     }
                   }),
             ],

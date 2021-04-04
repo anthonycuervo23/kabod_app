@@ -5,6 +5,7 @@ import 'package:kabod_app/screens/auth/screens/login_screens_controller.dart';
 import 'package:kabod_app/screens/auth/screens/reset_password_screen.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
+import 'package:kabod_app/screens/results/add_results.dart';
 import 'package:kabod_app/screens/wods/wod_editor_screen.dart';
 
 class AppRoutes {
@@ -13,10 +14,14 @@ class AppRoutes {
   static const String homeRoute = '/home';
   static const String addWodRoute = '/add_wod';
   static const String editWodRoute = '/edit_wod';
-  static const String classDetailsRoute = 'class_details';
+  static const String classDetailsRoute = '/class_details';
+  static const String addWodResultsRoute = '/add_wod_results';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case addWodResultsRoute:
+        return MaterialPageRoute(
+            builder: (_) => AddResultsScreen(currentWod: settings.arguments));
       case classDetailsRoute:
         List<dynamic> args = settings.arguments;
         return MaterialPageRoute(
