@@ -1,15 +1,15 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
-import 'package:kabod_app/screens/commons/show_toast.dart';
 import 'package:provider/provider.dart';
 
 //My imports
+import 'package:kabod_app/core/repository/classes_repository.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/screens/commons/show_toast.dart';
+import 'package:kabod_app/screens/classes/components/users_gridView.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
-import 'package:kabod_app/screens/classes/repository/classes_repository.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -71,10 +71,6 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserRepository userRepository = Provider.of<UserRepository>(context);
-    final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
-    final DateTime userSubscribedToClass =
-        _userSubscribedToClass(userRepository.user.uid);
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
@@ -143,41 +139,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 AsyncSnapshot<List<UserModel>> snapshot) {
               if (snapshot.hasData) {
                 List<UserModel> users = snapshot.data;
-                return Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3),
-                    itemCount: users.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      UserModel user = users[index];
-                      return Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: user.photoUrl != null
-                                ? NetworkImage(user.photoUrl)
-                                : null,
-                            radius: MediaQuery.of(context).size.width * 0.10,
-                            backgroundColor: Colors.grey[400].withOpacity(
-                              0.4,
-                            ),
-                            child: user.photoUrl == null
-                                ? FaIcon(
-                                    FontAwesomeIcons.user,
-                                    color: kWhiteTextColor,
-                                    size:
-                                        MediaQuery.of(context).size.width * 0.1,
-                                  )
-                                : Container(),
-                          ),
-                          Text(
-                            user.name,
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                );
+                return ShowSubscribedUsers(users: users);
               } else if (snapshot.data == null) {
                 return Center(
                     child: Text(
@@ -188,86 +150,97 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 return Center(child: Text(snapshot.error.toString()));
             },
           ),
-          if (widget.listOfHours[widget.index]
-                  .isBefore(DateTime.now().toUtc()) ||
-              widget.currentClass.classAthletes[keys[widget.index]].length >=
-                  10)
-            Container(),
-          if (!userSubscribed &&
-              widget.currentClass.classAthletes[keys[widget.index]].length <=
-                  10)
-            ReusableButton(
-                onPressed: () async {
-                  final Map<String, dynamic> data = {
-                    'class_athletes': {
-                      keys[widget.index]:
-                          FieldValue.arrayUnion([userRepository.user.uid])
-                    }
-                  };
-                  await context
-                      .read<ClassesRepository>()
-                      .addUserToClass(widget.currentClass.id, data);
-                  Navigator.pop(context);
-                  ToastUtil.show(
-                      ToastDecorator(
-                        widget: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const ListTile(
-                              leading: Icon(Icons.check,
-                                  size: 50, color: kButtonColor),
-                              title: Text('You\'ve booked a class',
-                                  style: TextStyle(fontSize: 20)),
-                            ),
-                          ],
-                        ),
-                        backgroundColor: kBackgroundColor,
-                      ),
-                      context,
-                      gravity: ToastGravity.top);
-                },
-                child: Text(
-                  'BOOK',
-                  style: kTextButtonStyle,
-                )),
-          if (widget.listOfHours[widget.index]
-                  .isAtSameMomentAs(userSubscribedToClass) &&
-              widget.listOfHours[widget.index].isAfter(DateTime.now().toUtc()))
-            ReusableButton(
-                onPressed: () async {
-                  final Map<String, dynamic> data = {
-                    'class_athletes.${keys[widget.index]}':
-                        FieldValue.arrayRemove([userRepository.user.uid])
-                  };
-                  await context
-                      .read<ClassesRepository>()
-                      .removeUserFromClass(widget.currentClass.id, data);
-                  Navigator.pop(context);
-                  ToastUtil.show(
-                      ToastDecorator(
-                        widget: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            const ListTile(
-                              leading: Icon(Icons.info_outline,
-                                  size: 50, color: kButtonColor),
-                              title: Text('You\'ve canceled the class',
-                                  style: TextStyle(fontSize: 20)),
-                            ),
-                          ],
-                        ),
-                        backgroundColor: kBackgroundColor,
-                      ),
-                      context,
-                      gravity: ToastGravity.top);
-                },
-                child: Text(
-                  'CANCEL BOOKING',
-                  style: kTextButtonStyle,
-                )),
+          bookingOrCancelButton(),
           DividerMedium()
         ],
       ),
     );
+  }
+
+  Widget bookingOrCancelButton() {
+    final UserRepository userRepository = Provider.of<UserRepository>(context);
+    final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
+    final DateTime userSubscribedToClass =
+        _userSubscribedToClass(userRepository.user.uid);
+    if (!userSubscribed &&
+        widget.currentClass.classAthletes[keys[widget.index]].length <= 10) {
+      return Visibility(
+        visible: widget.listOfHours[widget.index].isBefore(DateTime.now()) ||
+                widget.currentClass.classAthletes[keys[widget.index]].length >=
+                    10
+            ? false
+            : true,
+        child: ReusableButton(
+            onPressed: () async {
+              final Map<String, dynamic> data = {
+                'class_athletes': {
+                  keys[widget.index]:
+                      FieldValue.arrayUnion([userRepository.user.uid])
+                }
+              };
+              await context
+                  .read<ClassesRepository>()
+                  .addUserToClass(widget.currentClass.id, data);
+              Navigator.pop(context);
+              ToastUtil.show(
+                  ToastDecorator(
+                    widget: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const ListTile(
+                          leading:
+                              Icon(Icons.check, size: 50, color: Colors.green),
+                          title: Text('You\'ve booked a class',
+                              style: TextStyle(fontSize: 20)),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: kBackgroundColor,
+                  ),
+                  context,
+                  gravity: ToastGravity.top);
+            },
+            child: Text(
+              'BOOK',
+              style: kTextButtonStyle,
+            )),
+      );
+    } else if (widget.listOfHours[widget.index]
+            .isAtSameMomentAs(userSubscribedToClass) &&
+        widget.listOfHours[widget.index].isAfter(DateTime.now().toUtc())) {
+      return ReusableButton(
+          onPressed: () async {
+            final Map<String, dynamic> data = {
+              'class_athletes.${keys[widget.index]}':
+                  FieldValue.arrayRemove([userRepository.user.uid])
+            };
+            await context
+                .read<ClassesRepository>()
+                .removeUserFromClass(widget.currentClass.id, data);
+            Navigator.pop(context);
+            ToastUtil.show(
+                ToastDecorator(
+                  widget: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      const ListTile(
+                        leading: Icon(Icons.info_outline,
+                            size: 50, color: kButtonColor),
+                        title: Text('You\'ve canceled the class',
+                            style: TextStyle(fontSize: 20)),
+                      ),
+                    ],
+                  ),
+                  backgroundColor: kBackgroundColor,
+                ),
+                context,
+                gravity: ToastGravity.top);
+          },
+          child: Text(
+            'CANCEL BOOKING',
+            style: kTextButtonStyle,
+          ));
+    }
+    return Container();
   }
 }

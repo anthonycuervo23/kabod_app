@@ -6,7 +6,7 @@ import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/auth/components/login_fields.dart';
-import 'package:kabod_app/screens/auth/model/user_repository.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
