@@ -60,7 +60,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DividerBig(),
                         DividerBig(),
-                        Text('Welcome, ${userRepository.userModel.name}',
+                        Text(
+                            'Welcome, ${formatName(userRepository.userModel.name)}',
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),

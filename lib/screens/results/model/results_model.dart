@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Result {
   String time;
   String reps;
@@ -24,31 +26,48 @@ class Result {
       this.customScore,
       this.rx});
 
-  Result.fromMap(Map<String, dynamic> data, String id)
-      : time = data['time'],
-        reps = data['reps'],
-        rounds = data['rounds'],
-        photoUrl = data['result_photo'],
-        wodId = data['wod_id'],
-        weight = data['weight'],
-        comment = data['comment'],
-        customScore = data['custom_score'],
-        rx = data['rx'],
-        date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
-        id = id;
-
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['wod_id'] = wodId;
-    data['time'] = time;
-    data['reps'] = reps;
-    data['rounds'] = rounds;
-    data['result_photo'] = photoUrl;
-    data['weight'] = weight;
-    data['comment'] = comment;
-    data['custom_score'] = customScore;
-    data['rx'] = rx;
-    data['result_date'] = date;
-    return data;
+  factory Result.fromFireStore(DocumentSnapshot doc) {
+    Map data = doc.data();
+    return Result(
+      id: doc.id,
+      time: data['time'],
+      reps: data['reps'],
+      rounds: data['rounds'],
+      date: data['result_date'].toDate(),
+      photoUrl: data['result_photo'],
+      wodId: data['wod_id'],
+      weight: data['weight'],
+      comment: data['comment'],
+      customScore: data['custom_score'],
+      rx: data['rx'],
+    );
   }
+
+  // Result.fromMap(Map<String, dynamic> data, String id)
+  //     : time = data['time'],
+  //       reps = data['reps'],
+  //       rounds = data['rounds'],
+  //       photoUrl = data['result_photo'],
+  //       wodId = data['wod_id'],
+  //       weight = data['weight'],
+  //       comment = data['comment'],
+  //       customScore = data['custom_score'],
+  //       rx = data['rx'],
+  //       date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
+  //       id = id;
+  //
+  // Map<String, dynamic> toMap() {
+  //   final Map<String, dynamic> data = new Map<String, dynamic>();
+  //   data['wod_id'] = wodId;
+  //   data['time'] = time;
+  //   data['reps'] = reps;
+  //   data['rounds'] = rounds;
+  //   data['result_photo'] = photoUrl;
+  //   data['weight'] = weight;
+  //   data['comment'] = comment;
+  //   data['custom_score'] = customScore;
+  //   data['rx'] = rx;
+  //   data['result_date'] = date;
+  //   return data;
+  // }
 }

@@ -38,3 +38,31 @@ double doubleFromString(String s) {
   double d = double.parse(s.replaceAll(',', '.'));
   return d;
 }
+
+//get the first name and the initial of the middle or last name
+//this way the ui wont be affected.
+String formatName(String fullName) {
+  bool appendLastName = false;
+
+  List<String> tempList = fullName.split(" ");
+
+  int start = 0;
+  int end = tempList.length;
+  String initial;
+
+  if (end > 1) {
+    end = 1;
+    initial = tempList[1].substring(0, 1).toUpperCase();
+    appendLastName = true;
+  }
+
+  final selectedWords = tempList.sublist(start, end);
+
+  String output = selectedWords.join(" ");
+
+  if (appendLastName) {
+    output += ' $initial';
+  }
+
+  return output;
+}

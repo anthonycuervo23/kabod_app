@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/core/repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -79,6 +80,8 @@ class MyApp extends StatelessWidget {
             create: (_) => ResultRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<DrawerStateInfo>(
             create: (_) => DrawerStateInfo()),
+        Provider(
+            create: (_) => LeaderBoardRepository(FirebaseFirestore.instance)),
       ],
     );
   }

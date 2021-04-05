@@ -14,7 +14,6 @@ import 'package:kabod_app/screens/results/components/add_results_form.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
-import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
@@ -39,8 +38,6 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
   bool rx = false;
   final _formKey = GlobalKey<FormBuilderState>();
 
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-
   @override
   void initState() {
     _processing = false;
@@ -50,10 +47,13 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: MyAppBar(
-        scaffoldKey: _scaffoldKey,
+      appBar: AppBar(
         shape: kAppBarShape,
-        title: Text('Add WOD Result'),
+        title: Text('Save your Results'),
+        centerTitle: true,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios, color: kButtonColor),
+            onPressed: () => Navigator.pop(context)),
       ),
       body: ListView(
         padding: EdgeInsets.only(top: kDefaultPadding),

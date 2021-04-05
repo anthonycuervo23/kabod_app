@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-//My Imports
-import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/navigationDrawer/main_drawer.dart';
-import 'package:kabod_app/screens/commons/appbar.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
   @override
@@ -12,28 +7,52 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+ // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: MyAppBar(
-        shape: kAppBarShape,
-        scaffoldKey: _scaffoldKey,
-      ),
-      drawer: Theme(
-        data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
-        child: MyDrawer(AppRoutes.leaderBoardRoute),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Center(
-            child: Text('LEADERBOARD SCREEN'),
-          )
-        ],
-      ),
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+            body: Container(
+          margin: EdgeInsets.only(top: 65.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 15.0, top: 10.0),
+                child: RichText(
+                    text: TextSpan(
+                        text: "Leader",
+                        style: TextStyle(
+                            color: Colors.deepPurple,
+                            fontSize: 30.0,
+                            fontWeight: FontWeight.bold),
+                        children: [
+                      TextSpan(
+                          text: " Board",
+                          style: TextStyle(
+                              color: Colors.pink,
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold))
+                    ])),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 15.0),
+                child: Text(
+                  'Rank Board: ',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ))
+      ],
     );
   }
 }
