@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
-
 class LeaderBoardScreen extends StatefulWidget {
   @override
   _LeaderBoardScreenState createState() => _LeaderBoardScreenState();
 }
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
- // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
