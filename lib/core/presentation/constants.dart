@@ -16,3 +16,10 @@ const kBackgroundColor = Color(0xFF121212);
 const kWhiteTextColor = Colors.white;
 
 const kTextButtonStyle = TextStyle(color: kWhiteTextColor, fontSize: 20);
+
+BoxDecoration kListTileSelected = BoxDecoration(
+    color: Color(0xFF8A2222).withOpacity(0.5),
+    borderRadius: BorderRadius.all(Radius.circular(16)));
+
+TextStyle kListTileTextStyle =
+    TextStyle(fontWeight: FontWeight.bold, fontSize: 20);

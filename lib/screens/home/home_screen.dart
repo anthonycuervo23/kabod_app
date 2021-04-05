@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 // my imports
+import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
@@ -73,6 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   indicatorColor: kButtonColor,
                   tabs: [Tab(text: 'Schedule'), Tab(text: 'WOD')]),
             ),
+          ),
+          drawer: Theme(
+            data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+            child: MyDrawer(AppRoutes.homeRoute),
           ),
           floatingActionButton: userRepository.userModel.admin == true
               ? FloatingActionButton(
