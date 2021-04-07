@@ -49,7 +49,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                 const EdgeInsets.only(right: 20, top: 10, left: 8, bottom: 5),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(60),
-              child: userRepository.userModel.photoUrl != null
+              child: userRepository.userModel?.photoUrl != null
                   ? CachedNetworkImage(
                       imageUrl: userRepository.userModel.photoUrl,
                       placeholder: (context, url) => CircularProgressIndicator(

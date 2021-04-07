@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:kabod_app/core/repository/leaderboard_repository.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/core/repository/leaderboard_repository.dart';
 import 'package:kabod_app/navigationDrawer/model/drawer_notifier.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';

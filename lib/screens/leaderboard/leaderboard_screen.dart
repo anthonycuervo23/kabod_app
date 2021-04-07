@@ -34,7 +34,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   @override
   void initState() {
     _resultStream =
-        context.read<LeaderBoardRepository>().getResults('rounds', true);
+        context.read<LeaderBoardRepository>().getResults('time', true);
     super.initState();
   }
 
