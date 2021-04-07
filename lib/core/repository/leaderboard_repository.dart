@@ -6,43 +6,15 @@ class LeaderBoardRepository {
 
   LeaderBoardRepository(this._firestore) : assert(_firestore != null);
 
-  static List<Result> allResultsList = [];
+  Stream<List<Result>> getResults(String field, bool order) {
+    var ref = _firestore.collection('results');
 
-  listOfUsers() async {
-    List listOfUsers =
-        await _firestore.collection("users").get().then((val) => val.docs);
-    for (int i = 0; i < listOfUsers.length; i++) {
-      _firestore
-          .collection("users")
-          .doc(listOfUsers[i].id.toString())
-          .collection("results")
-          .snapshots()
-          .listen(createListOfResults);
-    }
+    return ref.orderBy(field, descending: order).snapshots().map((snapshot) {
+      return snapshot.docs
+          .map(
+            (document) => Result.fromMap(document.data(), document.id),
+          )
+          .toList();
+    });
   }
-
-  createListOfResults(QuerySnapshot snapshot) async {
-    var docs = snapshot.docs;
-    for (var Doc in docs) {
-      allResultsList.add(Result.fromFireStore(Doc));
-    }
-  }
-
-  // List<DocumentSnapshot> getAllResults() {
-  //   _firestore.collection("users").get().then((querySnapshot) {
-  //     querySnapshot.docs.forEach((result) {
-  //       _firestore
-  //           .collection("users")
-  //           .doc(result.id)
-  //           .collection("results")
-  //           .get()
-  //           .then((querySnapshot) {
-  //         querySnapshot.docs.forEach((result) {
-  //           print(result.data());
-  //           // return result.data();
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
 }

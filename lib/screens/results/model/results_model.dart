@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Result {
   String time;
-  String reps;
-  String rounds;
+  int reps;
+  int rounds;
   DateTime date;
   String id;
   String weight;
@@ -11,7 +9,11 @@ class Result {
   bool rx;
   String comment;
   String photoUrl;
-  String wodId;
+  String userId;
+  String wodName;
+  String gender;
+  String userName;
+  String userPhoto;
 
   Result(
       {this.time,
@@ -20,54 +22,49 @@ class Result {
       this.date,
       this.id,
       this.photoUrl,
-      this.wodId,
+      this.userId,
+      this.wodName,
       this.weight,
       this.comment,
+      this.gender,
       this.customScore,
+      this.userName,
+      this.userPhoto,
       this.rx});
 
-  factory Result.fromFireStore(DocumentSnapshot doc) {
-    Map data = doc.data();
-    return Result(
-      id: doc.id,
-      time: data['time'],
-      reps: data['reps'],
-      rounds: data['rounds'],
-      date: data['result_date'].toDate(),
-      photoUrl: data['result_photo'],
-      wodId: data['wod_id'],
-      weight: data['weight'],
-      comment: data['comment'],
-      customScore: data['custom_score'],
-      rx: data['rx'],
-    );
-  }
+  Result.fromMap(Map<String, dynamic> data, String id)
+      : time = data['time'],
+        reps = data['reps'],
+        rounds = data['rounds'],
+        photoUrl = data['result_photo'],
+        wodName = data['wod_name'],
+        userName = data['user_name'],
+        userPhoto = data['user_photo'],
+        weight = data['weight'],
+        comment = data['result_comment'],
+        userId = data['user_id'],
+        gender = data['gender'],
+        customScore = data['custom_score'],
+        rx = data['rx'],
+        date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
+        id = id;
 
-  // Result.fromMap(Map<String, dynamic> data, String id)
-  //     : time = data['time'],
-  //       reps = data['reps'],
-  //       rounds = data['rounds'],
-  //       photoUrl = data['result_photo'],
-  //       wodId = data['wod_id'],
-  //       weight = data['weight'],
-  //       comment = data['comment'],
-  //       customScore = data['custom_score'],
-  //       rx = data['rx'],
-  //       date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
-  //       id = id;
-  //
-  // Map<String, dynamic> toMap() {
-  //   final Map<String, dynamic> data = new Map<String, dynamic>();
-  //   data['wod_id'] = wodId;
-  //   data['time'] = time;
-  //   data['reps'] = reps;
-  //   data['rounds'] = rounds;
-  //   data['result_photo'] = photoUrl;
-  //   data['weight'] = weight;
-  //   data['comment'] = comment;
-  //   data['custom_score'] = customScore;
-  //   data['rx'] = rx;
-  //   data['result_date'] = date;
-  //   return data;
-  // }
+  Map<String, dynamic> toMap() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['wod_name'] = wodName;
+    data['user_id'] = userId;
+    data['time'] = time;
+    data['reps'] = reps;
+    data['user_name'] = userName;
+    data['user_photo'] = userPhoto;
+    data['rounds'] = rounds;
+    data['result_photo'] = photoUrl;
+    data['weight'] = weight;
+    data['result_comment'] = comment;
+    data['gender'] = gender;
+    data['custom_score'] = customScore;
+    data['rx'] = rx;
+    data['result_date'] = date;
+    return data;
+  }
 }

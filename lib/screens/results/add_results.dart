@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 
 //My imports
 import 'package:kabod_app/core/repository/intro_profile_repository.dart';
-import 'package:kabod_app/core/presentation/results_repository.dart';
+import 'file:///C:/Users/antho/Desktop/kabod_project/kabod_app/lib/core/repository/results_repository.dart';
 import 'package:kabod_app/screens/results/components/add_results_form.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
@@ -143,10 +143,17 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
               .uploadFile(path, _image);
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
       data['time'] = stringFromDuration(initialTimer);
-      data['result_date'] = widget.currentWod.date;
+      data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
       data['result_photo'] = _uploadedFileURL;
-      data['wod_id'] = widget.currentWod.id;
-      resultRepository.addResult(data, userRepository.user.uid);
+      data['wod_name'] = widget.currentWod.title;
+      data['reps'] = data['reps'] != null ? int.parse(data['reps']) : null;
+      data['rounds'] =
+          data['rounds'] != null ? int.parse(data['rounds']) : null;
+      data['weight'] = data['weight'] ?? null;
+      data['user_name'] = userRepository.userModel.name;
+      data['user_photo'] = userRepository.userModel.photoUrl;
+      data['gender'] = userRepository.userModel.gender;
+      resultRepository.addResult(data);
       Navigator.pop(context);
     } else if (validated && _image == null) {
       _formKey.currentState.save();
@@ -155,9 +162,16 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       });
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
       data['time'] = stringFromDuration(initialTimer);
-      data['result_date'] = widget.currentWod.date;
-      data['wod_id'] = widget.currentWod.id;
-      resultRepository.addResult(data, userRepository.user.uid);
+      data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
+      data['reps'] = data['reps'] != null ? int.parse(data['reps']) : null;
+      data['rounds'] =
+          data['rounds'] != null ? int.parse(data['rounds']) : null;
+      data['weight'] = data['weight'] ?? null;
+      data['wod_name'] = widget.currentWod.title;
+      data['user_name'] = userRepository.userModel.name;
+      data['user_photo'] = userRepository.userModel.photoUrl;
+      data['gender'] = userRepository.userModel.gender;
+      resultRepository.addResult(data);
       Navigator.pop(context);
     }
   }
