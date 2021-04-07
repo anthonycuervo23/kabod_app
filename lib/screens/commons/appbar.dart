@@ -38,13 +38,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         icon: Image.asset('assets/icons/drawer_icon.png'),
         onPressed: () {
-          Navigator.pop(context);
           _scaffoldKey.currentState.openDrawer();
         },
       ),
       actions: [
         InkWell(
-          onTap: () => userRepository.signOut(),
+          onTap: () {},
           child: Padding(
             padding:
                 const EdgeInsets.only(right: 20, top: 10, left: 8, bottom: 5),

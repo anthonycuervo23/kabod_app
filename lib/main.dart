@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/navigationDrawer/model/drawer_notifier.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
@@ -76,6 +77,8 @@ class MyApp extends StatelessWidget {
             create: (_) => ClassesRepository(FirebaseFirestore.instance)),
         Provider<ResultRepository>(
             create: (_) => ResultRepository(FirebaseFirestore.instance)),
+        ChangeNotifierProvider<DrawerStateInfo>(
+            create: (_) => DrawerStateInfo()),
       ],
     );
   }
