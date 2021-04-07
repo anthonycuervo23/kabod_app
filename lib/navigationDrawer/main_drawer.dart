@@ -87,7 +87,6 @@ class MyDrawer extends StatelessWidget {
                 Column(
                   children: [
                     Container(
-                      decoration: currentDrawer == 2 ? kListTileSelected : null,
                       child: ListTile(
                           leading: Image.asset('assets/icons/logout_icon.png'),
                           title: Text(
@@ -95,6 +94,8 @@ class MyDrawer extends StatelessWidget {
                             style: kListTileTextStyle,
                           ),
                           onTap: () {
+                            Navigator.popUntil(
+                                context, (route) => route.isFirst);
                             userRepository.signOut();
                           }),
                     ),

@@ -5,11 +5,7 @@ class ResultRepository {
 
   ResultRepository(this._firestore) : assert(_firestore != null);
 
-  Future<void> addResult(Map<String, dynamic> data, String uid) {
-    return _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('results')
-        .add(data);
+  Future<void> addResult(Map<String, dynamic> data) {
+    return _firestore.collection('results').add(data);
   }
 }

@@ -60,7 +60,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DividerBig(),
                         DividerBig(),
-                        Text('Welcome, ${userRepository.userModel.name}',
+                        Text(
+                            'Welcome, ${formatName(userRepository.userModel?.name ?? '')}',
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: TextStyle(color: kTextColor)),
                         DividerBig(),
                         WodCalendar(),
@@ -79,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
             child: MyDrawer(AppRoutes.homeRoute),
           ),
-          floatingActionButton: userRepository.userModel.admin == true
+          floatingActionButton: userRepository.userModel?.admin == true
               ? FloatingActionButton(
                   onPressed: () =>
                       Navigator.pushNamed(context, AppRoutes.addWodRoute),
