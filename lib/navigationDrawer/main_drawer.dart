@@ -51,13 +51,14 @@ class MyDrawer extends StatelessWidget {
                         leading: Image.asset('assets/icons/home_icon.png'),
                         title: Text('Home', style: kListTileTextStyle),
                         onTap: () {
-                          Navigator.of(context).pop();
+                          Navigator.popUntil(
+                              context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.homeRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(0);
 
-                          Navigator.pushNamed(context, AppRoutes.homeRoute);
+                          Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
                         },
                       ),
                     ),
@@ -71,15 +72,15 @@ class MyDrawer extends StatelessWidget {
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
-                          Navigator.of(context).pop();
+                          Navigator.popUntil(
+                              context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.leaderBoardRoute)
                             return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(1);
 
-                          Navigator.pushNamed(
-                              context, AppRoutes.leaderBoardRoute);
+                          Navigator.pushReplacementNamed(context, AppRoutes.leaderBoardRoute);
                         },
                       ),
                     ),
