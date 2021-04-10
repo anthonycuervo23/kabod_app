@@ -153,7 +153,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['user_name'] = userRepository.userModel.name;
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
-      resultRepository.addResult(data);
+      resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     } else if (validated && _image == null) {
       _formKey.currentState.save();
@@ -171,7 +171,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['user_name'] = userRepository.userModel.name;
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
-      resultRepository.addResult(data);
+      resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     }
   }

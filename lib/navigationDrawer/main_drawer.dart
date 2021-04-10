@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
@@ -87,8 +88,15 @@ class MyDrawer extends StatelessWidget {
                 Column(
                   children: [
                     Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFF121212).withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       child: ListTile(
-                          leading: Image.asset('assets/icons/logout_icon.png'),
+                          leading: FaIcon(
+                            FontAwesomeIcons.signOutAlt,
+                            size: 30,
+                            color: kButtonColor,
+                          ),
                           title: Text(
                             'Logout',
                             style: kListTileTextStyle,

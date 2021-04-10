@@ -1,16 +1,18 @@
+import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:provider/provider.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:intl/intl.dart';
 
 //My Imports
+import 'package:kabod_app/screens/leaderboard/components/leaderboard_cards.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/core/repository/leaderboard_repository.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
-import 'package:kabod_app/screens/commons/reusable_card.dart';
 import 'package:kabod_app/screens/results/model/results_model.dart';
 
 class LeaderBoardScreen extends StatefulWidget {
@@ -19,33 +21,136 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
-  Stream<List<Result>> _resultStream;
-  List<String> allGenders = [];
-  List allWodNames = [];
-  List allWodDates = [];
+  List<String> allWodNames = [];
   List<Result> _filteredList = [];
+  List<String> filteredWodNames;
   String _dropDownGender;
   DateTime _dropDownDate;
-  String test;
   String _dropDownWodName;
   int i = 0;
+  bool disableWodName = true;
+  bool disableGender = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
-    _resultStream =
-        context.read<LeaderBoardRepository>().getResults('time', true);
+    listOfUsers();
     super.initState();
+  }
+
+  static List<Result> allResultsListByDate = [];
+
+  listOfUsers() async {
+    List listOfUsers = await FirebaseFirestore.instance
+        .collection("users")
+        .get()
+        .then((val) => val.docs);
+    for (int i = 0; i < listOfUsers.length; i++) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(listOfUsers[i].id.toString())
+          .collection("results")
+          .where('result_date', isEqualTo: _dropDownDate)
+          .snapshots()
+          .listen(createListOfResultsByDate);
+    }
+    setState(() {
+      allResultsListByDate = _filteredList;
+    });
+  }
+
+  Future<List<Result>> _getListByDate() async {
+    return allResultsListByDate;
+  }
+
+  createListOfResultsByDate(QuerySnapshot snapshot) async {
+    var docs = snapshot.docs;
+    for (var Doc in docs) {
+      allResultsListByDate.add(Result.fromFireStore(Doc));
+    }
+  }
+
+  static List<Result> allResultsListByWodName = [];
+
+  Future<void> listOfResultsFilteredByWodName() async {
+    List listOfUsers = await FirebaseFirestore.instance
+        .collection("users")
+        .get()
+        .then((val) => val.docs);
+    for (int i = 0; i < listOfUsers.length; i++) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(listOfUsers[i].id.toString())
+          .collection("results")
+          .where('wod_date', isEqualTo: _dropDownDate)
+          .snapshots()
+          .listen(createListOfResultsByWodName);
+    }
+    setState(() {
+      allResultsListByWodName = _filteredList;
+    });
+  }
+
+  Future<List<Result>> _getListByWodName() async {
+    return allResultsListByWodName;
+  }
+
+  createListOfResultsByWodName(QuerySnapshot snapshot) async {
+    var docs = snapshot.docs;
+    for (var Doc in docs) {
+      allResultsListByWodName.add(Result.fromFireStore(Doc));
+    }
+  }
+
+  static List<Result> allResultsListByWodNameAndGender = [];
+
+  Future<void> listOfResultsFilteredByWodNameAndGender(
+      DateTime selectedDate, String wodName) async {
+    List listOfUsers = await FirebaseFirestore.instance
+        .collection("users")
+        .get()
+        .then((val) => val.docs);
+    for (int i = 0; i < listOfUsers.length; i++) {
+      FirebaseFirestore.instance
+          .collection("users")
+          .doc(listOfUsers[i].id.toString())
+          .collection("results")
+          .where('wod_date', isEqualTo: selectedDate)
+          .where('wod_name', isEqualTo: wodName)
+          .snapshots()
+          .listen(createListOfResultsByWodNameAndGender);
+    }
+    setState(() {
+      allResultsListByWodNameAndGender = _filteredList;
+    });
+  }
+
+  Future<List<Result>> _getlListbyWodNameAndGender() async {
+    return allResultsListByWodNameAndGender;
+  }
+
+  createListOfResultsByWodNameAndGender(QuerySnapshot snapshot) async {
+    var docs = snapshot.docs;
+    for (var Doc in docs) {
+      allResultsListByWodNameAndGender.add(Result.fromFireStore(Doc));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var medalSize = TextStyle(fontSize: 40);
+    Size size = MediaQuery.of(context).size;
+    TextStyle kNameStyle = TextStyle(fontSize: 20, color: Colors.white);
+    TextStyle medalSize = TextStyle(fontSize: 40);
     return Scaffold(
         key: _scaffoldKey,
         appBar: MyAppBar(
           scaffoldKey: _scaffoldKey,
           shape: kAppBarShape,
+          title: Text(
+            'Leader Board',
+            style: TextStyle(
+                color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
+          ),
         ),
         drawer: Theme(
           data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
@@ -55,310 +160,325 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Flexible(
-                child: StreamBuilder<List<Result>>(
-                    stream: _resultStream,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        List<Result> result = snapshot.data;
-                        for (int j = 0; j < result.length; j++) {
-                          Result itemResult = result[j];
-                          allGenders.add(itemResult.gender);
-                          allWodNames.add(itemResult.wodName);
-                          allWodDates.add(itemResult.date);
-                        }
-                        final List<String> filteredGenders =
-                            allGenders.toSet().toList();
-                        final List filteredWodNames =
-                            allWodNames.toSet().toList();
-                        final List filteredWodDates =
-                            allWodDates.toSet().toList();
-                        i = 0;
-                        return Column(
-                          children: [
-                            DividerSmall(),
-                            DefaultCard(
-                              child: Column(
-                                children: [
-                                  ListTile(
-                                    leading: Icon(
-                                      Icons.calendar_today,
-                                      size: 40,
-                                      color: kButtonColor,
-                                    ),
-                                    trailing: DropdownButton(
-                                      items: filteredWodDates
-                                              .map<DropdownMenuItem>(
-                                                (wodDate) => DropdownMenuItem(
-                                                  child:
-                                                      Text(wodDate.toString()),
-                                                  value: '$wodDate',
-                                                ),
-                                              )
-                                              ?.toList() ??
-                                          [],
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          print(filteredWodDates);
-                                          test = newValue;
-                                          setState(() {
-                                            _filteredList = result
-                                                .where((Result item) =>
-                                                    item.date ==
-                                                    DateTime.parse(test))
-                                                .toList();
-                                          });
-                                        });
-                                      },
-                                      hint: Text(
-                                        'WOD Date: ',
-                                        style: TextStyle(
-                                            color: kWhiteTextColor,
-                                            fontSize: 18),
-                                      ),
-                                      dropdownColor: kBackgroundColor,
-                                      style: TextStyle(
-                                          color: kTextColor, fontSize: 18),
-                                      //isExpanded: true,
-                                      value: _dropDownDate,
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Icon(
-                                      Icons.api_sharp,
-                                      size: 40,
-                                      color: kButtonColor,
-                                    ),
-                                    trailing: DropdownButton(
-                                      items: filteredWodNames
-                                              .map<DropdownMenuItem>(
-                                                (wodName) => DropdownMenuItem(
-                                                  child: Text(wodName),
-                                                  value: '$wodName',
-                                                ),
-                                              )
-                                              ?.toList() ??
-                                          [],
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          print(filteredGenders);
-                                          _dropDownWodName = newValue;
-                                          setState(() {
-                                            _filteredList = result
-                                                .where((Result item) =>
-                                                    item.wodName
-                                                        .toLowerCase() ==
-                                                    _dropDownWodName
-                                                        .toLowerCase())
-                                                .toList();
-                                          });
-                                        });
-                                      },
-                                      hint: Text(
-                                        'WOD Name: ',
-                                        style: TextStyle(
-                                            color: kWhiteTextColor,
-                                            fontSize: 18),
-                                      ),
-                                      dropdownColor: kBackgroundColor,
-                                      style: TextStyle(
-                                          color: kTextColor, fontSize: 18),
-                                      //isExpanded: true,
-                                      value: _dropDownWodName,
-                                    ),
-                                  ),
-                                  ListTile(
-                                    leading: Icon(
-                                      Icons.person,
-                                      size: 40,
-                                      color: kButtonColor,
-                                    ),
-                                    trailing: DropdownButton(
-                                      items: filteredGenders
-                                              .map<DropdownMenuItem>(
-                                                (gender) => DropdownMenuItem(
-                                                  child: Text(gender),
-                                                  value: '$gender',
-                                                ),
-                                              )
-                                              ?.toList() ??
-                                          [],
-                                      onChanged: (newValue) {
-                                        setState(() {
-                                          print(filteredGenders);
-                                          _dropDownGender = newValue;
-                                          setState(() {
-                                            _filteredList = result
-                                                .where((Result item) =>
-                                                    item.gender.toLowerCase() ==
-                                                    _dropDownGender
-                                                        .toLowerCase())
-                                                .toList();
-                                          });
-                                        });
-                                      },
-                                      hint: Text(
-                                        'Gender: ',
-                                        style: TextStyle(
-                                            color: kWhiteTextColor,
-                                            fontSize: 18),
-                                      ),
-                                      dropdownColor: kBackgroundColor,
-                                      style: TextStyle(
-                                          color: kTextColor, fontSize: 18),
-                                      //isExpanded: true,
-                                      value: _dropDownGender,
-                                    ),
-                                  ),
-                                ],
-                              ),
+              child: Column(
+                children: [
+                  Container(
+                    height: size.height * 0.3,
+                    child: Stack(
+                      children: [
+                        Container(
+                          height: size.height * 0.3 - 27,
+                          decoration: BoxDecoration(
+                            color: kPrimaryColor,
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
                             ),
-                            DividerSmall(),
-                            RichText(
-                                text: TextSpan(
-                                    text: "Leader",
-                                    style: TextStyle(
+                          ),
+                        ),
+                        Positioned(
+                          child: Column(
+                            children: [
+                              getWodDateDropdown(),
+                              getWodNameDropdown(disableWodName),
+                              getGenderDropdown(disableGender),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  DividerSmall(),
+                  Expanded(
+                    child: ListView.builder(
+                        itemCount: _filteredList.length,
+                        itemBuilder: (context, index) {
+                          print(index);
+                          if (index >= 1) {
+                            print('Greater than 1');
+                            if (_filteredList[index].rounds ==
+                                _filteredList[index - 1].rounds) {
+                              print('Same');
+                            } else {
+                              i++;
+                            }
+                          }
+                          return LeaderBoardCard(
+                            userName: Text(_filteredList[index].userName,
+                                style: kNameStyle),
+                            score: _filteredList[index].rounds == null
+                                ? _filteredList[index].time
+                                : '${_filteredList[index].rounds.toString()} Rounds and ${_filteredList[index].reps.toString()} reps',
+                            type: new Text(
+                                _filteredList[index].rx == true
+                                    ? 'RX'
+                                    : 'scale',
+                                style: _filteredList[index].rx == true
+                                    ? TextStyle(
+                                        fontSize: 18,
                                         color: kButtonColor,
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.bold),
-                                    children: [
-                                  TextSpan(
-                                      text: " Board",
-                                      style: TextStyle(
-                                          color: kTextColor,
-                                          fontSize: 30.0,
-                                          fontWeight: FontWeight.bold))
-                                ])),
-                            DividerSmall(),
-                            Expanded(
-                              child: ListView.builder(
-                                  itemCount: _filteredList.length,
-                                  itemBuilder: (context, index) {
-                                    print(index);
-                                    if (index >= 1) {
-                                      print('Greater than 1');
-                                      if (_filteredList[index].rounds ==
-                                          _filteredList[index - 1].rounds) {
-                                        print('Same');
-                                      } else {
-                                        i++;
-                                      }
-                                    }
-
-                                    return DefaultCard(
-                                      child: Column(
-                                        children: [
-                                          ListTile(
-                                            leading: Transform.translate(
-                                              offset: Offset(-30, 0),
-                                              child: CircleAvatar(
-                                                backgroundImage: _filteredList[
-                                                                index]
-                                                            .userPhoto !=
-                                                        null
-                                                    ? CachedNetworkImageProvider(
-                                                        _filteredList[index]
-                                                            .userPhoto,
-                                                      )
-                                                    : null,
-                                                radius: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.10,
-                                                backgroundColor: Colors
-                                                    .grey[400]
-                                                    .withOpacity(
-                                                  0.4,
-                                                ),
-                                                child: _filteredList[index]
-                                                            .userPhoto ==
-                                                        null
-                                                    ? FaIcon(
-                                                        FontAwesomeIcons.user,
-                                                        color: kWhiteTextColor,
-                                                        size: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.1,
-                                                      )
-                                                    : Container(),
-                                              ),
-                                            ),
-                                            title: Transform.translate(
-                                              offset: Offset(-30, 0),
-                                              child: Text(
-                                                _filteredList[index].userName,
-                                                style: TextStyle(
-                                                    fontSize: 22,
-                                                    color: kWhiteTextColor),
-                                              ),
-                                            ),
-                                            subtitle: Transform.translate(
-                                              offset: Offset(-30, 0),
-                                              child: Text(
-                                                _filteredList[index].rounds ==
-                                                        null
-                                                    ? _filteredList[index].time
-                                                    : '${_filteredList[index].rounds.toString()} and ${_filteredList[index].reps.toString()} reps',
-                                                style: TextStyle(
-                                                    color: kTextColor,
-                                                    fontSize: 16),
-                                              ),
-                                            ),
-                                            trailing: i == 0
-                                                ? Text("🥇", style: medalSize)
-                                                : i == 1
-                                                    ? Text(
-                                                        "🥈",
-                                                        style: medalSize,
-                                                      )
-                                                    : i == 2
-                                                        ? Text(
-                                                            "🥉",
-                                                            style: medalSize,
-                                                          )
-                                                        : Text(''),
-                                          ),
-                                          ListTile(
-                                            leading: _filteredList[index].rx ==
-                                                    true
-                                                ? Text(
-                                                    'RX',
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: kButtonColor),
-                                                  )
-                                                : null,
-                                            title:
-                                                _filteredList[index].comment !=
-                                                        null
-                                                    ? Text(_filteredList[index]
-                                                        .comment)
-                                                    : null,
-                                            trailing: InkWell(
-                                              onTap: () {},
-                                              child: Icon(
-                                                Icons.camera_alt,
-                                                color: kButtonColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  }),
-                            )
-                          ],
-                        );
-                      } else {
-                        return Center(
-                          child: Text(snapshot.error.toString()),
-                        );
-                      }
-                    }))
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic)
+                                    : TextStyle(
+                                        fontSize: 14,
+                                        color: kTextColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontStyle: FontStyle.italic)),
+                            place: i == 0
+                                ? Text("🥇", style: medalSize)
+                                : i == 1
+                                    ? Text(
+                                        "🥈",
+                                        style: medalSize,
+                                      )
+                                    : i == 2
+                                        ? Text(
+                                            "🥉",
+                                            style: medalSize,
+                                          )
+                                        : SizedBox(height: 50),
+                            picture: _filteredList[index].userPhoto != null
+                                ? CachedNetworkImageProvider(
+                                    _filteredList[index].userPhoto,
+                                  )
+                                : null,
+                            pictureIcon: _filteredList[index].userPhoto == null
+                                ? FaIcon(
+                                    FontAwesomeIcons.user,
+                                    color: kWhiteTextColor,
+                                    size:
+                                        MediaQuery.of(context).size.width * 0.1,
+                                  )
+                                : Container(),
+                            comment: (_filteredList[index].comment == null &&
+                                    _filteredList[index].photoUrl == null)
+                                ? FaIcon(
+                                    FontAwesomeIcons.commentDots,
+                                    size: 20,
+                                    color: kTextColor,
+                                  )
+                                : Container(),
+                          );
+                        }),
+                  )
+                ],
+              ),
+            )
           ],
         ));
+  }
+
+  Widget getWodDateDropdown() {
+    final format = DateFormat("EEEE d MMMM, y");
+    return FutureBuilder(
+        future: _getListByDate(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Result> result = snapshot.data;
+            i = 0;
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: kButtonColor, width: 1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: DateTimeField(
+                  decoration: (InputDecoration(
+                      suffixIcon: Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.white70,
+                        size: 35,
+                      ),
+                      hintStyle: TextStyle(
+                          color: kTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
+                      hintText: 'Select Date')),
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: kWhiteTextColor,
+                  ),
+                  format: format,
+                  onShowPicker: (context, currentValue) {
+                    return showDatePicker(
+                        context: context,
+                        firstDate: DateTime(2021, 3, 21),
+                        initialDate: currentValue ?? DateTime.now(),
+                        lastDate: DateTime.now());
+                  },
+                  onChanged: (newValue) {
+                    setState(() {
+                      listOfResultsFilteredByWodName();
+                      _dropDownDate = newValue;
+                      disableWodName = false;
+                      _dropDownWodName = null;
+                      _dropDownGender = null;
+                      setState(() {
+                        _filteredList = result
+                            .where((Result item) => item.date == _dropDownDate)
+                            .toList();
+                      });
+                    });
+                  },
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
+        });
+  }
+
+  Widget getWodNameDropdown(enableDropDown) {
+    return FutureBuilder(
+        future: _getListByWodName(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Result> result = snapshot.data;
+            for (int j = 0; j < result.length; j++) {
+              Result itemResult = result[j];
+              allWodNames.add(itemResult.wodName);
+            }
+            filteredWodNames = allWodNames.toSet().toList();
+
+            i = 0;
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: kButtonColor, width: 1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: IgnorePointer(
+                  ignoring: enableDropDown,
+                  child: DropdownButton(
+                    items: filteredWodNames
+                            .toList()
+                            ?.map<DropdownMenuItem>(
+                              (wodName) => DropdownMenuItem(
+                                child: Text(wodName),
+                                value: '$wodName',
+                              ),
+                            )
+                            ?.toList() ??
+                        [],
+                    onChanged: (newValue) {
+                      setState(() {
+                        listOfResultsFilteredByWodNameAndGender(
+                            _dropDownDate, _dropDownWodName);
+                        disableGender = false;
+                        _dropDownWodName = newValue;
+                        _dropDownGender = null;
+                        setState(() {
+                          _filteredList = result
+                              .where((Result item) =>
+                                  item.wodName.toLowerCase() ==
+                                      _dropDownWodName.toLowerCase() &&
+                                  item.date == _dropDownDate)
+                              .toList();
+                        });
+                      });
+                    },
+                    isExpanded: true,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 36,
+                    underline: SizedBox(),
+                    hint: Text(
+                      'WOD Name: ',
+                      style: TextStyle(color: kTextColor, fontSize: 18),
+                    ),
+                    dropdownColor: kBackgroundColor,
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18),
+                    //isExpanded: true,
+                    value: _dropDownWodName,
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
+        });
+  }
+
+  Widget getGenderDropdown(enableDropDown) {
+    return FutureBuilder(
+        future: _getlListbyWodNameAndGender(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            List<Result> result = snapshot.data;
+            i = 0;
+            return Padding(
+              padding:
+                  const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+              child: Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: kButtonColor, width: 1),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: IgnorePointer(
+                  ignoring: enableDropDown,
+                  child: DropdownButton<String>(
+                    value: _dropDownGender,
+                    onChanged: (String newValue) {
+                      setState(() {
+                        _dropDownGender = newValue;
+
+                        if (_dropDownGender == "All") {
+                          setState(() {
+                            // no search field input, display all items
+                            _filteredList = result;
+                          });
+                        } else {
+                          setState(() {
+                            _filteredList = result
+                                .where((Result result) =>
+                                    result.gender.toLowerCase() ==
+                                    _dropDownGender.toLowerCase())
+                                .toList();
+                          });
+                        }
+                      });
+                    },
+                    items: <String>[
+                          'All',
+                          'Male',
+                          'Female',
+                        ].map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        })?.toList() ??
+                        [],
+                    isExpanded: true,
+                    icon: Icon(Icons.arrow_drop_down),
+                    iconSize: 36,
+                    underline: SizedBox(),
+                    hint: Text(
+                      'Gender: ',
+                      style: TextStyle(color: kTextColor, fontSize: 18),
+                    ),
+                    dropdownColor: kBackgroundColor,
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
+        });
   }
 }

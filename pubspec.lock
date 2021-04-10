@@ -114,7 +114,7 @@ packages:
     source: hosted
     version: "1.0.0"
   datetime_picker_formfield:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: datetime_picker_formfield
       url: "https://pub.dartlang.org"

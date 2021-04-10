@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         selectedClasses[0]
                                 .classAthletes[listOfClasses[index]]
-                                .contains(userRepository.user.uid.toString())
+                                .contains(userRepository.user?.uid.toString())
                             ? Text('Registered')
                             : Container(),
                       ],
