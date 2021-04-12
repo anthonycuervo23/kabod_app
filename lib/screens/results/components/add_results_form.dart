@@ -177,6 +177,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
           DividerMedium(),
           FormBuilderTextField(
             name: 'result_comment',
+            validator: FormBuilderValidators.maxLength(context, 110),
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             maxLines: 8,
             keyboardType: TextInputType.multiline,

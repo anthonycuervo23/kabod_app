@@ -1,10 +1,10 @@
-import 'dart:ui';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 
 //My Imports
 import 'package:kabod_app/screens/leaderboard/components/leaderboard_cards.dart';
@@ -21,6 +21,7 @@ class LeaderBoardScreen extends StatefulWidget {
 }
 
 class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> allWodNames = [];
   List<Result> _filteredList = [];
   List<String> filteredWodNames;
@@ -30,17 +31,17 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
   int i = 0;
   bool disableWodName = true;
   bool disableGender = true;
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool firstTime = true;
 
   @override
   void initState() {
-    listOfUsers();
+    listOfResultsFilteredByDate();
     super.initState();
   }
 
   static List<Result> allResultsListByDate = [];
 
-  listOfUsers() async {
+  Future<void> listOfResultsFilteredByDate() async {
     List listOfUsers = await FirebaseFirestore.instance
         .collection("users")
         .get()
@@ -51,6 +52,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .doc(listOfUsers[i].id.toString())
           .collection("results")
           .where('result_date', isEqualTo: _dropDownDate)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByDate);
     }
@@ -83,6 +85,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .doc(listOfUsers[i].id.toString())
           .collection("results")
           .where('wod_date', isEqualTo: _dropDownDate)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByWodName);
     }
@@ -117,6 +120,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .collection("results")
           .where('wod_date', isEqualTo: selectedDate)
           .where('wod_name', isEqualTo: wodName)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByWodNameAndGender);
     }
@@ -125,7 +129,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
     });
   }
 
-  Future<List<Result>> _getlListbyWodNameAndGender() async {
+  Future<void> _getlListByWodNameAndGender() async {
     return allResultsListByWodNameAndGender;
   }
 
@@ -189,78 +193,111 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     ),
                   ),
                   DividerSmall(),
-                  Expanded(
-                    child: ListView.builder(
-                        itemCount: _filteredList.length,
-                        itemBuilder: (context, index) {
-                          print(index);
-                          if (index >= 1) {
-                            print('Greater than 1');
-                            if (_filteredList[index].rounds ==
-                                _filteredList[index - 1].rounds) {
-                              print('Same');
-                            } else {
-                              i++;
-                            }
-                          }
-                          return LeaderBoardCard(
-                            userName: Text(_filteredList[index].userName,
-                                style: kNameStyle),
-                            score: _filteredList[index].rounds == null
-                                ? _filteredList[index].time
-                                : '${_filteredList[index].rounds.toString()} Rounds and ${_filteredList[index].reps.toString()} reps',
-                            type: new Text(
-                                _filteredList[index].rx == true
-                                    ? 'RX'
-                                    : 'scale',
-                                style: _filteredList[index].rx == true
-                                    ? TextStyle(
-                                        fontSize: 18,
-                                        color: kButtonColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic)
-                                    : TextStyle(
-                                        fontSize: 14,
-                                        color: kTextColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FontStyle.italic)),
-                            place: i == 0
-                                ? Text("🥇", style: medalSize)
-                                : i == 1
-                                    ? Text(
-                                        "🥈",
-                                        style: medalSize,
-                                      )
-                                    : i == 2
-                                        ? Text(
-                                            "🥉",
-                                            style: medalSize,
-                                          )
-                                        : SizedBox(height: 50),
-                            picture: _filteredList[index].userPhoto != null
-                                ? CachedNetworkImageProvider(
-                                    _filteredList[index].userPhoto,
-                                  )
-                                : null,
-                            pictureIcon: _filteredList[index].userPhoto == null
-                                ? FaIcon(
-                                    FontAwesomeIcons.user,
-                                    color: kWhiteTextColor,
-                                    size:
-                                        MediaQuery.of(context).size.width * 0.1,
-                                  )
-                                : Container(),
-                            comment: (_filteredList[index].comment == null &&
-                                    _filteredList[index].photoUrl == null)
-                                ? FaIcon(
-                                    FontAwesomeIcons.commentDots,
-                                    size: 20,
-                                    color: kTextColor,
-                                  )
-                                : Container(),
-                          );
-                        }),
-                  )
+                  _filteredList.length == 0 && firstTime == true
+                      ? Center(
+                          child: Text('PLEASE ENTER SOME FILTERS TO SEARCH',
+                              style: TextStyle(fontSize: 24)))
+                      : _filteredList.length == 0 && firstTime == false
+                          ? Center(
+                              child: Text('NO DATA FOUND',
+                                  style: TextStyle(fontSize: 24)))
+                          : Expanded(
+                              child: ListView.builder(
+                                  itemCount: _filteredList.length,
+                                  itemBuilder: (context, index) {
+                                    print(index);
+                                    if (index >= 1) {
+                                      print('Greater than 1');
+                                      if (_filteredList[index].rounds ==
+                                          _filteredList[index - 1].rounds) {
+                                        print('Same');
+                                      } else {
+                                        i++;
+                                      }
+                                    }
+                                    return InkWell(
+                                      onTap: _filteredList[index].photoUrl ==
+                                              null
+                                          ? null
+                                          : () => Navigator.pushNamed(context,
+                                              AppRoutes.pictureDetailsRoute,
+                                              arguments: _filteredList[index]
+                                                  .photoUrl),
+                                      child: LeaderBoardCard(
+                                        userName: Text(
+                                            _filteredList[index].userName,
+                                            style: kNameStyle),
+                                        score: _filteredList[index].rounds ==
+                                                null
+                                            ? stringFromDuration(
+                                                _filteredList[index].time)
+                                            : '${_filteredList[index].rounds.toString()} Rounds ${_filteredList[index].reps.toString()} reps',
+                                        type: new Text(
+                                            _filteredList[index].rx == true
+                                                ? 'RX'
+                                                : 'scale',
+                                            style: _filteredList[index].rx ==
+                                                    true
+                                                ? TextStyle(
+                                                    fontSize: 18,
+                                                    color: kButtonColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle: FontStyle.italic)
+                                                : TextStyle(
+                                                    fontSize: 14,
+                                                    color: kTextColor,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontStyle:
+                                                        FontStyle.italic)),
+                                        place: i == 0
+                                            ? Text("🥇", style: medalSize)
+                                            : i == 1
+                                                ? Text(
+                                                    "🥈",
+                                                    style: medalSize,
+                                                  )
+                                                : i == 2
+                                                    ? Text(
+                                                        "🥉",
+                                                        style: medalSize,
+                                                      )
+                                                    : SizedBox(height: 50),
+                                        comment: _filteredList[index].comment !=
+                                                null
+                                            ? Text(_filteredList[index].comment)
+                                            : Container(),
+                                        picture: _filteredList[index]
+                                                    .userPhoto !=
+                                                null
+                                            ? CachedNetworkImageProvider(
+                                                _filteredList[index].userPhoto,
+                                              )
+                                            : null,
+                                        pictureIcon:
+                                            _filteredList[index].userPhoto ==
+                                                    null
+                                                ? FaIcon(
+                                                    FontAwesomeIcons.user,
+                                                    color: kWhiteTextColor,
+                                                    size: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.1,
+                                                  )
+                                                : Container(),
+                                        commentPhoto:
+                                            _filteredList[index].photoUrl !=
+                                                    null
+                                                ? FaIcon(
+                                                    FontAwesomeIcons.image,
+                                                    size: 20,
+                                                    color: kTextColor,
+                                                  )
+                                                : Container(),
+                                      ),
+                                    );
+                                  }),
+                            )
                 ],
               ),
             )
@@ -311,7 +348,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   onChanged: (newValue) {
                     setState(() {
                       listOfResultsFilteredByWodName();
+                      print(result[0].wodType);
                       _dropDownDate = newValue;
+                      firstTime = false;
                       disableWodName = false;
                       _dropDownWodName = null;
                       _dropDownGender = null;
@@ -327,7 +366,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text(snapshot.error.toString()),
+              child: Text('PLEASE ENTER A VALID DATE TO SEE THE SCORES'),
             );
           }
         });
@@ -371,7 +410,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     onChanged: (newValue) {
                       setState(() {
                         listOfResultsFilteredByWodNameAndGender(
-                            _dropDownDate, _dropDownWodName);
+                          _dropDownDate,
+                          _dropDownWodName,
+                        );
                         disableGender = false;
                         _dropDownWodName = newValue;
                         _dropDownGender = null;
@@ -403,7 +444,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text(snapshot.error.toString()),
+              child: Text('NO RESULTS FOUND FOR THIS FILTERING'),
             );
           }
         });
@@ -411,7 +452,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
 
   Widget getGenderDropdown(enableDropDown) {
     return FutureBuilder(
-        future: _getlListbyWodNameAndGender(),
+        future: _getlListByWodNameAndGender(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<Result> result = snapshot.data;
@@ -476,7 +517,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text(snapshot.error.toString()),
+              child: Text('NO RESULTS FOUND FOR THIS FILTERING'),
             );
           }
         });

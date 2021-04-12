@@ -16,13 +16,16 @@ class WodEditorScreen extends StatefulWidget {
 
 class _WodEditorScreenState extends State<WodEditorScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
-        title: Text(widget.currentWod != null ? 'Edit WOD' : 'Create WOD'),
+        title: Text(widget.currentWod != null ? 'Edit WOD' : 'Create WOD',
+            style: TextStyle(
+                color: kTextColor,
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold)),
         leading: IconButton(
             icon: Icon(Icons.clear, color: kButtonColor),
             onPressed: () => Navigator.pop(context)),
