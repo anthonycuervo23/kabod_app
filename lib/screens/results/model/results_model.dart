@@ -1,13 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//My imports
+import 'package:kabod_app/core/utils/general_utils.dart';
+
 class Result {
-  String time;
+  Duration time;
   int reps;
   int rounds;
   DateTime date;
   String id;
   String weight;
   String customScore;
+  String wodType;
   bool rx;
   String comment;
   String photoUrl;
@@ -21,6 +25,7 @@ class Result {
       {this.time,
       this.reps,
       this.rounds,
+      this.wodType,
       this.date,
       this.id,
       this.photoUrl,
@@ -34,20 +39,39 @@ class Result {
       this.userPhoto,
       this.rx});
 
+  Result.fromMap(Map<String, dynamic> data, String id)
+      : time = durationFromString(data['time']),
+        reps = data['reps'],
+        rounds = data['rounds'],
+        date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
+        photoUrl = data['result_photo'],
+        wodName = data['wod_name'],
+        weight = data['weight'],
+        comment = data['result_comment'],
+        customScore = data['custom_score'],
+        rx = data['rx'],
+        wodType = data['wod_type'],
+        userPhoto = data['user_photo'],
+        userName = data['user_name'],
+        userId = data['user_id'],
+        gender = data['gender'],
+        id = id;
+
   factory Result.fromFireStore(DocumentSnapshot doc) {
     Map data = doc.data();
     return Result(
       id: doc.id,
-      time: data['time'],
+      time: durationFromString(data['time']),
       reps: data['reps'],
       rounds: data['rounds'],
       date: DateTime.fromMillisecondsSinceEpoch(data['result_date']),
       photoUrl: data['result_photo'],
       wodName: data['wod_name'],
       weight: data['weight'],
-      comment: data['comment'],
+      comment: data['result_comment'],
       customScore: data['custom_score'],
       rx: data['rx'],
+      wodType: data['wod_type'],
       userPhoto: data['user_photo'],
       userName: data['user_name'],
       userId: data['user_id'],

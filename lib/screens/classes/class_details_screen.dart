@@ -74,7 +74,11 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
-        title: Text('Schedule'),
+        title: Text(
+          'Schedule',
+          style: TextStyle(
+              color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: kButtonColor),

@@ -6,6 +6,7 @@ class LeaderBoardCard extends StatelessWidget {
   final Widget place;
   final String score;
   final Widget type;
+  final Widget commentPhoto;
   final Widget comment;
   final ImageProvider picture;
   final Widget pictureIcon;
@@ -15,6 +16,7 @@ class LeaderBoardCard extends StatelessWidget {
       this.type,
       this.score,
       this.comment,
+      this.commentPhoto,
       this.picture,
       this.pictureIcon,
       this.place});
@@ -30,7 +32,7 @@ class LeaderBoardCard extends StatelessWidget {
           Container(
             child: Container(
               margin: EdgeInsets.fromLTRB(66.0, 8.0, 0.0, 0.0),
-              constraints: BoxConstraints.expand(),
+              // constraints: BoxConstraints.expand(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
@@ -43,6 +45,7 @@ class LeaderBoardCard extends StatelessWidget {
                   ),
                   Text(score,
                       style: TextStyle(fontSize: 18, color: Colors.white)),
+                  comment,
                   Container(
                       margin: EdgeInsets.symmetric(vertical: 8.0),
                       height: 2.0,
@@ -67,16 +70,17 @@ class LeaderBoardCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
-                                  comment,
+                                  commentPhoto,
                                 ]),
                           )),
                       Container(width: 8.0),
                     ],
                   ),
+                  SizedBox(height: 5),
                 ],
               ),
             ),
-            height: 124.0,
+            //height: 164.0,
             margin: EdgeInsets.only(left: 46.0),
             decoration: BoxDecoration(
               color: kPrimaryColor,

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:kabod_app/core/utils/decimalTextInputFormatter.dart';
 
 //My imports
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
@@ -141,6 +142,9 @@ class _AddResultsFormState extends State<AddResultsForm> {
           ],
           if (currentWodType == WodTypeOptions.weight)
             FormBuilderTextField(
+              inputFormatters: [
+                DecimalTextInputFormatter(decimalRange: 2, signed: false)
+              ],
               keyboardType: TextInputType.number,
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.numeric(context),
@@ -177,6 +181,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
           DividerMedium(),
           FormBuilderTextField(
             name: 'result_comment',
+            validator: FormBuilderValidators.maxLength(context, 110),
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             maxLines: 8,
             keyboardType: TextInputType.multiline,
