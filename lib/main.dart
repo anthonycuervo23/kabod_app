@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
             create: (_) => WodRepository(FirebaseFirestore.instance)),
         Provider<ClassesRepository>(
             create: (_) => ClassesRepository(FirebaseFirestore.instance)),
-        Provider<ResultRepository>(
+        ChangeNotifierProvider<ResultRepository>(
             create: (_) => ResultRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<DrawerStateInfo>(
             create: (_) => DrawerStateInfo()),

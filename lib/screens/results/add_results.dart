@@ -1,8 +1,6 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -160,8 +158,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['gender'] = userRepository.userModel.gender;
       data['wod_type'] = widget.currentWod.type;
       resultRepository.addResult(data, userRepository.user.uid);
-      Navigator.pushNamed(context, AppRoutes.pictureDetailsRoute,
-          arguments: widget.currentWod);
+      Navigator.pop(context);
     } else if (validated && _image == null) {
       _formKey.currentState.save();
       setState(() {
@@ -180,8 +177,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
       resultRepository.addResult(data, userRepository.user.uid);
-      Navigator.pushNamed(context, AppRoutes.pictureDetailsRoute,
-          arguments: widget.currentWod);
+      Navigator.pop(context);
     }
   }
 

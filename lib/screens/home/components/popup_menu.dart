@@ -2,18 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //my imports
+import 'package:kabod_app/screens/results/model/results_model.dart';
+import 'package:kabod_app/core/repository/results_repository.dart';
+import 'package:kabod_app/screens/results/edit_results.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
 
-class PopupWodMenu extends StatelessWidget {
+class PopupWodMenu extends StatefulWidget {
   final Wod currentWod;
   PopupWodMenu({this.currentWod});
 
   @override
+  _PopupWodMenuState createState() => _PopupWodMenuState();
+}
+
+class _PopupWodMenuState extends State<PopupWodMenu> {
+
+  @override
   Widget build(BuildContext context) {
     final UserRepository user = Provider.of<UserRepository>(context);
+    final ResultRepository result = Provider.of<ResultRepository>(context);
+    result.getResult(user.user.uid, widget.currentWod.title);
+    Result selectedResult = context.read<ResultRepository>().getTheResult();
     return PopupMenuButton(
       color: kBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -29,13 +41,23 @@ class PopupWodMenu extends StatelessWidget {
                     children: [
                       Image.asset('assets/icons/results_icon.png'),
                       SizedBox(width: 10),
-                      Text('Add Score'),
+                      Text(selectedResult.wodName == widget.currentWod.title
+                          ? 'Edit Score'
+                          : 'Add Score'),
                     ],
                   ),
                 ),
                 onTap: () {
-                  Navigator.pushNamed(context, AppRoutes.addWodResultsRoute,
-                      arguments: currentWod);
+                  selectedResult.wodName == widget.currentWod.title
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => EditResultScreen(
+                                  currentResult: selectedResult,
+                                  currentWod: widget.currentWod)))
+                      : Navigator.pushNamed(
+                          context, AppRoutes.addWodResultsRoute,
+                          arguments: widget.currentWod);
                 },
               ),
               Divider(),
@@ -67,7 +89,7 @@ class PopupWodMenu extends StatelessWidget {
                       ),
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.editWodRoute,
-                            arguments: currentWod);
+                            arguments: widget.currentWod);
                       },
                     )
                   : Container(),

@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+
+//My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 
 class PictureDetailsScreen extends StatelessWidget {
   final String picture;
+
   PictureDetailsScreen({this.picture});
   @override
   Widget build(BuildContext context) {
@@ -18,11 +21,13 @@ class PictureDetailsScreen extends StatelessWidget {
       ),
       body: Center(
         child: Container(
-          child: CachedNetworkImage(
-              imageUrl: picture,
-              placeholder: (context, url) => CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(kButtonColor))),
-        ),
+            child: picture != null
+                ? CachedNetworkImage(
+                    imageUrl: picture,
+                    placeholder: (context, url) => CircularProgressIndicator(
+                        valueColor:
+                            AlwaysStoppedAnimation<Color>(kButtonColor)))
+                : Container()),
       ),
     );
   }

@@ -227,11 +227,27 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                         userName: Text(
                                             _filteredList[index].userName,
                                             style: kNameStyle),
-                                        score: _filteredList[index].rounds ==
-                                                null
-                                            ? stringFromDuration(
-                                                _filteredList[index].time)
-                                            : '${_filteredList[index].rounds.toString()} Rounds ${_filteredList[index].reps.toString()} reps',
+                                        score: (_filteredList[index].rounds ==
+                                                    null &&
+                                                _filteredList[index].time ==
+                                                    Duration() &&
+                                                _filteredList[index]
+                                                        .customScore ==
+                                                    null)
+                                            ? '${_filteredList[index].weight} lb'
+                                            : (_filteredList[index].time ==
+                                                        Duration() &&
+                                                    _filteredList[index]
+                                                            .customScore ==
+                                                        null)
+                                                ? '${_filteredList[index].rounds.toString()} Rounds ${_filteredList[index].reps.toString()} reps'
+                                                : (_filteredList[index].time !=
+                                                        Duration())
+                                                    ? stringFromDuration(
+                                                        _filteredList[index]
+                                                            .time)
+                                                    : _filteredList[index]
+                                                        .customScore,
                                         type: new Text(
                                             _filteredList[index].rx == true
                                                 ? 'RX'
