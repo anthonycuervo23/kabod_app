@@ -363,6 +363,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   },
                   onChanged: (newValue) {
                     setState(() {
+                      allWodNames = [];
                       listOfResultsFilteredByWodName();
                       print(result[0].wodType);
                       _dropDownDate = newValue;
@@ -370,11 +371,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                       disableWodName = false;
                       _dropDownWodName = null;
                       _dropDownGender = null;
-                      setState(() {
-                        _filteredList = result
-                            .where((Result item) => item.date == _dropDownDate)
-                            .toList();
-                      });
+                      _filteredList = result
+                          .where((Result item) => item.date == _dropDownDate)
+                          .toList();
                     });
                   },
                 ),

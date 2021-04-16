@@ -19,7 +19,6 @@ class PopupWodMenu extends StatefulWidget {
 }
 
 class _PopupWodMenuState extends State<PopupWodMenu> {
-
   @override
   Widget build(BuildContext context) {
     final UserRepository user = Provider.of<UserRepository>(context);
