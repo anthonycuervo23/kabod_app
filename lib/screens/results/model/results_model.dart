@@ -79,3 +79,10 @@ class Result {
     );
   }
 }
+
+class ResultsOfaDay {
+  String selectedWod;
+  Result selectedResult;
+
+  ResultsOfaDay({this.selectedWod, this.selectedResult});
+}

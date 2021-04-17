@@ -24,7 +24,8 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
     final UserRepository user = Provider.of<UserRepository>(context);
     final ResultRepository result = Provider.of<ResultRepository>(context);
     result.getResult(user.user.uid, widget.currentWod.title);
-    Result selectedResult = context.read<ResultRepository>().getTheResult();
+    ResultsOfaDay resultsOfaDay = result.selectedResult;
+    print(resultsOfaDay.selectedResult);
     return PopupMenuButton(
       color: kBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -40,19 +41,21 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                     children: [
                       Image.asset('assets/icons/results_icon.png'),
                       SizedBox(width: 10),
-                      Text(selectedResult.wodName == widget.currentWod.title
+                      Text(resultsOfaDay.selectedResult.wodName ==
+                              widget.currentWod.title
                           ? 'Edit Score'
                           : 'Add Score'),
                     ],
                   ),
                 ),
                 onTap: () {
-                  selectedResult.wodName == widget.currentWod.title
+                  resultsOfaDay.selectedResult.wodName ==
+                          widget.currentWod.title
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => EditResultScreen(
-                                  currentResult: selectedResult,
+                                  currentResult: resultsOfaDay.selectedResult,
                                   currentWod: widget.currentWod)))
                       : Navigator.pushNamed(
                           context, AppRoutes.addWodResultsRoute,

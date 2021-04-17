@@ -18,7 +18,7 @@ class ResultRepository extends ChangeNotifier {
         .then((value) => data['result_id'] = value.id);
   }
 
-  Result selectedResult = Result();
+  ResultsOfaDay selectedResult = ResultsOfaDay();
   Future<void> getResult(String uid, String currentWod) async {
     final results = await _firestore
         .collection('users')
@@ -26,15 +26,21 @@ class ResultRepository extends ChangeNotifier {
         .collection('results')
         .where('wod_name', isEqualTo: currentWod)
         .get();
-    for (var result in results.docs) {
-      selectedResult = Result.fromMap(result.data(), result.id);
-      notifyListeners();
+    if (results.docs != null && results.docs.isNotEmpty) {
+      for (var result in results.docs) {
+        selectedResult.selectedResult =
+            Result.fromMap(result.data(), result.id);
+        selectedResult.selectedWod = currentWod;
+      }
+    } else {
+      selectedResult = ResultsOfaDay();
     }
+    notifyListeners();
   }
 
-  Result getTheResult() {
-    return selectedResult;
-  }
+  // Result getTheResult() {
+  //   return selectedResult;
+  // }
 
   Future<void> deleteResult(String uid, String id) {
     return _firestore
