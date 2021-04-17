@@ -19,13 +19,22 @@ class PopupWodMenu extends StatefulWidget {
 }
 
 class _PopupWodMenuState extends State<PopupWodMenu> {
+  List<Result> listOfResults = [];
   @override
   Widget build(BuildContext context) {
     final UserRepository user = Provider.of<UserRepository>(context);
     final ResultRepository result = Provider.of<ResultRepository>(context);
     result.getResult(user.user.uid, widget.currentWod.title);
-    ResultsOfaDay resultsOfaDay = result.selectedResult;
-    print(resultsOfaDay.selectedResult);
+    listOfResults = result.listOfResults;
+    bool checkResult() {
+      for (var i = 0; i < listOfResults.length; i++) {
+        if (listOfResults[i].wodName == widget.currentWod.title) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     return PopupMenuButton(
       color: kBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -41,21 +50,17 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                     children: [
                       Image.asset('assets/icons/results_icon.png'),
                       SizedBox(width: 10),
-                      Text(resultsOfaDay.selectedResult.wodName ==
-                              widget.currentWod.title
-                          ? 'Edit Score'
-                          : 'Add Score'),
+                      Text(checkResult() ? 'Edit Score' : 'Add Score'),
                     ],
                   ),
                 ),
                 onTap: () {
-                  resultsOfaDay.selectedResult.wodName ==
-                          widget.currentWod.title
+                  checkResult()
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => EditResultScreen(
-                                  currentResult: resultsOfaDay.selectedResult,
+                                  currentResult: listOfResults[0],
                                   currentWod: widget.currentWod)))
                       : Navigator.pushNamed(
                           context, AppRoutes.addWodResultsRoute,
