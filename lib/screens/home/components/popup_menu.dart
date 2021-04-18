@@ -20,21 +20,31 @@ class PopupWodMenu extends StatefulWidget {
 
 class _PopupWodMenuState extends State<PopupWodMenu> {
   List<Result> listOfResults = [];
+  Result selectedResult;
+
+  bool checkResult(List<Result> listOfResults) {
+    for (var i = 0; i < listOfResults.length; i++) {
+      if (listOfResults[i].wodName == widget.currentWod.title) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  currentResult(List<Result> listOfResults) {
+    for (var i = 0; i < listOfResults.length; i++) {
+      if (listOfResults[i].wodName == widget.currentWod.title) {
+        return listOfResults[i];
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final UserRepository user = Provider.of<UserRepository>(context);
     final ResultRepository result = Provider.of<ResultRepository>(context);
     result.getResult(user.user.uid, widget.currentWod.title);
     listOfResults = result.listOfResults;
-    bool checkResult() {
-      for (var i = 0; i < listOfResults.length; i++) {
-        if (listOfResults[i].wodName == widget.currentWod.title) {
-          return true;
-        }
-      }
-      return false;
-    }
-
     return PopupMenuButton(
       color: kBackgroundColor,
       shape: RoundedRectangleBorder(
@@ -50,17 +60,19 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                     children: [
                       Image.asset('assets/icons/results_icon.png'),
                       SizedBox(width: 10),
-                      Text(checkResult() ? 'Edit Score' : 'Add Score'),
+                      Text(checkResult(listOfResults)
+                          ? 'Edit Score'
+                          : 'Add Score'),
                     ],
                   ),
                 ),
                 onTap: () {
-                  checkResult()
+                  checkResult(listOfResults)
                       ? Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (_) => EditResultScreen(
-                                  currentResult: listOfResults[0],
+                                  currentResult: currentResult(listOfResults),
                                   currentWod: widget.currentWod)))
                       : Navigator.pushNamed(
                           context, AppRoutes.addWodResultsRoute,

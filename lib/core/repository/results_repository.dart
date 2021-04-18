@@ -28,17 +28,21 @@ class ResultRepository extends ChangeNotifier {
         .get();
     if (results.docs != null && results.docs.isNotEmpty) {
       for (var result in results.docs) {
-        listOfResults.add(Result.fromMap(result.data(), result.id));
+        Result existingResult = listOfResults.firstWhere(
+            (resultToCheck) =>
+                resultToCheck.wodName ==
+                Result.fromMap(result.data(), result.id).wodName,
+            orElse: () => null);
+        if (existingResult == null) {
+          listOfResults.removeWhere((element) => element.wodName == currentWod);
+          listOfResults.add(Result.fromMap(result.data(), result.id));
+        }
       }
     } else {
-      listOfResults = [];
+      listOfResults.removeWhere((element) => element.wodName == currentWod);
     }
     notifyListeners();
   }
-
-  // Result getTheResult() {
-  //   return selectedResult;
-  // }
 
   Future<void> deleteResult(String uid, String id) {
     return _firestore
