@@ -1,31 +1,31 @@
 class Exercise {
-  String id;
-  String uid;
-  String exercise;
-  // Result results;
+  final String id;
+  final String uid;
+  final String exercise;
+  final List<Result> results;
 
-  Exercise({
-    this.id,
-    this.uid,
-    this.exercise,
-  });
+  Exercise({this.id, this.uid, this.results, this.exercise});
 
-  factory Exercise.fromJson(Map<String, dynamic> json) {
+  factory Exercise.fromJson(Map<String, dynamic> parsedJson) {
+    var list = parsedJson['results'] as List;
+    print(list.runtimeType);
+    List<Result> resultsList = list.map((i) => Result.fromJson(i)).toList();
+
     return Exercise(
-      id: json["_id"],
-      uid: json["uid"],
-      exercise: json["exercise"],
-    );
+        id: parsedJson['_id'],
+        uid: parsedJson['uid'],
+        exercise: parsedJson['exercise'],
+        results: resultsList);
   }
 }
 
 class Result {
-  String id;
-  String weight;
-  String reps;
-  String time;
-  String scoreType;
-  DateTime createdAt;
+  final String id;
+  final String weight;
+  final String reps;
+  final String time;
+  final String scoreType;
+  final DateTime createdAt;
 
   Result(
       {this.id,
@@ -35,14 +35,14 @@ class Result {
       this.scoreType,
       this.createdAt});
 
-  factory Result.fromJson(Map<String, dynamic> json) {
+  factory Result.fromJson(Map<String, dynamic> parsedJson) {
     return Result(
-      id: json["_id"],
-      weight: json["weight"],
-      reps: json["reps"],
-      time: json["time"],
-      scoreType: json["score_type"],
-      createdAt: json["createdAt"].toDate(),
+      id: parsedJson['_id'],
+      weight: parsedJson['weight'],
+      reps: parsedJson['reps'],
+      time: parsedJson['time'],
+      scoreType: parsedJson['score_type'],
+      createdAt: parsedJson['createdAt'],
     );
   }
 }

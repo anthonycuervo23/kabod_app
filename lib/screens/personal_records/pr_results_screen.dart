@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 //My imports
+import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/screens/personal_records/components/resultsList.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
@@ -18,8 +20,19 @@ class _ResultsScreenState extends State<ResultsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _exerciseController = TextEditingController();
   final ApiService api = ApiService();
+  List<Result> resultsList;
+
+  @override
+  void initState() {
+    super.initState();
+    resultsList = widget.selectedExercise.results;
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (resultsList == null) {
+      resultsList = [];
+    }
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -76,6 +89,8 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 color: kButtonColor,
               ),
               onSelected: (int menu) {
+                Navigator.pushNamed(context, AppRoutes.addResultRoute,
+                    arguments: widget.selectedExercise);
                 if (menu == 1) {
                 } else if (menu == 2) {
                   _showEditExerciseDialog(context);
@@ -87,8 +102,16 @@ class _ResultsScreenState extends State<ResultsScreen> {
           ),
         ],
       ),
-      body: Center(
-        child: Text(widget.selectedExercise.exercise),
+      body: Container(
+        child: Center(
+            child: resultsList.length > 0
+                ? ResultsList(results: resultsList)
+                : Center(
+                    child: Text(
+                      'No data found, please add new score',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )),
       ),
     );
   }
@@ -135,7 +158,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     fontSize: 30,
                     fontWeight: FontWeight.bold),
               ),
-              actions: <Widget>[
+              actions: [
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
@@ -196,7 +219,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: Text(
                 'Yes',

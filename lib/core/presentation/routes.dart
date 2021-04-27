@@ -7,6 +7,7 @@ import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
 import 'package:kabod_app/screens/leaderboard/leaderboard_screen.dart';
 import 'package:kabod_app/screens/leaderboard/picture_details_screen.dart';
+import 'package:kabod_app/screens/personal_records/edit_result_screen.dart';
 import 'package:kabod_app/screens/personal_records/pr_results_screen.dart';
 import 'package:kabod_app/screens/personal_records/pr_screen.dart';
 import 'package:kabod_app/screens/results/add_results.dart';
@@ -24,9 +25,14 @@ class AppRoutes {
   static const String pictureDetailsRoute = '/pictureDetails';
   static const String personalRecordsRoute = '/personalRecords';
   static const String resultsRoute = '/resultsRoute';
+  static const String addResultRoute = '/addResultRoute';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case addResultRoute:
+        return MaterialPageRoute(
+            builder: (_) =>
+                EditResultDetailsScreen(selectedExercise: settings.arguments));
       case resultsRoute:
         return MaterialPageRoute(
             builder: (_) =>

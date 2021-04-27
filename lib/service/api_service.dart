@@ -133,6 +133,7 @@ class ApiService {
         await get(Uri.parse('$apiUrl/$id/results/'), headers: header);
 
     if (res.statusCode == 200) {
+      print('$apiUrl/$id/results/');
       List<dynamic> body = jsonDecode(res.body);
       List<Result> results =
           body.map((dynamic item) => Result.fromJson(item)).toList();
