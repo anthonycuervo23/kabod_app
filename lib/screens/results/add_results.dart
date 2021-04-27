@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as Path;
@@ -49,7 +48,11 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
-        title: Text('Save your Results'),
+        title: Text(
+          'Save your Results',
+          style: TextStyle(
+              color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         leading: IconButton(
             icon: Icon(Icons.arrow_back_ios, color: kButtonColor),
@@ -153,7 +156,8 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       data['user_name'] = userRepository.userModel.name;
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
-      resultRepository.addResult(data);
+      data['wod_type'] = widget.currentWod.type;
+      resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     } else if (validated && _image == null) {
       _formKey.currentState.save();
@@ -168,10 +172,11 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
           data['rounds'] != null ? int.parse(data['rounds']) : null;
       data['weight'] = data['weight'] ?? null;
       data['wod_name'] = widget.currentWod.title;
+      data['wod_type'] = widget.currentWod.type;
       data['user_name'] = userRepository.userModel.name;
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
-      resultRepository.addResult(data);
+      resultRepository.addResult(data, userRepository.user.uid);
       Navigator.pop(context);
     }
   }

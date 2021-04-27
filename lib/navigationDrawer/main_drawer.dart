@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
@@ -50,13 +51,14 @@ class MyDrawer extends StatelessWidget {
                         leading: Image.asset('assets/icons/home_icon.png'),
                         title: Text('Home', style: kListTileTextStyle),
                         onTap: () {
-                          Navigator.of(context).pop();
+                          Navigator.popUntil(
+                              context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.homeRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(0);
 
-                          Navigator.pushNamed(context, AppRoutes.homeRoute);
+                          Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
                         },
                       ),
                     ),
@@ -70,15 +72,15 @@ class MyDrawer extends StatelessWidget {
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
-                          Navigator.of(context).pop();
+                          Navigator.popUntil(
+                              context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.leaderBoardRoute)
                             return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(1);
 
-                          Navigator.pushNamed(
-                              context, AppRoutes.leaderBoardRoute);
+                          Navigator.pushReplacementNamed(context, AppRoutes.leaderBoardRoute);
                         },
                       ),
                     ),
@@ -87,8 +89,15 @@ class MyDrawer extends StatelessWidget {
                 Column(
                   children: [
                     Container(
+                      decoration: BoxDecoration(
+                          color: Color(0xFF121212).withOpacity(0.5),
+                          borderRadius: BorderRadius.all(Radius.circular(12))),
                       child: ListTile(
-                          leading: Image.asset('assets/icons/logout_icon.png'),
+                          leading: FaIcon(
+                            FontAwesomeIcons.signOutAlt,
+                            size: 30,
+                            color: kButtonColor,
+                          ),
                           title: Text(
                             'Logout',
                             style: kListTileTextStyle,

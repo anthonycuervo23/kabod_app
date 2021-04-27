@@ -227,7 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         selectedClasses[0]
                                 .classAthletes[listOfClasses[index]]
-                                .contains(userRepository.user.uid.toString())
+                                .contains(userRepository.user?.uid.toString())
                             ? Text('Registered')
                             : Container(),
                       ],
@@ -307,6 +307,7 @@ class _HomeScreenState extends State<HomeScreen> {
           itemCount: selectedWods.length,
           itemBuilder: (BuildContext context, int index) {
             Wod wod = selectedWods[index];
+            print(index);
             return DefaultCard(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,7 +319,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor)),
                       subtitle: Text(wod.type, style: TextStyle(fontSize: 18)),
-                      trailing: PopupWodMenu(currentWod: wod),
+                      trailing: Container(
+                          width: 100,
+                          height: 100,
+                          child: PopupWodMenu(currentWod: wod)),
                     ),
                   ),
                   DividerSmall(),

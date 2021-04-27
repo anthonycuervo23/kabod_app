@@ -1,11 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+//My imports
+import 'package:kabod_app/core/utils/general_utils.dart';
+
 class Result {
-  String time;
+  Duration time;
   int reps;
   int rounds;
   DateTime date;
   String id;
   String weight;
   String customScore;
+  String wodType;
   bool rx;
   String comment;
   String photoUrl;
@@ -19,6 +25,7 @@ class Result {
       {this.time,
       this.reps,
       this.rounds,
+      this.wodType,
       this.date,
       this.id,
       this.photoUrl,
@@ -33,38 +40,42 @@ class Result {
       this.rx});
 
   Result.fromMap(Map<String, dynamic> data, String id)
-      : time = data['time'],
+      : time = durationFromString(data['time']),
         reps = data['reps'],
         rounds = data['rounds'],
+        date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
         photoUrl = data['result_photo'],
         wodName = data['wod_name'],
-        userName = data['user_name'],
-        userPhoto = data['user_photo'],
         weight = data['weight'],
         comment = data['result_comment'],
-        userId = data['user_id'],
-        gender = data['gender'],
         customScore = data['custom_score'],
         rx = data['rx'],
-        date = DateTime.fromMillisecondsSinceEpoch(data['result_date']),
+        wodType = data['wod_type'],
+        userPhoto = data['user_photo'],
+        userName = data['user_name'],
+        userId = data['user_id'],
+        gender = data['gender'],
         id = id;
 
-  Map<String, dynamic> toMap() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['wod_name'] = wodName;
-    data['user_id'] = userId;
-    data['time'] = time;
-    data['reps'] = reps;
-    data['user_name'] = userName;
-    data['user_photo'] = userPhoto;
-    data['rounds'] = rounds;
-    data['result_photo'] = photoUrl;
-    data['weight'] = weight;
-    data['result_comment'] = comment;
-    data['gender'] = gender;
-    data['custom_score'] = customScore;
-    data['rx'] = rx;
-    data['result_date'] = date;
-    return data;
+  factory Result.fromFireStore(DocumentSnapshot doc) {
+    Map data = doc.data();
+    return Result(
+      id: doc.id,
+      time: durationFromString(data['time']),
+      reps: data['reps'],
+      rounds: data['rounds'],
+      date: DateTime.fromMillisecondsSinceEpoch(data['result_date']),
+      photoUrl: data['result_photo'],
+      wodName: data['wod_name'],
+      weight: data['weight'],
+      comment: data['result_comment'],
+      customScore: data['custom_score'],
+      rx: data['rx'],
+      wodType: data['wod_type'],
+      userPhoto: data['user_photo'],
+      userName: data['user_name'],
+      userId: data['user_id'],
+      gender: data['gender'],
+    );
   }
 }
