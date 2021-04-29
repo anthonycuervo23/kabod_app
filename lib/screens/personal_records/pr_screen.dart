@@ -118,8 +118,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                 future: _future,
                 builder: (context, snapshot) {
                   return filterExerciseList.length > 0
-                      ? Expanded(
-                          child: ExercisesList(exercises: filterExerciseList))
+                      ? ExercisesList(exercises: filterExerciseList)
                       : Center(
                           child:
                               Text('No data found, tap plus button to add!'));

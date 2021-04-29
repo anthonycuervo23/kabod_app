@@ -107,16 +107,14 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
       setState(() {
         _processing = true;
       });
-      // Need to TESTED MORE>!!
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      //final toJson = jsonEncode(data['createdAt'], toEncodable: myEncode);
       api.createResult(
           Result(
             weight: int.parse(data['weight']) ?? null,
             reps: int.parse(data['reps']) ?? null,
             time: stringFromDuration(initialTimer),
             comment: data['result_comment'] ?? null,
-            //createdAt: data['createdAt'].toIso8601String()
+            createdAt: data['createdAt'],
           ),
           widget.selectedExercise.id);
       Navigator.pop(context);
@@ -130,26 +128,16 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
       setState(() {
         _processing = true;
       });
-      // Need to TESTED MORE>!!
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      //final toJson = jsonEncode(data['createdAt'], toEncodable: myEncode);
       api.updateResult(
           widget.currentResult.id,
           Result(
-            weight: int.parse(data['weight']) ?? null,
-            reps: int.parse(data['reps']) ?? null,
-            time: stringFromDuration(initialTimer),
-            comment: data['result_comment'] ?? null,
-            //createdAt: data['createdAt'].toIso8601String()
-          ));
+              weight: int.parse(data['weight']) ?? null,
+              reps: int.parse(data['reps']) ?? null,
+              time: stringFromDuration(initialTimer),
+              comment: data['result_comment'] ?? null,
+              createdAt: data['createdAt']));
       Navigator.pop(context);
     }
-  }
-
-  dynamic myEncode(dynamic item) {
-    if (item is DateTime) {
-      return item.toIso8601String();
-    }
-    return item;
   }
 }

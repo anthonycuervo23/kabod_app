@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 
 //My imports
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
@@ -196,8 +197,9 @@ class ApiService {
     final Response response = await put(
       Uri.parse('$apiUrl/results/$id'),
       headers: header,
-      body: jsonEncode(data),
+      body: jsonEncode(data, toEncodable: myEncode),
     );
+
     if (response.statusCode == 200) {
       return Result.fromJson(json.decode(response.body));
     } else {
