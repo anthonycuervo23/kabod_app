@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 import 'package:kabod_app/service/api_service.dart';
 
 class ResultDetailWidget extends StatefulWidget {
-  const ResultDetailWidget({Key key, @required this.results, this.index})
+  const ResultDetailWidget(
+      {Key key, @required this.results, this.selectedExercise, this.index})
       : super(key: key);
 
   final List<Result> results;
+  final Exercise selectedExercise;
   final int index;
 
   @override
@@ -23,43 +27,60 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      color: kPrimaryColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all((Radius.circular(15)))),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        ListTile(
-          leading: Icon(
-            Icons.album,
-            size: 70,
-            color: kButtonColor,
-          ),
-          title: Text('Abr 20, 2021',
-              style:
-                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-          subtitle: Text('Time: 00:01:00',
-              style: TextStyle(color: Colors.white, fontSize: 20)),
-        ),
-        ButtonTheme(
-          child: ButtonBar(
-            children: [
-              TextButton(
-                child:
-                    const Text('Edit', style: TextStyle(color: Colors.white)),
-                onPressed: () {},
+    return Padding(
+      padding: const EdgeInsets.only(left: 20.0),
+      child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DividerMedium(),
+            Text('Abr 20, 2021',
+                style: TextStyle(
+                    color: kWhiteTextColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 22)),
+            DividerSmall(),
+            widget.results[widget.index].time != null
+                ? Text('Time: ${widget.results[widget.index].time}',
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
+                : Container(),
+            widget.results[widget.index].reps != null
+                ? Text('Reps: ${widget.results[widget.index].reps.toString()}',
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
+                : Container(),
+            widget.results[widget.index].weight != null
+                ? Text('Weight: ${widget.results[widget.index].weight} lb',
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
+                : Container(),
+            widget.results[widget.index].comment != null
+                ? Text('Comment: ${widget.results[widget.index].comment}',
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
+                : Container(),
+            ButtonTheme(
+              child: ButtonBar(
+                children: [
+                  TextButton(
+                    child: const Text('Edit',
+                        style: TextStyle(color: kWhiteTextColor)),
+                    onPressed: () {
+                      Navigator.pushNamed(context, AppRoutes.editResultRoute,
+                          arguments: [
+                            widget.results[widget.index],
+                            widget.selectedExercise
+                          ]);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text('Delete',
+                        style: TextStyle(color: kWhiteTextColor)),
+                    onPressed: () {
+                      _confirmDeleteDialog();
+                    },
+                  ),
+                ],
               ),
-              TextButton(
-                child:
-                    const Text('Delete', style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  _confirmDeleteDialog();
-                },
-              ),
-            ],
-          ),
-        ),
-      ]),
+            ),
+          ]),
     );
   }
 
@@ -82,7 +103,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
               ],
             ),
           ),
-          actions: <Widget>[
+          actions: [
             TextButton(
               child: Text(
                 'Yes',

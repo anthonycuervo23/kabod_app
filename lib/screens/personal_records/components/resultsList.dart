@@ -7,7 +7,8 @@ import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 
 class ResultsList extends StatelessWidget {
   final List<Result> results;
-  ResultsList({Key key, this.results}) : super(key: key);
+  final Exercise selectedExercise;
+  ResultsList({Key key, this.results, this.selectedExercise}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,31 +20,10 @@ class ResultsList extends StatelessWidget {
               color: kPrimaryColor,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.all((Radius.circular(10)))),
-              child: ResultDetailWidget(results: results, index: index));
+              child: ResultDetailWidget(
+                  results: results,
+                  index: index,
+                  selectedExercise: selectedExercise));
         });
-  }
-}
-
-class NewWidget extends StatefulWidget {
-  const NewWidget({Key key, @required this.results, this.index})
-      : super(key: key);
-
-  final List<Result> results;
-  final int index;
-
-  @override
-  _NewWidgetState createState() => _NewWidgetState();
-}
-
-class _NewWidgetState extends State<NewWidget> {
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(Icons.star, color: kButtonColor, size: 40),
-      title: Text(
-        widget.results[widget.index].scoreType,
-        style: TextStyle(fontSize: 20),
-      ),
-    );
   }
 }

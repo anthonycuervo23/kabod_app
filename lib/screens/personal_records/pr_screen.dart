@@ -1,12 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 //My imports
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/personal_records/components/exercisesList.dart';
@@ -204,12 +202,8 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      api.createExercise(Exercise(
-                          exercise: _exerciseController.text,
-                          uid: Provider.of<UserRepository>(context,
-                                  listen: false)
-                              .user
-                              .uid));
+                      api.createExercise(
+                          Exercise(exercise: _exerciseController.text));
                       _exerciseController.clear();
                       Navigator.of(context).pop();
                     }

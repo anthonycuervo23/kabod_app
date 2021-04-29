@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 //My imports
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/personal_records/components/pr_result_form.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -38,11 +38,14 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    //print(widget.currentResult.id);
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
         title: Text(
-          'Save your Results',
+          widget.currentResult != null
+              ? 'Save your Result'
+              : 'Edit your Result',
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
@@ -59,65 +62,94 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DividerMedium(),
-                Text('Back Squat',
+                Text(widget.selectedExercise.exercise,
                     style: TextStyle(fontSize: 24, color: kWhiteTextColor)),
                 PrResultsForm(
                   formKey: _formKey,
                   initialTimer: initialTimer,
+                  currentResult: widget.currentResult,
                   onTimerDurationChanged: (value) {
                     setState(() {
                       initialTimer = value;
                     });
                   },
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                        child: Row(
-                      children: [
-                        Icon(Icons.calendar_today_outlined, color: kTextColor),
-                        SizedBox(width: 8),
-                        Text(DateTime.now().toString())
-                      ],
-                    )),
-                  ],
-                ),
-                DividerSmall(),
               ],
             ),
           ),
           DividerBig(),
           ReusableButton(
-            onPressed: () {
-              // _processing ? null :
-              bool validated = _formKey.currentState.validate();
-              if (validated) {
-                _formKey.currentState.save();
-                setState(() {
-                  _processing = true;
-                });
-                // Need to fix this part.!!
-                final data =
-                    Map<String, dynamic>.from(_formKey.currentState.value);
-                data['time'] = stringFromDuration(initialTimer);
-                // data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
-                data['reps'] =
-                    data['reps'] != null ? int.parse(data['reps']) : null;
-                //data['weight'] = data['weight'] ?? null;
-                api.createResult(Result(weight: data['weight'] ?? null),
-                    widget.selectedExercise.id);
-                Navigator.pop(context);
-              }
-            },
+            onPressed: _processing
+                ? null
+                : widget.currentResult != null
+                    ? _updateResult
+                    : _saveResult,
             child: _processing
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
                   )
-                : Text('SAVE RESULT', style: kTextButtonStyle),
+                : Text(
+                    widget.currentResult != null
+                        ? 'UPDATE RESULT'
+                        : 'SAVE RESULT',
+                    style: kTextButtonStyle),
           ),
           DividerMedium(),
         ],
       ),
     );
+  }
+
+  _saveResult() async {
+    bool validated = _formKey.currentState.validate();
+    if (validated) {
+      _formKey.currentState.save();
+      setState(() {
+        _processing = true;
+      });
+      // Need to TESTED MORE>!!
+      final data = Map<String, dynamic>.from(_formKey.currentState.value);
+      //final toJson = jsonEncode(data['createdAt'], toEncodable: myEncode);
+      api.createResult(
+          Result(
+            weight: int.parse(data['weight']) ?? null,
+            reps: int.parse(data['reps']) ?? null,
+            time: stringFromDuration(initialTimer),
+            comment: data['result_comment'] ?? null,
+            //createdAt: data['createdAt'].toIso8601String()
+          ),
+          widget.selectedExercise.id);
+      Navigator.pop(context);
+    }
+  }
+
+  _updateResult() async {
+    bool validated = _formKey.currentState.validate();
+    if (validated) {
+      _formKey.currentState.save();
+      setState(() {
+        _processing = true;
+      });
+      // Need to TESTED MORE>!!
+      final data = Map<String, dynamic>.from(_formKey.currentState.value);
+      //final toJson = jsonEncode(data['createdAt'], toEncodable: myEncode);
+      api.updateResult(
+          widget.currentResult.id,
+          Result(
+            weight: int.parse(data['weight']) ?? null,
+            reps: int.parse(data['reps']) ?? null,
+            time: stringFromDuration(initialTimer),
+            comment: data['result_comment'] ?? null,
+            //createdAt: data['createdAt'].toIso8601String()
+          ));
+      Navigator.pop(context);
+    }
+  }
+
+  dynamic myEncode(dynamic item) {
+    if (item is DateTime) {
+      return item.toIso8601String();
+    }
+    return item;
   }
 }

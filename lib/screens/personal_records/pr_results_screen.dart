@@ -35,6 +35,11 @@ class _ResultsScreenState extends State<ResultsScreen> {
     }
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          widget.selectedExercise.exercise,
+          style: TextStyle(fontSize: 24),
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
@@ -105,7 +110,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
       body: Container(
         child: Center(
             child: resultsList.length > 0
-                ? ResultsList(results: resultsList)
+                ? ResultsList(
+                    results: resultsList,
+                    selectedExercise: widget.selectedExercise)
                 : Center(
                     child: Text(
                       'No data found, please add new score',

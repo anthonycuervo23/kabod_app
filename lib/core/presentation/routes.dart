@@ -26,9 +26,15 @@ class AppRoutes {
   static const String personalRecordsRoute = '/personalRecords';
   static const String resultsRoute = '/resultsRoute';
   static const String addResultRoute = '/addResultRoute';
+  static const String editResultRoute = '/editResultRoute';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case editResultRoute:
+        List<dynamic> args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => EditResultDetailsScreen(
+                currentResult: args[0], selectedExercise: args[1]));
       case addResultRoute:
         return MaterialPageRoute(
             builder: (_) =>

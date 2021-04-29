@@ -1,23 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:intl/intl.dart';
 
 //My imports
 import 'package:kabod_app/core/utils/decimalTextInputFormatter.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
+import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 
 class PrResultsForm extends StatefulWidget {
   PrResultsForm(
       {Key key,
       @required GlobalKey<FormBuilderState> formKey,
+      this.currentResult,
       this.initialTimer,
       this.onTimerDurationChanged})
       : _formKey = formKey,
         super(key: key);
 
   final GlobalKey<FormBuilderState> _formKey;
+  final Result currentResult;
   final ValueChanged<Duration> onTimerDurationChanged;
   final Duration initialTimer;
 
@@ -73,6 +77,9 @@ class _PrResultsFormState extends State<PrResultsForm> {
               FormBuilderValidators.integer(context),
               FormBuilderValidators.maxLength(context, 3)
             ]),
+            initialValue: widget.currentResult != null
+                ? widget.currentResult.reps.toString()
+                : '',
             name: 'reps',
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             textInputAction: TextInputAction.next,
@@ -93,9 +100,11 @@ class _PrResultsFormState extends State<PrResultsForm> {
             keyboardType: TextInputType.number,
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.numeric(context),
-              FormBuilderValidators.required(context),
               FormBuilderValidators.maxLength(context, 6)
             ]),
+            initialValue: widget.currentResult != null
+                ? widget.currentResult.weight.toString()
+                : '',
             name: 'weight',
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             textInputAction: TextInputAction.next,
@@ -110,17 +119,32 @@ class _PrResultsFormState extends State<PrResultsForm> {
           ),
           DividerMedium(),
           DividerMedium(),
-          // FormBuilderTextField(
-          //   name: 'result_comment',
-          //   validator: FormBuilderValidators.maxLength(context, 110),
-          //   style: TextStyle(color: kWhiteTextColor, fontSize: 20),
-          //   maxLines: 8,
-          //   keyboardType: TextInputType.multiline,
-          //   decoration: InputDecoration(
-          //       hintText: 'Optional comments...',
-          //       hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
-          //       border: InputBorder.none),
-          // ),
+          FormBuilderTextField(
+            initialValue: widget.currentResult != null
+                ? widget.currentResult.comment
+                : '',
+            name: 'result_comment',
+            validator: FormBuilderValidators.maxLength(context, 110),
+            style: TextStyle(color: kWhiteTextColor, fontSize: 20),
+            maxLines: 8,
+            keyboardType: TextInputType.multiline,
+            decoration: InputDecoration(
+                hintText: 'Optional comments...',
+                hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
+                border: InputBorder.none),
+          ),
+          FormBuilderDateTimePicker(
+            validator: FormBuilderValidators.required(context),
+            name: 'createdAt',
+            initialValue: widget.currentResult != null
+                ? widget.currentResult.createdAt
+                : DateTime.now(),
+            inputType: InputType.date,
+            format: DateFormat('EEEE, dd MMMM, yyyy'),
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                prefixIcon: Image.asset('assets/icons/calendar_icon.png')),
+          ),
         ],
       ),
     );

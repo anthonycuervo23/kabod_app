@@ -9,7 +9,7 @@ class ApiService {
   // Fetch the currentUser, and then get its id token
   final User user = FirebaseAuth.instance.currentUser;
 
-  final String apiUrl = "http://10.0.2.2:8080/exercises";
+  final String apiUrl = "http://10.0.2.2:8080/api/v1/exercises";
 
   // Fetch the list of Exercises
   Future<List<Exercise>> getExercises() async {
@@ -65,7 +65,7 @@ class ApiService {
     };
 
     final Response response = await post(
-      Uri.parse('$apiUrl/create'),
+      Uri.parse(apiUrl),
       headers: header,
       body: jsonEncode(data),
     );
@@ -158,12 +158,12 @@ class ApiService {
       'weight': result.weight,
       'reps': result.reps,
       'time': result.time,
-      'score_type': result.scoreType,
+      'comment': result.comment,
       'createdAt': result.createdAt,
     };
 
     final Response response = await post(
-      Uri.parse('$apiUrl/$id/results/create'),
+      Uri.parse('$apiUrl/$id/results'),
       headers: header,
       body: jsonEncode(data),
     );
@@ -189,12 +189,12 @@ class ApiService {
       'weight': result.weight,
       'reps': result.reps,
       'time': result.time,
-      'score_type': result.scoreType,
+      'comment': result.comment,
       'createdAt': result.createdAt,
     };
 
     final Response response = await put(
-      Uri.parse('$apiUrl/$id'),
+      Uri.parse('$apiUrl/results/$id'),
       headers: header,
       body: jsonEncode(data),
     );

@@ -8,11 +8,10 @@ class Exercise {
 
   factory Exercise.fromJson(Map<String, dynamic> parsedJson) {
     var list = parsedJson['results'] as List;
-    print(list.runtimeType);
     List<Result> resultsList = list.map((i) => Result.fromJson(i)).toList();
 
     return Exercise(
-        id: parsedJson['_id'],
+        id: parsedJson['id'],
         uid: parsedJson['uid'],
         exercise: parsedJson['exercise'],
         results: resultsList);
@@ -21,18 +20,18 @@ class Exercise {
 
 class Result {
   final String id;
-  final String weight;
-  final String reps;
+  final int weight;
+  final int reps;
   final String time;
-  final String scoreType;
-  final DateTime createdAt;
+  final String comment;
+  final String createdAt;
 
   Result(
       {this.id,
       this.weight,
       this.reps,
       this.time,
-      this.scoreType,
+      this.comment,
       this.createdAt});
 
   factory Result.fromJson(Map<String, dynamic> parsedJson) {
@@ -41,7 +40,8 @@ class Result {
       weight: parsedJson['weight'],
       reps: parsedJson['reps'],
       time: parsedJson['time'],
-      scoreType: parsedJson['score_type'],
+      comment: parsedJson['comment'],
+      //createdAt: DateTime.tryParse(parsedJson['createdAt']),
       createdAt: parsedJson['createdAt'],
     );
   }
