@@ -24,7 +24,7 @@ class Result {
   final int reps;
   final String time;
   final String comment;
-  final DateTime createdAt;
+  final int createdAt;
 
   Result(
       {this.id,
@@ -41,8 +41,7 @@ class Result {
       reps: parsedJson['reps'],
       time: parsedJson['time'],
       comment: parsedJson['comment'],
-      createdAt: DateTime.tryParse(parsedJson['createdAt']),
-      //createdAt: parsedJson['createdAt'],
+      createdAt: parsedJson['createdAt'],
     );
   }
 }
