@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
@@ -34,7 +35,12 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
           mainAxisSize: MainAxisSize.min,
           children: [
             DividerMedium(),
-            Text('Abr 20, 2021',
+            Text(
+                widget.results[widget.index].createdAt != null
+                    ? DateFormat('MMMM d, y').format(
+                        DateTime.fromMillisecondsSinceEpoch(
+                            widget.results[widget.index].createdAt))
+                    : 'No Date',
                 style: TextStyle(
                     color: kWhiteTextColor,
                     fontWeight: FontWeight.bold,

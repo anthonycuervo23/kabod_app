@@ -114,7 +114,7 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
             reps: int.parse(data['reps']) ?? null,
             time: stringFromDuration(initialTimer),
             comment: data['result_comment'] ?? null,
-            createdAt: data['createdAt'],
+            createdAt: data['createdAt'].millisecondsSinceEpoch,
           ),
           widget.selectedExercise.id);
       Navigator.pop(context);
@@ -136,7 +136,7 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
               reps: int.parse(data['reps']) ?? null,
               time: stringFromDuration(initialTimer),
               comment: data['result_comment'] ?? null,
-              createdAt: data['createdAt']));
+              createdAt: data['createdAt'].millisecondsSinceEpoch));
       Navigator.pop(context);
     }
   }
