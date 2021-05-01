@@ -43,7 +43,7 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
   Widget build(BuildContext context) {
     final UserRepository user = Provider.of<UserRepository>(context);
     final ResultRepository result = Provider.of<ResultRepository>(context);
-    result.getResult(user.user.uid, widget.currentWod.title);
+    result.getResult(user.user?.uid, widget.currentWod.title);
     listOfResults = result.listOfResults;
     return PopupMenuButton(
       color: kBackgroundColor,
