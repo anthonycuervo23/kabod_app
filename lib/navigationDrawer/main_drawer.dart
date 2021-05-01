@@ -115,14 +115,36 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                     ),
-                    Container(
+                      Container(
+                      decoration: currentDrawer == 3 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading:
+                            Image.asset('assets/icons/calculator_icon.png'),
+                        title: Text(
+                          '1RM Calculator',
+                          style: kListTileTextStyle,
+                        ),
+                       onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.currentPage == AppRoutes.calculatorRoute)
+                            return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(3);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.calculatorRoute);
+                        },
+                      ),
+                    ),
+                     Container(
                       decoration: currentDrawer == 4 ? kListTileSelected : null,
                       child: ListTile(
                         leading: Image.asset('assets/icons/timer_icon.png'),
                         title: Text(
                           'Timers',
                           style: kListTileTextStyle,
-                        ),
+                          ),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
                           if (this.widget.currentPage == AppRoutes.timersRoute)
@@ -138,8 +160,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                 SharedPrefs.sharedPrefs,
                               ]);
                         },
-                      ),
-                    ),
+                        ),
+                       ),
                   ],
                 ),
                 Column(
