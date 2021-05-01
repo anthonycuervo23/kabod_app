@@ -13,6 +13,7 @@ import 'package:kabod_app/screens/personal_records/pr_screen.dart';
 import 'package:kabod_app/screens/profile/editProfile_screen.dart';
 import 'package:kabod_app/screens/profile/profile_screen.dart';
 import 'package:kabod_app/screens/results/add_results.dart';
+import 'package:kabod_app/screens/timers/tabata_screen.dart';
 import 'package:kabod_app/screens/wods/wod_editor_screen.dart';
 
 class AppRoutes {
@@ -31,9 +32,14 @@ class AppRoutes {
   static const String editResultRoute = '/editResultRoute';
   static const String profileRoute = '/profileRoute';
   static const String editProfileRoute = '/editProfileRoute';
+  static const String timersRoute = '/timers';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case timersRoute:
+        List<dynamic> args = settings.arguments;
+        return MaterialPageRoute(
+            builder: (_) => TabataScreen(settings: args[0], prefs: args[1]));
       case editProfileRoute:
         return MaterialPageRoute(
             builder: (_) => EditProfileScreen(user: settings.arguments));

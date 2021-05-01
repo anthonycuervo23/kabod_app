@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kabod_app/screens/timers/models/settings_model.dart';
+import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
@@ -8,10 +10,16 @@ import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/navigationDrawer/model/drawer_notifier.dart';
 
-class MyDrawer extends StatelessWidget {
+class MyDrawer extends StatefulWidget {
   MyDrawer(this.currentPage);
 
   final String currentPage;
+
+  @override
+  _MyDrawerState createState() => _MyDrawerState();
+}
+
+class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
     final currentDrawer =
@@ -52,7 +60,8 @@ class MyDrawer extends StatelessWidget {
                         title: Text('Home', style: kListTileTextStyle),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.currentPage == AppRoutes.homeRoute) return;
+                          if (this.widget.currentPage == AppRoutes.homeRoute)
+                            return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(0);
@@ -73,8 +82,8 @@ class MyDrawer extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.currentPage == AppRoutes.leaderBoardRoute)
-                            return;
+                          if (this.widget.currentPage ==
+                              AppRoutes.leaderBoardRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(1);
@@ -95,7 +104,7 @@ class MyDrawer extends StatelessWidget {
                         ),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.currentPage ==
+                          if (this.widget.currentPage ==
                               AppRoutes.personalRecordsRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
@@ -103,6 +112,31 @@ class MyDrawer extends StatelessWidget {
 
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.personalRecordsRoute);
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: currentDrawer == 4 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading: Image.asset('assets/icons/timer_icon.png'),
+                        title: Text(
+                          'Timers',
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.widget.currentPage == AppRoutes.timersRoute)
+                            return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(4);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.timersRoute,
+                              arguments: [
+                                Settings(SharedPrefs.sharedPrefs),
+                                SharedPrefs.sharedPrefs,
+                              ]);
                         },
                       ),
                     ),

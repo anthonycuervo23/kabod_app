@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -16,12 +17,12 @@ import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
-
-import 'core/repository/results_repository.dart';
+import 'package:kabod_app/core/repository/results_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await sharedPrefs.init();
   runApp(MyApp());
 }
 
