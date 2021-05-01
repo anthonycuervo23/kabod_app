@@ -38,14 +38,12 @@ class AppRoutes {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case calculatorRoute:
+        return MaterialPageRoute(builder: (_) => CalculatorScreen());
       case timersRoute:
         List<dynamic> args = settings.arguments;
         return MaterialPageRoute(
             builder: (_) => TabataScreen(settings: args[0], prefs: args[1]));
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case calculatorRoute:
-        return MaterialPageRoute(builder: (_) => CalculatorScreen());
       case editProfileRoute:
         return MaterialPageRoute(
             builder: (_) => EditProfileScreen(user: settings.arguments));

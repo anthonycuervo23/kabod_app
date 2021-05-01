@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:kabod_app/screens/timers/models/settings_model.dart';
-import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kabod_app/screens/timers/models/settings_model.dart';
+import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
@@ -115,7 +115,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                     ),
-                      Container(
+                    Container(
                       decoration: currentDrawer == 3 ? kListTileSelected : null,
                       child: ListTile(
                         leading:
@@ -124,10 +124,10 @@ class _MyDrawerState extends State<MyDrawer> {
                           '1RM Calculator',
                           style: kListTileTextStyle,
                         ),
-                       onTap: () {
+                        onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.currentPage == AppRoutes.calculatorRoute)
-                            return;
+                          if (this.widget.currentPage ==
+                              AppRoutes.calculatorRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(3);
@@ -137,14 +137,14 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                     ),
-                     Container(
+                    Container(
                       decoration: currentDrawer == 4 ? kListTileSelected : null,
                       child: ListTile(
                         leading: Image.asset('assets/icons/timer_icon.png'),
                         title: Text(
                           'Timers',
                           style: kListTileTextStyle,
-                          ),
+                        ),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
                           if (this.widget.currentPage == AppRoutes.timersRoute)
@@ -160,8 +160,8 @@ class _MyDrawerState extends State<MyDrawer> {
                                 SharedPrefs.sharedPrefs,
                               ]);
                         },
-                        ),
-                       ),
+                      ),
+                    ),
                   ],
                 ),
                 Column(
@@ -185,6 +185,31 @@ class _MyDrawerState extends State<MyDrawer> {
                                 context, (route) => route.isFirst);
                             userRepository.signOut();
                           }),
+                    ),
+                    Container(
+                      decoration: currentDrawer == 4 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading: Image.asset('assets/icons/timer_icon.png'),
+                        title: Text(
+                          'Timers',
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.widget.currentPage == AppRoutes.timersRoute)
+                            return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(4);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.timersRoute,
+                              arguments: [
+                                Settings(SharedPrefs.sharedPrefs),
+                                SharedPrefs.sharedPrefs,
+                              ]);
+                        },
+                      ),
                     ),
                   ],
                 ),
