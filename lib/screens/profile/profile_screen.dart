@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,7 +26,9 @@ class ProfileScreen extends StatelessWidget {
             if (userRepository.userModel != null) ...[
               ProfileHeader(
                 avatar: userRepository.userModel.photoUrl != null
-                    ? NetworkImage(userRepository.userModel.photoUrl)
+                    ? CachedNetworkImageProvider(
+                        userRepository.userModel.photoUrl,
+                      )
                     : AssetImage(
                         "assets/images/profile_image.jpg",
                       ),

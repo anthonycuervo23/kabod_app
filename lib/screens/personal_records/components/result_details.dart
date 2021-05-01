@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 import 'package:kabod_app/service/api_service.dart';
@@ -25,6 +26,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
   _ResultDetailWidgetState();
 
   final ApiService api = ApiService();
+  Duration duration = Duration();
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +48,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     fontWeight: FontWeight.bold,
                     fontSize: 22)),
             DividerSmall(),
-            widget.results[widget.index].time != null
+            durationFromString(widget.results[widget.index].time) != duration
                 ? Text('Time: ${widget.results[widget.index].time}',
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),

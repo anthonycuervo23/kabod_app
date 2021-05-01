@@ -137,7 +137,8 @@ class _PrResultsFormState extends State<PrResultsForm> {
             validator: FormBuilderValidators.required(context),
             name: 'createdAt',
             initialValue: widget.currentResult != null
-                ? widget.currentResult.createdAt
+                ? DateTime.fromMillisecondsSinceEpoch(
+                    widget.currentResult.createdAt)
                 : DateTime.now(),
             inputType: InputType.date,
             format: DateFormat('EEEE, dd MMMM, yyyy'),

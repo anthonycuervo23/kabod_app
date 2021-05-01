@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -9,6 +10,7 @@ class UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserRepository userRepository = Provider.of<UserRepository>(context);
+    final df = DateFormat('MMMM d, y');
     return Container(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -49,11 +51,11 @@ class UserInfo extends StatelessWidget {
                               color: kButtonColor,
                             ),
                             title: Text(
-                              'Address',
+                              'Birth date',
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
-                              'Address',
+                              df.format(userRepository.userModel.birthDate),
                               style: TextStyle(
                                   fontSize: 20, color: kWhiteTextColor),
                             ),
