@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -43,7 +44,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         InkWell(
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, AppRoutes.profileRoute),
           child: Padding(
             padding:
                 const EdgeInsets.only(right: 20, top: 10, left: 8, bottom: 5),

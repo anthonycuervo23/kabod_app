@@ -10,6 +10,8 @@ import 'package:kabod_app/screens/leaderboard/picture_details_screen.dart';
 import 'package:kabod_app/screens/personal_records/result_editor_screen.dart';
 import 'package:kabod_app/screens/personal_records/pr_results_screen.dart';
 import 'package:kabod_app/screens/personal_records/pr_screen.dart';
+import 'package:kabod_app/screens/profile/editProfile_screen.dart';
+import 'package:kabod_app/screens/profile/profile_screen.dart';
 import 'package:kabod_app/screens/results/add_results.dart';
 import 'package:kabod_app/screens/wods/wod_editor_screen.dart';
 
@@ -27,9 +29,16 @@ class AppRoutes {
   static const String resultsRoute = '/resultsRoute';
   static const String addResultRoute = '/addResultRoute';
   static const String editResultRoute = '/editResultRoute';
+  static const String profileRoute = '/profileRoute';
+  static const String editProfileRoute = '/editProfileRoute';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case editProfileRoute:
+        return MaterialPageRoute(
+            builder: (_) => EditProfileScreen(user: settings.arguments));
+      case profileRoute:
+        return MaterialPageRoute(builder: (_) => ProfileScreen());
       case editResultRoute:
         List<dynamic> args = settings.arguments;
         return MaterialPageRoute(

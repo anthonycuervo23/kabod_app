@@ -67,6 +67,10 @@ class UserRepository extends ChangeNotifier {
     }
   }
 
+  Future<void> updateData(String id, Map<String, dynamic> data) async {
+    final userDB = await _db.collection('users').doc(id).update(data);
+  }
+
   Future<void> _onAuthStateChanged(User firebaseUser) async {
     if (firebaseUser == null) {
       _status = Status.Unauthenticated;
