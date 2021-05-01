@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //my imports
 import 'package:kabod_app/screens/auth/screens/login_screens_controller.dart';
 import 'package:kabod_app/screens/auth/screens/reset_password_screen.dart';
+import 'package:kabod_app/screens/calculator/calculator_screen.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
 import 'package:kabod_app/screens/leaderboard/leaderboard_screen.dart';
@@ -26,14 +27,17 @@ class AppRoutes {
   static const String leaderBoardRoute = '/leaderBoard';
   static const String pictureDetailsRoute = '/pictureDetails';
   static const String personalRecordsRoute = '/personalRecords';
-  static const String resultsRoute = '/resultsRoute';
-  static const String addResultRoute = '/addResultRoute';
-  static const String editResultRoute = '/editResultRoute';
-  static const String profileRoute = '/profileRoute';
-  static const String editProfileRoute = '/editProfileRoute';
+  static const String resultsRoute = '/results';
+  static const String addResultRoute = '/addResult';
+  static const String editResultRoute = '/editResult';
+  static const String profileRoute = '/profile';
+  static const String editProfileRoute = '/editProfile';
+  static const String calculatorRoute = '/calculator';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case calculatorRoute:
+        return MaterialPageRoute(builder: (_) => CalculatorScreen());
       case editProfileRoute:
         return MaterialPageRoute(
             builder: (_) => EditProfileScreen(user: settings.arguments));
