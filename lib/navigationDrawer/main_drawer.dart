@@ -51,14 +51,14 @@ class MyDrawer extends StatelessWidget {
                         leading: Image.asset('assets/icons/home_icon.png'),
                         title: Text('Home', style: kListTileTextStyle),
                         onTap: () {
-                          Navigator.popUntil(
-                              context, (route) => route.isFirst);
+                          Navigator.popUntil(context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.homeRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(0);
 
-                          Navigator.pushReplacementNamed(context, AppRoutes.homeRoute);
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.homeRoute);
                         },
                       ),
                     ),
@@ -72,15 +72,37 @@ class MyDrawer extends StatelessWidget {
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
-                          Navigator.popUntil(
-                              context, (route) => route.isFirst);
+                          Navigator.popUntil(context, (route) => route.isFirst);
                           if (this.currentPage == AppRoutes.leaderBoardRoute)
                             return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
                               .setCurrentDrawer(1);
 
-                          Navigator.pushReplacementNamed(context, AppRoutes.leaderBoardRoute);
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.leaderBoardRoute);
+                        },
+                      ),
+                    ),
+                    Container(
+                      decoration: currentDrawer == 2 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading:
+                            Image.asset('assets/icons/performance_icon.png'),
+                        title: Text(
+                          'Personal Records',
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.currentPage ==
+                              AppRoutes.personalRecordsRoute) return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(2);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.personalRecordsRoute);
                         },
                       ),
                     ),
