@@ -106,6 +106,28 @@ class MyDrawer extends StatelessWidget {
                         },
                       ),
                     ),
+                    Container(
+                      decoration: currentDrawer == 3 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading:
+                            Image.asset('assets/icons/calculator_icon.png'),
+                        title: Text(
+                          '1RM Calculator',
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.currentPage == AppRoutes.calculatorRoute)
+                            return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(3);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.calculatorRoute);
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Column(
