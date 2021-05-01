@@ -94,9 +94,9 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 color: kButtonColor,
               ),
               onSelected: (int menu) {
-                Navigator.pushNamed(context, AppRoutes.addResultRoute,
-                    arguments: widget.selectedExercise);
                 if (menu == 1) {
+                  Navigator.pushNamed(context, AppRoutes.addResultRoute,
+                      arguments: widget.selectedExercise);
                 } else if (menu == 2) {
                   _showEditExerciseDialog(context);
                 } else if (menu == 3) {
