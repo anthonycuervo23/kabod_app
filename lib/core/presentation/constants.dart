@@ -23,3 +23,9 @@ BoxDecoration kListTileSelected = BoxDecoration(
 
 TextStyle kListTileTextStyle =
     TextStyle(fontWeight: FontWeight.bold, fontSize: 20);
+
+TextStyle kTimerHeadersStyle = TextStyle(
+    fontWeight: FontWeight.bold, color: kWhiteTextColor, fontSize: 20);
+
+TextStyle kTimerInputStyle =
+    TextStyle(fontWeight: FontWeight.bold, color: kTextColor, fontSize: 22);
