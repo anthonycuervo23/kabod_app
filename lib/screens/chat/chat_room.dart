@@ -15,8 +15,8 @@ import 'package:kabod_app/screens/chat/components/loading.dart';
 import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
 
 class ChatRoomScreen extends StatefulWidget {
-  final String chatWithUserId, name, profilePic;
-  ChatRoomScreen(this.chatWithUserId, this.name, this.profilePic);
+  final String chatWithUserId, name, profilePic, myId;
+  ChatRoomScreen(this.chatWithUserId, this.name, this.profilePic, this.myId);
 
   @override
   _ChatRoomScreenState createState() => _ChatRoomScreenState();
@@ -32,7 +32,9 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
             style: TextStyle(fontSize: 24, color: kTextColor)),
       ),
       body: ChatScreen(
-          chatWithUserId: widget.chatWithUserId, profilePic: widget.profilePic),
+          chatWithUserId: widget.chatWithUserId,
+          profilePic: widget.profilePic,
+          myId: widget.myId),
     );
   }
 }
@@ -40,16 +42,19 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
 class ChatScreen extends StatefulWidget {
   final String chatWithUserId;
   final String profilePic;
-  ChatScreen({Key key, @required this.chatWithUserId, this.profilePic})
+  final String myId;
+  ChatScreen(
+      {Key key, @required this.chatWithUserId, this.profilePic, this.myId})
       : super(key: key);
 
   @override
-  State createState() =>
-      ChatScreenState(chatWithUserId: chatWithUserId, profilePic: profilePic);
+  State createState() => ChatScreenState(
+      chatWithUserId: chatWithUserId, profilePic: profilePic, myId: myId);
 }
 
 class ChatScreenState extends State<ChatScreen> {
-  ChatScreenState({Key key, @required this.chatWithUserId, this.profilePic});
+  ChatScreenState(
+      {Key key, @required this.chatWithUserId, this.profilePic, this.myId});
 
   String chatWithUserId;
   File imageFile;
@@ -57,6 +62,7 @@ class ChatScreenState extends State<ChatScreen> {
   bool isShowSticker;
   String imageUrl;
   String profilePic;
+  String myId;
 
   String chatRoomId, messageId = "";
   Stream messageStream;
@@ -100,7 +106,8 @@ class ChatScreenState extends State<ChatScreen> {
           documentReference,
           {
             "message": message,
-            "sendBy": myUserId,
+            "idFrom": myUserId,
+            "idTo": widget.chatWithUserId,
             "ts": lastMessageTs,
             "imgUrl": myProfilePic,
             "type": type
@@ -133,7 +140,7 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   Widget buildItem(int index, DocumentSnapshot document) {
-    if (document.data()['sendBy'] == myUserId) {
+    if (document.data()['idFrom'] == myUserId) {
       // Right (my message)
       return Row(
         children: <Widget>[
@@ -483,6 +490,8 @@ class ChatScreenState extends State<ChatScreen> {
     focusNode.addListener(onFocusChange);
     listScrollController.addListener(_scrollListener);
 
+    readLocal();
+
     doThisOnLaunch();
     isLoading = false;
     isShowSticker = false;
@@ -497,6 +506,16 @@ class ChatScreenState extends State<ChatScreen> {
         isShowSticker = false;
       });
     }
+  }
+
+  readLocal() async {
+    print(myId);
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(myId)
+        .update({'chatting_with': widget.chatWithUserId});
+
+    setState(() {});
   }
 
   Future getImage() async {
@@ -547,6 +566,10 @@ class ChatScreenState extends State<ChatScreen> {
         isShowSticker = false;
       });
     } else {
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(myUserId)
+          .update({'chatting_with': null});
       Navigator.pop(context);
     }
 

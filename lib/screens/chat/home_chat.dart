@@ -1,10 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/chat_repository.dart';
+import 'package:kabod_app/main.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/chat/chat_room.dart';
@@ -70,9 +74,6 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
   }
 
   Widget chatRoomsList() {
-    print(myName);
-    print(myUserId);
-    print(myEmail);
     return StreamBuilder(
         stream: chatRoomsStream,
         builder: (context, snapshot) {
@@ -113,7 +114,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    ChatRoomScreen(userId, name, profileUrl)));
+                    ChatRoomScreen(userId, name, profileUrl, myUserId)));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
@@ -143,11 +144,15 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
       shrinkWrap: true,
       itemBuilder: (context, index) {
         QueryDocumentSnapshot ds = filteredUsers[index];
-        return searchListUserTile(
-            profileUrl: ds.data()["photo_url"],
-            name: ds.data()["name"],
-            userId: ds.data()["user_id"],
-            email: ds.data()['email']);
+        if (ds.data()['user_id'] == myUserId) {
+          return Container();
+        } else {
+          return searchListUserTile(
+              profileUrl: ds.data()["photo_url"],
+              name: ds.data()["name"],
+              userId: ds.data()["user_id"],
+              email: ds.data()['email']);
+        }
       },
     );
   }
@@ -166,7 +171,43 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
   void initState() {
     athleteNameController.addListener(_onSearchChanged);
     onScreenLoaded();
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                channel.description,
+                // TODO add a proper drawable resource to android, for now using
+                //      one that already exists in example app.
+                icon: 'launch_background',
+              ),
+            ));
+      }
+    });
+
+    getToken();
     super.initState();
+  }
+
+  getToken() async {
+    String token = await FirebaseMessaging.instance.getToken().then((token) {
+      print('token: $token');
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(myUserId)
+          .update({'pushToken': token});
+    }).catchError((err) {
+      Fluttertoast.showToast(msg: err.message.toString());
+    });
+    print(token);
   }
 
   @override
@@ -298,8 +339,8 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) =>
-                    ChatRoomScreen(username, name, profilePicUrl)));
+                builder: (context) => ChatRoomScreen(
+                    username, name, profilePicUrl, widget.myUsername)));
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
