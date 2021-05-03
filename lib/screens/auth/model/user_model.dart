@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class UserModel {
   String id;
   String name;
@@ -36,6 +38,20 @@ class UserModel {
     registrationDate = data['registration_date']?.toDate();
     photoUrl = data['photo_url'];
     introSeen = data['intro_seen'];
+  }
+
+  UserModel.fromSnapshot(DocumentSnapshot snapshot) {
+    id = snapshot.id;
+    name = snapshot['name'];
+    admin = snapshot['admin'];
+    phone = snapshot['phone'];
+    gender = snapshot['gender'];
+    birthDate = DateTime.fromMillisecondsSinceEpoch(snapshot['birth_date']);
+    email = snapshot['email'];
+    lastLoggedIn = snapshot['last_logged_in']?.toDate();
+    registrationDate = snapshot['registration_date']?.toDate();
+    photoUrl = snapshot['photo_url'];
+    introSeen = snapshot['intro_seen'];
   }
 
   Map<String, dynamic> toMap() {
