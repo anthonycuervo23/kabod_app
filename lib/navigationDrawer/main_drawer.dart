@@ -162,6 +162,28 @@ class _MyDrawerState extends State<MyDrawer> {
                         },
                       ),
                     ),
+                    Container(
+                      decoration: currentDrawer == 5 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading: Image.asset('assets/icons/chat_icon.png'),
+                        title: Text(
+                          'Kabod Chat',
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.widget.currentPage == AppRoutes.chatRoute)
+                            return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(5);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.chatRoute,
+                              arguments: userRepository.user.uid);
+                        },
+                      ),
+                    ),
                   ],
                 ),
                 Column(
@@ -181,35 +203,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             style: kListTileTextStyle,
                           ),
                           onTap: () {
-                            Navigator.popUntil(
-                                context, (route) => route.isFirst);
-                            userRepository.signOut();
+                            userRepository.signOut().then((value) {
+                              Navigator.popUntil(
+                                  context, (route) => route.isFirst);
+                            });
                           }),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 4 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading: Image.asset('assets/icons/timer_icon.png'),
-                        title: Text(
-                          'Timers',
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage == AppRoutes.timersRoute)
-                            return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(4);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.timersRoute,
-                              arguments: [
-                                Settings(SharedPrefs.sharedPrefs),
-                                SharedPrefs.sharedPrefs,
-                              ]);
-                        },
-                      ),
                     ),
                   ],
                 ),

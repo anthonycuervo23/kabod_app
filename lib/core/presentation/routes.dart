@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kabod_app/screens/auth/screens/login_screens_controller.dart';
 import 'package:kabod_app/screens/auth/screens/reset_password_screen.dart';
 import 'package:kabod_app/screens/calculator/calculator_screen.dart';
+import 'package:kabod_app/screens/chat/home_chat.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
 import 'package:kabod_app/screens/leaderboard/leaderboard_screen.dart';
@@ -35,9 +36,13 @@ class AppRoutes {
   static const String editProfileRoute = '/editProfile';
   static const String calculatorRoute = '/calculator';
   static const String timersRoute = '/timers';
+  static const String chatRoute = '/chat';
+  static const String chatRoomRoute = '/chatRoom';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case chatRoute:
+        return MaterialPageRoute(builder: (_) => HomeChatScreen());
       case calculatorRoute:
         return MaterialPageRoute(builder: (_) => CalculatorScreen());
       case timersRoute:

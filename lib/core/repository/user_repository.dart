@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 
 //My imports
 import 'package:kabod_app/screens/auth/model/user_model.dart';
+import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
+import 'package:kabod_app/service/sharedPreferences.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
@@ -50,7 +52,8 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future signOut() async {
-    _firebaseAuth.signOut();
+    SharedPrefs.sharedPrefs.clear();
+    await _firebaseAuth.signOut();
     _fsUser = null;
     _userListener.cancel();
     notifyListeners();
@@ -68,7 +71,8 @@ class UserRepository extends ChangeNotifier {
   }
 
   Future<void> updateData(String id, Map<String, dynamic> data) async {
-    final userDB = await _db.collection('users').doc(id).update(data);
+    // final userDB =
+    return await _db.collection('users').doc(id).update(data);
   }
 
   Future<void> _onAuthStateChanged(User firebaseUser) async {
@@ -79,6 +83,7 @@ class UserRepository extends ChangeNotifier {
     } else {
       _user = firebaseUser;
       _saveUserRecord();
+      //_nameSaver();
       final userDB = _db.collection('users').doc(_user.uid);
       _userListener = userDB
           .snapshots()
@@ -106,6 +111,9 @@ class UserRepository extends ChangeNotifier {
       lastLoggedIn: DateTime.now().toUtc(),
       introSeen: false,
     );
+    //SharedPrefs.sharedPrefs.setString('userName', _user.displayName);
+    SharedPreferenceHelper().saveUserEmail(_user.email);
+    SharedPreferenceHelper().saveUserId(_user.uid);
     final userDB = _db.collection('users').doc(_user.uid);
     if ((await userDB.get()).exists) {
       await userDB.update({
