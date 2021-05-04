@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,9 @@ class HomeChatScreen extends StatefulWidget {
 
 class _HomeChatScreenState extends State<HomeChatScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   bool isSearching = false;
   String myName, myProfilePic, myUserId, myEmail;
   Stream chatRoomsStream;
@@ -167,31 +171,65 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     getChatRooms();
   }
 
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('app_icon');
+    var initializationSettings =
+        new InitializationSettings(android: initializationSettingsAndroid);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> getNotification() async {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+          payload: json.encode(message),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // notification = message.data;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+          payload: json.encode(message),
+        );
+      }
+    });
+  }
+
   @override
   void initState() {
     athleteNameController.addListener(_onSearchChanged);
     onScreenLoaded();
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (notification != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-            notification.hashCode,
-            notification.title,
-            notification.body,
-            NotificationDetails(
-              android: AndroidNotificationDetails(
-                channel.id,
-                channel.name,
-                channel.description,
-                // TODO add a proper drawable resource to android, for now using
-                //      one that already exists in example app.
-                icon: 'launch_background',
-              ),
-            ));
-      }
-    });
+    configLocalNotification();
+    getNotification();
 
     getToken();
     super.initState();

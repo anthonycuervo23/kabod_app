@@ -513,7 +513,7 @@ class ChatScreenState extends State<ChatScreen> {
     FirebaseFirestore.instance
         .collection('users')
         .doc(myId)
-        .update({'chatting_with': widget.chatWithUserId});
+        .update({'chattingWith': widget.chatWithUserId});
 
     setState(() {});
   }
@@ -569,7 +569,7 @@ class ChatScreenState extends State<ChatScreen> {
       FirebaseFirestore.instance
           .collection('users')
           .doc(myUserId)
-          .update({'chatting_with': null});
+          .update({'chattingWith': null});
       Navigator.pop(context);
     }
 
