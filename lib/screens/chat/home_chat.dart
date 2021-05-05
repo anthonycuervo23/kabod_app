@@ -17,6 +17,7 @@ import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/chat/chat_room.dart';
 import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/commons/dividers.dart';
 
 class HomeChatScreen extends StatefulWidget {
   @override
@@ -91,7 +92,18 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.data.docs.length == 0) {
-              return Center(child: Text(S.of(context).noUsersFound));
+              return Column(
+                children: [
+                  Center(
+                    child: Text(
+                      S.of(context).noUsersFound,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  DividerBig(),
+                  Image.asset('assets/images/search_icon.png')
+                ],
+              );
             }
             return ListView.builder(
               itemCount: snapshot.data.docs.length,

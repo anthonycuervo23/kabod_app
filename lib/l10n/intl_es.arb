@@ -39,7 +39,7 @@
   "emptyMessage": "el mensaje esta vacio",
   "notAnImage": "Este archivo no es una imagen",
   "typeMessage": "Escribe tu mensaje...",
-  "noUsersFound": "No se encontraron usuarios",
+  "noUsersFound": "No tienes chats activos",
   "searchAthleteHint": "Nombre del Atleta",
   "openImage": "Abrir imagen...",
   "appBarSchedule": "Horario",

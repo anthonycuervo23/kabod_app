@@ -155,7 +155,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noPhoto" : MessageLookupByLibrary.simpleMessage("No Photo to show"),
     "noScoreFound" : MessageLookupByLibrary.simpleMessage("NO DATA FOUND"),
     "noScoreWithFilter" : MessageLookupByLibrary.simpleMessage("NO RESULTS FOUND FOR THIS FILTERING"),
-    "noUsersFound" : MessageLookupByLibrary.simpleMessage("No user found"),
+    "noUsersFound" : MessageLookupByLibrary.simpleMessage("You don\'t have active chats"),
     "notAnImage" : MessageLookupByLibrary.simpleMessage("This file is not an image"),
     "openImage" : MessageLookupByLibrary.simpleMessage("Open image..."),
     "optionalComments" : MessageLookupByLibrary.simpleMessage("Optional comments..."),

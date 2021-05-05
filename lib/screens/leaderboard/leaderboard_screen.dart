@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
@@ -202,12 +203,24 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   DividerSmall(),
                   _filteredList.length == 0 && firstTime == true
                       ? Center(
-                          child: Text(S.of(context).enterFilters,
-                              style: TextStyle(fontSize: 24)))
+                          child: Text(
+                          S.of(context).enterFilters,
+                          style: TextStyle(fontSize: 24),
+                          textAlign: TextAlign.center,
+                        ))
                       : _filteredList.length == 0 && firstTime == false
-                          ? Center(
-                              child: Text(S.of(context).noScoreFound,
-                                  style: TextStyle(fontSize: 24)))
+                          ? Column(
+                              children: [
+                                Center(
+                                  child: Text(
+                                    S.of(context).noScoreWithFilter,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                DividerBig(),
+                                Image.asset('assets/images/search_icon.png')
+                              ],
+                            )
                           : Expanded(
                               child: ListView.builder(
                                   itemCount: _filteredList.length,
@@ -469,8 +482,17 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
               ),
             );
           } else {
-            return Center(
-              child: Text(S.of(context).noScoreWithFilter),
+            return Column(
+              children: [
+                Center(
+                  child: Text(
+                    S.of(context).noScoreWithFilter,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                DividerBig(),
+                Image.asset('assets/images/search_icon.png')
+              ],
             );
           }
         });
@@ -545,8 +567,17 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
               ),
             );
           } else {
-            return Center(
-              child: Text(S.of(context).noScoreWithFilter),
+            return Column(
+              children: [
+                Center(
+                  child: Text(
+                    S.of(context).noScoreWithFilter,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+                DividerBig(),
+                Image.asset('assets/images/search_icon.png')
+              ],
             );
           }
         });

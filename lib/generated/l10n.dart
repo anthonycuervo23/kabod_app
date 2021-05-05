@@ -435,10 +435,10 @@ class S {
     );
   }
 
-  /// `No user found`
+  /// `You don't have active chats`
   String get noUsersFound {
     return Intl.message(
-      'No user found',
+      'You don\'t have active chats',
       name: 'noUsersFound',
       desc: '',
       args: [],

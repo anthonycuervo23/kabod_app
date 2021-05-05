@@ -39,7 +39,7 @@
   "emptyMessage": "Nothing to send",
   "notAnImage": "This file is not an image",
   "typeMessage": "Type your message...",
-  "noUsersFound": "No user found",
+  "noUsersFound": "You don't have active chats",
   "searchAthleteHint": "Athlete Name",
   "openImage": "Open image...",
   "appBarSchedule": "Schedule",
