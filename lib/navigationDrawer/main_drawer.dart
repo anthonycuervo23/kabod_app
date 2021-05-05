@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
@@ -57,7 +58,8 @@ class _MyDrawerState extends State<MyDrawer> {
                       decoration: currentDrawer == 0 ? kListTileSelected : null,
                       child: ListTile(
                         leading: Image.asset('assets/icons/home_icon.png'),
-                        title: Text('Home', style: kListTileTextStyle),
+                        title: Text(S.of(context).drawerHome,
+                            style: kListTileTextStyle),
                         onTap: () {
                           Navigator.popUntil(context, (route) => route.isFirst);
                           if (this.widget.currentPage == AppRoutes.homeRoute)
@@ -77,7 +79,7 @@ class _MyDrawerState extends State<MyDrawer> {
                         leading:
                             Image.asset('assets/icons/whiteboard_icon.png'),
                         title: Text(
-                          'LeaderBoard',
+                          S.of(context).drawerLeaderBoard,
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
@@ -97,31 +99,9 @@ class _MyDrawerState extends State<MyDrawer> {
                       decoration: currentDrawer == 2 ? kListTileSelected : null,
                       child: ListTile(
                         leading:
-                            Image.asset('assets/icons/performance_icon.png'),
-                        title: Text(
-                          'Personal Records',
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage ==
-                              AppRoutes.personalRecordsRoute) return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(2);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.personalRecordsRoute);
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 3 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading:
                             Image.asset('assets/icons/calculator_icon.png'),
                         title: Text(
-                          '1RM Calculator',
+                          S.of(context).drawerCalculator,
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
@@ -130,7 +110,7 @@ class _MyDrawerState extends State<MyDrawer> {
                               AppRoutes.calculatorRoute) return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(3);
+                              .setCurrentDrawer(2);
 
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.calculatorRoute);
@@ -138,11 +118,11 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ),
                     Container(
-                      decoration: currentDrawer == 4 ? kListTileSelected : null,
+                      decoration: currentDrawer == 3 ? kListTileSelected : null,
                       child: ListTile(
                         leading: Image.asset('assets/icons/timer_icon.png'),
                         title: Text(
-                          'Timers',
+                          S.of(context).drawerTimers,
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
@@ -151,7 +131,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             return;
 
                           Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(4);
+                              .setCurrentDrawer(3);
 
                           Navigator.pushReplacementNamed(
                               context, AppRoutes.timersRoute,
@@ -163,11 +143,33 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ),
                     Container(
+                      decoration: currentDrawer == 4 ? kListTileSelected : null,
+                      child: ListTile(
+                        leading:
+                            Image.asset('assets/icons/performance_icon.png'),
+                        title: Text(
+                          S.of(context).drawerPersonalRecords,
+                          style: kListTileTextStyle,
+                        ),
+                        onTap: () {
+                          Navigator.popUntil(context, (route) => route.isFirst);
+                          if (this.widget.currentPage ==
+                              AppRoutes.personalRecordsRoute) return;
+
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(4);
+
+                          Navigator.pushReplacementNamed(
+                              context, AppRoutes.personalRecordsRoute);
+                        },
+                      ),
+                    ),
+                    Container(
                       decoration: currentDrawer == 5 ? kListTileSelected : null,
                       child: ListTile(
                         leading: Image.asset('assets/icons/chat_icon.png'),
                         title: Text(
-                          'Kabod Chat',
+                          S.of(context).drawerChat,
                           style: kListTileTextStyle,
                         ),
                         onTap: () {
@@ -199,7 +201,7 @@ class _MyDrawerState extends State<MyDrawer> {
                             color: kButtonColor,
                           ),
                           title: Text(
-                            'Logout',
+                            S.of(context).drawerLogout,
                             style: kListTileTextStyle,
                           ),
                           onTap: () {

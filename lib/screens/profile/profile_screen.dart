@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -49,7 +50,7 @@ class ProfileScreen extends StatelessWidget {
                 Center(
                   child: userRepository.userModel.admin == false
                       ? Text(
-                          'Athlete',
+                          S.of(context).athlete,
                           style: TextStyle(color: kButtonColor, fontSize: 18),
                         )
                       : Text(
@@ -70,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                     color: kButtonColor,
                   ),
                   title: Text(
-                    'Edit profile',
+                    S.of(context).editProfile,
                     style: TextStyle(
                         fontSize: 20,
                         color: kTextColor,
@@ -86,7 +87,7 @@ class ProfileScreen extends StatelessWidget {
                     color: kButtonColor,
                   ),
                   title: Text(
-                    'Logout',
+                    S.of(context).drawerLogout,
                     style: TextStyle(
                         fontSize: 20,
                         color: kTextColor,

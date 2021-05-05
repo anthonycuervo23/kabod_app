@@ -6,8 +6,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 //my imports
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:kabod_app/navigationDrawer/model/drawer_notifier.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
@@ -71,6 +73,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          S.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         theme: ThemeData(
           floatingActionButtonTheme: FloatingActionButtonThemeData(
             backgroundColor: kButtonColor,

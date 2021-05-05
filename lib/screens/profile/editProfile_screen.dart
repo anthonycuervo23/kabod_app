@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 
@@ -51,7 +52,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'EDIT PROFILE',
+          S.of(context).appBarEditProfile,
           style: TextStyle(fontSize: 24, color: kTextColor),
         ),
         shape: kAppBarShape,
@@ -82,7 +83,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             controller: _nameController,
             decoration: InputDecoration(
-                labelText: 'Name',
+                labelText: S.of(context).introName,
                 labelStyle: TextStyle(color: kButtonColor, fontSize: 18)),
           ),
           const SizedBox(height: 10.0),
@@ -90,7 +91,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: TextStyle(color: kWhiteTextColor, fontSize: 20),
             controller: _phoneController,
             decoration: InputDecoration(
-                labelText: 'Phone',
+                labelText: S.of(context).introPhone,
                 labelStyle: TextStyle(color: kButtonColor, fontSize: 18)),
           ),
           const SizedBox(height: 10.0),
@@ -99,7 +100,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: ReusableButton(
               child: _processing
                   ? CircularProgressIndicator()
-                  : Text('SAVE', style: TextStyle(fontSize: 20)),
+                  : Text(S.of(context).saveButton,
+                      style: TextStyle(fontSize: 20)),
               onPressed: _processing
                   ? null
                   : () async {
@@ -145,7 +147,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: kBackgroundColor,
-            title: Text('Pick an image',
+            title: Text(S.of(context).pickImage,
                 style: TextStyle(
                     color: kButtonColor,
                     fontSize: 30,
@@ -162,7 +164,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onTap: () {
                         getImage(ImageSource.gallery);
                       },
-                      title: Text('Gallery',
+                      title: Text(S.of(context).fromGallery,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -172,7 +174,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       onTap: () {
                         getImage(ImageSource.camera);
                       },
-                      title: Text('Camera',
+                      title: Text(S.of(context).fromCamera,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -185,7 +187,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Cancel',
+                    S.of(context).cancel,
                     style: TextStyle(
                         color: kTextColor,
                         fontWeight: FontWeight.bold,

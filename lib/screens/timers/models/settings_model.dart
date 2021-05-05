@@ -19,7 +19,7 @@ class Settings {
     Map<String, dynamic> json =
         jsonDecode(_prefs.getString('settings') ?? '{}');
     silentMode = json['silentMode'] ?? false;
-    countdownPip = json['countdownPip'] ?? 'sounds/pip.mp3';
+    countdownPip = json['countdownPip'] ?? 'pip.mp3';
     startRep = json['startRep'] ?? 'boop.mp3';
     startRest = json['startRest'] ?? 'dingdingding.mp3';
     startBreak = json['startBreak'] ?? 'dingdingding.mp3';

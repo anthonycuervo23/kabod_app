@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:kabod_app/core/model/wod_type_options.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:kabod_app/core/utils/decimalTextInputFormatter.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 //My imports
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
@@ -89,7 +90,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
               decoration: InputDecoration(
                 hintText: stringFromDuration(widget.initialTimer) ==
                         stringFromDuration(nullTime)
-                    ? 'Time'
+                    ? S.of(context).time
                     : stringFromDuration(widget.initialTimer),
                 hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
                 enabledBorder: UnderlineInputBorder(
@@ -115,7 +116,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
                     borderSide: BorderSide(color: kButtonColor)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: kButtonColor)),
-                labelText: 'Rounds',
+                labelText: S.of(context).rounds,
                 labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
               ),
             ),
@@ -134,7 +135,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
                     borderSide: BorderSide(color: kButtonColor)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: kButtonColor)),
-                labelText: 'Reps',
+                labelText: S.of(context).reps,
                 labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
               ),
             ),
@@ -159,7 +160,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
                     borderSide: BorderSide(color: kButtonColor)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: kButtonColor)),
-                labelText: 'Weight',
+                labelText: S.of(context).weight,
                 labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
               ),
             ),
@@ -174,7 +175,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
                     borderSide: BorderSide(color: kButtonColor)),
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(color: kButtonColor)),
-                labelText: 'Score',
+                labelText: S.of(context).score,
                 labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
               ),
             ),
@@ -186,7 +187,7 @@ class _AddResultsFormState extends State<AddResultsForm> {
             maxLines: 8,
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(
-                hintText: 'Optional comments...',
+                hintText: S.of(context).optionalComments,
                 hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
                 border: InputBorder.none),
           ),

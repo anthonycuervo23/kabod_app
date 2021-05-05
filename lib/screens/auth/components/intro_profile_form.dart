@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 //My imports
 import 'package:kabod_app/screens/auth/components/text_fields_input.dart';
@@ -22,7 +23,7 @@ class IntroProfileForm extends StatelessWidget {
         children: [
           GenderPickerFieldInput(
             name: 'gender',
-            hint: 'Select Gender',
+            hint: S.of(context).introGender,
             icon: FontAwesomeIcons.venusMars,
             validator: FormBuilderValidators.required(context),
           ),
@@ -32,7 +33,7 @@ class IntroProfileForm extends StatelessWidget {
               FormBuilderValidators.required(context),
             ]),
             icon: FontAwesomeIcons.user,
-            hint: 'Name',
+            hint: S.of(context).introName,
             inputType: TextInputType.name,
             inputAction: TextInputAction.next,
           ),
@@ -40,13 +41,13 @@ class IntroProfileForm extends StatelessWidget {
             validator: FormBuilderValidators.required(context),
             name: 'birth_date',
             icon: FontAwesomeIcons.calendarAlt,
-            hint: 'Birth date',
+            hint: S.of(context).introBirthDate,
             inputAction: TextInputAction.done,
           ),
           TextFieldInput(
             name: 'phone',
             icon: FontAwesomeIcons.phoneAlt,
-            hint: 'Phone Number',
+            hint: S.of(context).introPhone,
             inputType: TextInputType.phone,
             inputAction: TextInputAction.next,
             validator: FormBuilderValidators.compose([

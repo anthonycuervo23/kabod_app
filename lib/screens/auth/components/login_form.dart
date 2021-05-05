@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -48,9 +49,9 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   key: Key('email-field'),
                   controller: _email,
                   validator: (value) =>
-                      (value.isEmpty) ? 'Please enter an email' : null,
+                      (value.isEmpty) ? S.of(context).loginFormEmail : null,
                   labelText: 'E-Mail',
-                  hintText: 'Enter your email',
+                  hintText: S.of(context).loginFormHintEmail,
                   isPassword: false,
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () =>
@@ -65,9 +66,9 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   key: Key('password-field'),
                   controller: _password,
                   validator: (value) =>
-                      (value.isEmpty) ? 'Please enter your password' : null,
-                  labelText: 'Password',
-                  hintText: 'Enter your password',
+                      (value.isEmpty) ? S.of(context).loginFormPassword : null,
+                  labelText: S.of(context).loginFormLabelPassword,
+                  hintText: S.of(context).loginFormHintPassword,
                   isSecure: true,
                   onEditingComplete: () async {
                     if (_formKey.currentState.validate()) {
@@ -84,7 +85,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                 onTap: () =>
                     Navigator.pushNamed(context, AppRoutes.ResetPasswordRoute),
                 child: Text(
-                  'Forgot Password?',
+                  S.of(context).loginForgotPassword,
                   style: TextStyle(color: kWhiteTextColor),
                 ),
               ),
@@ -103,7 +104,8 @@ class _GetLoginFormState extends State<GetLoginForm> {
                             ));
                         }
                       },
-                      child: Text('SIGN IN', style: kTextButtonStyle),
+                      child: Text(S.of(context).loginSignIn,
+                          style: kTextButtonStyle),
                     ),
               SizedBox(height: 30),
             ],

@@ -7,12 +7,12 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kBackgroundColor,
+      color: kPrimaryColor,
       child: Hero(
         tag: 'logo',
         child: Center(
-          child: Image.asset('assets/images/logo.png',
-              width: MediaQuery.of(context).size.width * 0.25),
+          child: Image.asset('assets/images/logo_white.png',
+              width: MediaQuery.of(context).size.width * 0.40),
         ),
       ),
     );

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 import 'package:kabod_app/service/api_service.dart';
@@ -49,26 +50,33 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     fontSize: 22)),
             DividerSmall(),
             durationFromString(widget.results[widget.index].time) != duration
-                ? Text('Time: ${widget.results[widget.index].time}',
+                ? Text(S.of(context).prTime(widget.results[widget.index].time),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
             widget.results[widget.index].reps != null
-                ? Text('Reps: ${widget.results[widget.index].reps.toString()}',
+                ? Text(
+                    S
+                        .of(context)
+                        .prReps(widget.results[widget.index].reps.toString()),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
             widget.results[widget.index].weight != null
-                ? Text('Weight: ${widget.results[widget.index].weight} lb',
+                ? Text(
+                    S.of(context).prWeight(widget.results[widget.index].weight),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
             widget.results[widget.index].comment != null
-                ? Text('Comment: ${widget.results[widget.index].comment}',
+                ? Text(
+                    S
+                        .of(context)
+                        .prComment(widget.results[widget.index].comment),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
             ButtonTheme(
               child: ButtonBar(
                 children: [
                   TextButton(
-                    child: const Text('Edit',
+                    child: const Text('Editar',
                         style: TextStyle(color: kWhiteTextColor)),
                     onPressed: () {
                       Navigator.pushNamed(context, AppRoutes.editResultRoute,
@@ -79,7 +87,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     },
                   ),
                   TextButton(
-                    child: const Text('Delete',
+                    child: const Text('Borrar',
                         style: TextStyle(color: kWhiteTextColor)),
                     onPressed: () {
                       _confirmDeleteDialog();
@@ -100,21 +108,21 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
         return AlertDialog(
           backgroundColor: kBackgroundColor,
           title: Text(
-            'Warning!',
+            S.of(context).warning,
             style: TextStyle(
                 color: kButtonColor, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: [
-                Text('Are you sure want delete this item?'),
+                Text(S.of(context).confirmDialog),
               ],
             ),
           ),
           actions: [
             TextButton(
               child: Text(
-                'Yes',
+                S.of(context).yes,
                 style: TextStyle(color: kTextColor, fontSize: 18),
               ),
               onPressed: () {

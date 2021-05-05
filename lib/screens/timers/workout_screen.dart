@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:screen/screen.dart';
 
 //My imports
@@ -112,7 +113,7 @@ class _WorkoutScreenState extends State<WorkoutScreen> {
                 TableCell(child: Text('Set', style: TextStyle(fontSize: 30.0))),
                 TableCell(child: Text('Rep', style: TextStyle(fontSize: 30.0))),
                 TableCell(
-                    child: Text('Total Time',
+                    child: Text(S.of(context).totalTime,
                         textAlign: TextAlign.end,
                         style: TextStyle(fontSize: 30.0)))
               ]),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/timers/models/settings_model.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -33,11 +34,14 @@ class AudioSelectListItem extends StatelessWidget {
       ),
       title: Text(title, style: kTimerInputStyle),
       subtitle: DropdownButton<String>(
+        dropdownColor: kPrimaryColor,
         isDense: true,
         value: value,
         items: [
-          DropdownMenuItem(child: Text('Low Beep'), value: 'pip.mp3'),
-          DropdownMenuItem(child: Text('High Beep'), value: 'boop.mp3'),
+          DropdownMenuItem(
+              child: Text(S.of(context).lowBeep), value: 'pip.mp3'),
+          DropdownMenuItem(
+              child: Text(S.of(context).highBeep), value: 'boop.mp3'),
           DropdownMenuItem(
               child: Text('Ding Ding Ding!'), value: 'dingdingding.mp3'),
         ],
@@ -53,14 +57,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:
-            Text('Settings', style: TextStyle(fontSize: 30, color: kTextColor)),
+        title: Text(S.of(context).timerSettings,
+            style: TextStyle(fontSize: 30, color: kTextColor)),
       ),
       body: ListView(
         children: <Widget>[
           SwitchListTile(
             activeColor: kButtonColor,
-            title: Text('Silent mode', style: kTimerInputStyle),
+            title: Text(S.of(context).silenceMode, style: kTimerInputStyle),
             value: widget.settings.silentMode,
             onChanged: (silentMode) {
               setState(() {
@@ -72,13 +76,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
           Divider(height: 10),
           ListTile(
             title: Text(
-              'Sounds',
+              S.of(context).sounds,
               style: kTimerHeadersStyle,
             ),
           ),
           AudioSelectListItem(
             value: widget.settings.countdownPip,
-            title: 'Countdown pips',
+            title: S.of(context).countdownPips,
             onChanged: (String value) {
               setState(() {
                 widget.settings.countdownPip = value;
@@ -88,62 +92,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           AudioSelectListItem(
             value: widget.settings.startRep,
-            title: 'Start next rep',
+            title: S.of(context).startNextRep,
             onChanged: (String value) {
               setState(() {
                 widget.settings.startRep = value;
                 widget.onSettingsChanged();
               });
-              // widget.settings.startRep = value;
-              // widget.onSettingsChanged();
             },
           ),
           AudioSelectListItem(
             value: widget.settings.startRest,
-            title: 'Rest',
+            title: S.of(context).rest,
             onChanged: (String value) {
               setState(() {
                 widget.settings.startRest = value;
                 widget.onSettingsChanged();
               });
-              // widget.settings.startRest = value;
-              // widget.onSettingsChanged();
             },
           ),
           AudioSelectListItem(
             value: widget.settings.startBreak,
-            title: 'Break',
+            title: S.of(context).breakTimer,
             onChanged: (String value) {
               setState(() {
                 widget.settings.startBreak = value;
                 widget.onSettingsChanged();
               });
-              // widget.settings.startBreak = value;
-              // widget.onSettingsChanged();
             },
           ),
           AudioSelectListItem(
             value: widget.settings.startSet,
-            title: 'Start next set',
+            title: S.of(context).startNextSet,
             onChanged: (String value) {
               setState(() {
                 widget.settings.startSet = value;
                 widget.onSettingsChanged();
               });
-              // widget.settings.startSet = value;
-              // widget.onSettingsChanged();
             },
           ),
           AudioSelectListItem(
             value: widget.settings.endWorkout,
-            title: 'End workout (plays twice)',
+            title: S.of(context).endWorkout,
             onChanged: (String value) {
               setState(() {
                 widget.settings.endWorkout = value;
                 widget.onSettingsChanged();
               });
-              // widget.settings.endWorkout = value;
-              // widget.onSettingsChanged();
             },
           ),
         ],

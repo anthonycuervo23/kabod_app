@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 class PictureDetailsScreen extends StatelessWidget {
   final String picture;
@@ -14,7 +15,7 @@ class PictureDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         shape: kAppBarShape,
         title: Text(
-          'Results Details',
+          S.of(context).appBarResultDetails,
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),

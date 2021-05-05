@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -21,17 +22,17 @@ class DeleteWodButton extends StatelessWidget {
               context: context,
               builder: (context) => AlertDialog(
                 backgroundColor: kBackgroundColor,
-                title: Text('Warning!',
+                title: Text(S.of(context).warning,
                     style: TextStyle(
                         color: kButtonColor,
                         fontSize: 30,
                         fontWeight: FontWeight.bold)),
-                content: Text('Are you sure you want to delete this WOD?'),
+                content: Text(S.of(context).deleteWodAlert),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.pop(context, false),
                     child: Text(
-                      'Cancel',
+                      S.of(context).cancel,
                       style: TextStyle(
                           color: kTextColor,
                           fontWeight: FontWeight.bold,
@@ -41,7 +42,7 @@ class DeleteWodButton extends StatelessWidget {
                   TextButton(
                     onPressed: () => Navigator.pop(context, true),
                     child: Text(
-                      'Delete',
+                      S.of(context).deleteButton,
                       style: TextStyle(
                           color: kButtonColor,
                           fontSize: 18,

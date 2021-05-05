@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 //My Imports
 import 'package:kabod_app/screens/leaderboard/components/leaderboard_cards.dart';
@@ -157,7 +158,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           scaffoldKey: _scaffoldKey,
           shape: kAppBarShape,
           title: Text(
-            'Leader Board',
+            S.of(context).appBarLeaderBoard,
             style: TextStyle(
                 color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
           ),
@@ -201,11 +202,11 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                   DividerSmall(),
                   _filteredList.length == 0 && firstTime == true
                       ? Center(
-                          child: Text('PLEASE ENTER SOME FILTERS TO SEARCH',
+                          child: Text(S.of(context).enterFilters,
                               style: TextStyle(fontSize: 24)))
                       : _filteredList.length == 0 && firstTime == false
                           ? Center(
-                              child: Text('NO DATA FOUND',
+                              child: Text(S.of(context).noScoreFound,
                                   style: TextStyle(fontSize: 24)))
                           : Expanded(
                               child: ListView.builder(
@@ -246,7 +247,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                                     _filteredList[index]
                                                             .customScore ==
                                                         null)
-                                                ? '${_filteredList[index].rounds.toString()} Rounds ${_filteredList[index].reps.toString()} reps'
+                                                ? S.of(context).roundsAndReps(
+                                                    _filteredList[index].rounds,
+                                                    _filteredList[index].reps)
                                                 : (_filteredList[index].time !=
                                                         Duration())
                                                     ? stringFromDuration(
@@ -257,7 +260,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                         type: new Text(
                                             _filteredList[index].rx == true
                                                 ? 'RX'
-                                                : 'scale',
+                                                : S.of(context).scale,
                                             style: _filteredList[index].rx ==
                                                     true
                                                 ? TextStyle(
@@ -354,7 +357,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                           color: kTextColor,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
-                      hintText: 'Select Date')),
+                      hintText: S.of(context).selectDay)),
                   style: TextStyle(
                     fontSize: 18,
                     color: kWhiteTextColor,
@@ -386,7 +389,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text('PLEASE ENTER A VALID DATE TO SEE THE SCORES'),
+              child: Text(S.of(context).enterValidDate),
             );
           }
         });
@@ -451,8 +454,11 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     iconSize: 36,
                     underline: SizedBox(),
                     hint: Text(
-                      'WOD Name: ',
-                      style: TextStyle(color: kTextColor, fontSize: 18),
+                      S.of(context).wodNameFilter,
+                      style: TextStyle(
+                          color: kTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                     dropdownColor: kBackgroundColor,
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18),
@@ -464,7 +470,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text('NO RESULTS FOUND FOR THIS FILTERING'),
+              child: Text(S.of(context).noScoreWithFilter),
             );
           }
         });
@@ -494,7 +500,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                       setState(() {
                         _dropDownGender = newValue;
 
-                        if (_dropDownGender == "All") {
+                        if (_dropDownGender == "Todo") {
                           setState(() {
                             // no search field input, display all items
                             _filteredList = result;
@@ -511,9 +517,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                       });
                     },
                     items: <String>[
-                          'All',
-                          'Male',
-                          'Female',
+                          'Todo',
+                          'Masculino',
+                          'Femenino',
                         ].map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -526,8 +532,11 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                     iconSize: 36,
                     underline: SizedBox(),
                     hint: Text(
-                      'Gender: ',
-                      style: TextStyle(color: kTextColor, fontSize: 18),
+                      S.of(context).filterGender,
+                      style: TextStyle(
+                          color: kTextColor,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold),
                     ),
                     dropdownColor: kBackgroundColor,
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18),
@@ -537,7 +546,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
             );
           } else {
             return Center(
-              child: Text('NO RESULTS FOUND FOR THIS FILTERING'),
+              child: Text(S.of(context).noScoreWithFilter),
             );
           }
         });

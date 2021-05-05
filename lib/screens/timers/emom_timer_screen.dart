@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:screen/screen.dart';
 
 //My imports
@@ -106,10 +107,14 @@ class _WorkoutEmomScreenState extends State<WorkoutEmomScreen> {
               2: FlexColumnWidth(1.0)
             }, children: [
               TableRow(children: [
-                TableCell(child: Text('Set', style: TextStyle(fontSize: 30.0))),
-                TableCell(child: Text('Rep', style: TextStyle(fontSize: 30.0))),
                 TableCell(
-                    child: Text('Total Time',
+                    child: Text(S.of(context).setTimer,
+                        style: TextStyle(fontSize: 30.0))),
+                TableCell(
+                    child: Text(S.of(context).repTimer,
+                        style: TextStyle(fontSize: 30.0))),
+                TableCell(
+                    child: Text(S.of(context).totalTimeTimer,
                         textAlign: TextAlign.end,
                         style: TextStyle(fontSize: 30.0)))
               ]),

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -75,7 +76,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
       appBar: AppBar(
         shape: kAppBarShape,
         title: Text(
-          'Schedule',
+          S.of(context).appBarSchedule,
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
@@ -89,7 +90,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.all(kDefaultPadding),
-            child: Text('Class Details',
+            child: Text(S.of(context).classDetails,
                 style: TextStyle(fontSize: 24, color: kWhiteTextColor)),
           ),
           DefaultCard(
@@ -107,7 +108,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                     children: [
                       Text(
                         widget.listOfHours[widget.index].hour != 12
-                            ? 'CrossFit Class'
+                            ? S.of(context).crossfitClass
                             : 'Open Box',
                         style: TextStyle(fontSize: 24, color: kWhiteTextColor),
                       ),
@@ -122,7 +123,10 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   ),
                   DividerBig(),
                   Text(
-                      '${widget.currentClass.classAthletes[keys[widget.index]].length} of ${widget.currentClass.maxAthletes}',
+                      S.of(context).athletesSubscribed(
+                          widget.currentClass.classAthletes[keys[widget.index]]
+                              .length,
+                          widget.currentClass.maxAthletes),
                       style: TextStyle(fontSize: 24)),
                 ],
               ),
@@ -132,7 +136,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
           Padding(
             padding: const EdgeInsets.only(left: kDefaultPadding),
             child: Text(
-              'Registered Athletes',
+              S.of(context).registerAthletes,
               style: TextStyle(fontSize: 24, color: kWhiteTextColor),
             ),
           ),
@@ -147,7 +151,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
               } else if (snapshot.data == null) {
                 return Center(
                     child: Text(
-                  'THE CLASS IS EMPTY',
+                  S.of(context).classEmpty,
                   style: TextStyle(fontSize: 20),
                 ));
               } else
@@ -194,7 +198,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                         const ListTile(
                           leading:
                               Icon(Icons.check, size: 50, color: Colors.green),
-                          title: Text('You\'ve booked a class',
+                          title: Text("Has Reservado una Clase.!",
                               style: TextStyle(fontSize: 20)),
                         ),
                       ],
@@ -205,7 +209,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   gravity: ToastGravity.top);
             },
             child: Text(
-              'BOOK',
+              S.of(context).cancelClassButton,
               style: kTextButtonStyle,
             )),
       );
@@ -230,7 +234,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                       const ListTile(
                         leading: Icon(Icons.info_outline,
                             size: 50, color: kButtonColor),
-                        title: Text('You\'ve canceled the class',
+                        title: Text("Tu reserva ha sido cancelada.",
                             style: TextStyle(fontSize: 20)),
                       ),
                     ],
@@ -241,7 +245,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                 gravity: ToastGravity.top);
           },
           child: Text(
-            'CANCEL BOOKING',
+            S.of(context).cancelClassButton,
             style: kTextButtonStyle,
           ));
     }
