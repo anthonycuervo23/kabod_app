@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/chat_repository.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/main.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
@@ -89,7 +91,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.data.docs.length == 0) {
-              return Center(child: Text("No user found"));
+              return Center(child: Text(S.of(context).noUsersFound));
             }
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
@@ -126,8 +128,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
-              child: Image.network(
-                profileUrl,
+              child: CachedNetworkImage(
+                imageUrl: profileUrl,
+                placeholder: (context, url) => CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
                 height: 60,
                 width: 60,
               ),
@@ -173,7 +177,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
 
   void configLocalNotification() {
     var initializationSettingsAndroid =
-        new AndroidInitializationSettings('app_icon');
+        new AndroidInitializationSettings('notification_image');
     var initializationSettings =
         new InitializationSettings(android: initializationSettingsAndroid);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
@@ -245,7 +249,6 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     }).catchError((err) {
       Fluttertoast.showToast(msg: err.message.toString());
     });
-    print(token);
   }
 
   @override
@@ -316,7 +319,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
                               controller: athleteNameController,
                               decoration: InputDecoration(
                                 border: InputBorder.none,
-                                hintText: "Athlete Name",
+                                hintText: S.of(context).searchAthleteHint,
                                 hintStyle:
                                     TextStyle(color: kTextColor, fontSize: 18),
                               ),
@@ -358,9 +361,9 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
     username =
         widget.chatRoomId.replaceAll(widget.myUsername, "").replaceAll("_", "");
     QuerySnapshot querySnapshot = await ChatRepository().getUserInfo(username);
-    print(widget.myUsername);
     name = "${querySnapshot.docs[0].data()["name"]}";
     profilePicUrl = "${querySnapshot.docs[0].data()["photo_url"]}";
+
     setState(() {});
   }
 
@@ -386,8 +389,10 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: Image.network(
-                profilePicUrl,
+              child: CachedNetworkImage(
+                imageUrl: profilePicUrl,
+                placeholder: (context, url) => CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
                 height: 55,
                 width: 55,
               ),
@@ -404,7 +409,7 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
                   SizedBox(height: 3),
                   Text(
                       widget.lastMessage.contains('http')
-                          ? 'Open image...'
+                          ? S.of(context).openImage
                           : widget.lastMessage,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1),

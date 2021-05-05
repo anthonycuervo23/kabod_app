@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:kabod_app/core/utils/decimalTextInputFormatter.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 
@@ -60,7 +61,7 @@ class _PrResultsFormState extends State<PrResultsForm> {
             decoration: InputDecoration(
               hintText: stringFromDuration(widget.initialTimer) ==
                       stringFromDuration(nullTime)
-                  ? 'Time'
+                  ? S.of(context).time
                   : stringFromDuration(widget.initialTimer),
               hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
               enabledBorder: UnderlineInputBorder(
@@ -88,7 +89,7 @@ class _PrResultsFormState extends State<PrResultsForm> {
                   borderSide: BorderSide(color: kButtonColor)),
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Reps',
+              labelText: S.of(context).reps,
               labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
             ),
           ),
@@ -113,7 +114,7 @@ class _PrResultsFormState extends State<PrResultsForm> {
                   borderSide: BorderSide(color: kButtonColor)),
               focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: kButtonColor)),
-              labelText: 'Weight',
+              labelText: S.of(context).weight,
               labelStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
             ),
           ),
@@ -129,7 +130,7 @@ class _PrResultsFormState extends State<PrResultsForm> {
             maxLines: 8,
             keyboardType: TextInputType.multiline,
             decoration: InputDecoration(
-                hintText: 'Optional comments...',
+                hintText: S.of(context).optionalComments,
                 hintStyle: TextStyle(color: kWhiteTextColor, fontSize: 20),
                 border: InputBorder.none),
           ),

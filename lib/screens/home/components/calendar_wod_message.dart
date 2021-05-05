@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 //my imports
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -21,17 +22,13 @@ class RestDayMessage extends StatelessWidget {
           ),
           DividerSmall(),
           Text(
-            'Today is a very important day as it is your scheduled rest day. We pre-program rest days in order to give your body the time it needs to recover and reap the rewards of all the hard work you\'ve done the last few days.',
+            S.of(context).restDayMessage1,
             style: TextStyle(fontSize: 18),
           ),
           DividerSmall(),
-          Text(
-              'If you still plan to exercise then please click on a previous calendar day to select a new workout.',
-              style: TextStyle(fontSize: 18)),
+          Text(S.of(context).restDayMessage2, style: TextStyle(fontSize: 18)),
           DividerSmall(),
-          Text(
-              'Note: A rest day does not mean that you still can\'t be active: get outside, go for a hike, play with your kids, let your imagination run wild 😉',
-              style: TextStyle(fontSize: 18))
+          Text(S.of(context).restDayMessage3, style: TextStyle(fontSize: 18))
         ],
       ),
     );

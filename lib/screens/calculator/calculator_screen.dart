@@ -4,6 +4,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/calculator/components/calculator.dart';
 import 'package:kabod_app/screens/calculator/components/custom_dialog.dart';
@@ -39,7 +40,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
       appBar: MyAppBar(
         scaffoldKey: _scaffoldKey,
         title: Text(
-          'RM Calculator',
+          S.of(context).appBarCalculator,
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
@@ -61,15 +62,15 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
               children: <Widget>[
                 Expanded(
                     child: TextInputCard(
-                        cardTitle: "Weight",
-                        hintText: "Required",
+                        cardTitle: S.of(context).weight,
+                        hintText: S.of(context).required,
                         decimal: true,
                         onChanged: _onWeightChanged,
                         text: _enteredWeight)),
                 Expanded(
                     child: TextInputCard(
-                        cardTitle: "Reps",
-                        hintText: "Required",
+                        cardTitle: S.of(context).reps,
+                        hintText: S.of(context).required,
                         decimal: false,
                         onChanged: _onRepsChanged,
                         text: _enteredReps)),
@@ -104,7 +105,7 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         /* If _estimatedRM is null, it means that entered weight/reps is not valid*/
                         return Center(
                             child: Text(
-                          "No Data Available",
+                          S.of(context).noDataCalculator,
                           style: TextStyle(fontSize: 24),
                         ));
                       } else {
@@ -137,14 +138,19 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                                           context: context,
                                           builder: (BuildContext context) {
                                             return CustomDialogBox(
-                                              title:
-                                                  "Plates for ${snapshot.data[index + 1].toInt()} lb",
+                                              title: S
+                                                  .of(context)
+                                                  .platesForWeight(snapshot
+                                                      .data[index + 1]
+                                                      .toInt()),
                                               descriptions:
-                                                  "Load these plates on each side of a 45lb bar",
+                                                  S.of(context).platesToLoad,
                                               text: finalSum !=
                                                       snapshot.data[index + 1]
                                                           .toInt()
-                                                  ? 'Note: $finalSum lb is as close as you can get with the plates you have setup.'
+                                                  ? S
+                                                      .of(context)
+                                                      .weightNote(finalSum)
                                                   : '',
                                               listOfPlates: Container(
                                                 height: 120,

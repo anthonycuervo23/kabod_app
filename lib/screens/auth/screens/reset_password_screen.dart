@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -48,28 +50,25 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   flex: 1,
                   child: SingleChildScrollView(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
                           padding:
                               const EdgeInsets.only(left: 40.0, right: 40.0),
-                          child: RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: 'Reset Password\n\n',
-                                  style: TextStyle(
-                                      color: kWhiteTextColor, fontSize: 38),
-                                ),
-                                TextSpan(
-                                  text:
-                                      'Please enter your email address. You will receive a link to create a new password via email',
-                                  style: TextStyle(
-                                      // color: Colors.grey.shade500,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
+                          child: Column(
+                            children: [
+                              Text(
+                                S.of(context).resetPassword,
+                                style: TextStyle(
+                                    color: kWhiteTextColor, fontSize: 38),
+                              ),
+                              DividerSmall(),
+                              Text(
+                                S.of(context).resetPasswordInstructions,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 16),
+                              ),
+                            ],
                           ),
                         ),
                         DividerBig(),
@@ -79,9 +78,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             key: Key('email-field'),
                             controller: _emailField,
                             validator: (value) => (value.isEmpty)
-                                ? 'Please enter a valid email'
+                                ? S.of(context).validEmail
                                 : null,
-                            hintText: 'enter your email',
+                            hintText: S.of(context).loginFormHintEmail,
                             labelText: 'E-mail',
                             isPassword: false,
                           ),
@@ -96,7 +95,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   onPressed: () async {
                     await _resetPassword();
                   },
-                  child: Text('SEND', style: kTextButtonStyle),
+                  child:
+                      Text(S.of(context).sendButton, style: kTextButtonStyle),
                 ),
               ],
             ),
@@ -148,7 +148,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               fontWeight: FontWeight.bold),
                         )
                       : Text(
-                          'Success!',
+                          S.of(context).success,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontSize: 38,
@@ -157,12 +157,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   DividerSmall(),
                   resetPasswordResult
                       ? Text(
-                          'Please enter a valid email',
+                          S.of(context).newPasswordError,
                           style: TextStyle(
                               color: Colors.grey.shade500, fontSize: 16),
                         )
                       : Text(
-                          'We have sent a new reset link to your email',
+                          S.of(context).newPasswordAlert,
                         ),
                   DividerSmall(),
                   SizedBox(
@@ -187,8 +187,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                         },
                         child: Text(
                           resetPasswordResult
-                              ? 'Try again'
-                              : 'Continue to sign in',
+                              ? S.of(context).tryAgain
+                              : S.of(context).continuoToSignIn,
                           style: TextStyle(color: kWhiteTextColor),
                         )),
                   )

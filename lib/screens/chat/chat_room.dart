@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/repository/chat_repository.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/chat/components/full_photo.dart';
 import 'package:kabod_app/screens/chat/components/loading.dart';
 import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
@@ -133,7 +134,7 @@ class ChatScreenState extends State<ChatScreen> {
           duration: Duration(milliseconds: 300), curve: Curves.easeOut);
     } else {
       Fluttertoast.showToast(
-          msg: 'Nothing to send',
+          msg: S.of(context).emptyMessage,
           backgroundColor: kButtonColor,
           textColor: Colors.black);
     }
@@ -162,9 +163,6 @@ class ChatScreenState extends State<ChatScreen> {
                     ),
                     color: Colors.blue,
                   ),
-                  // decoration: BoxDecoration(
-                  //     color: kButtonColor,
-                  //     borderRadius: BorderRadius.circular(8.0)),
                   margin: EdgeInsets.only(
                       bottom: isLastMessageRight(index) ? 20.0 : 10.0,
                       right: 10.0),
@@ -556,7 +554,7 @@ class ChatScreenState extends State<ChatScreen> {
       setState(() {
         isLoading = false;
       });
-      Fluttertoast.showToast(msg: 'This file is not an image');
+      Fluttertoast.showToast(msg: S.of(context).notAnImage);
     });
   }
 
@@ -761,7 +759,7 @@ class ChatScreenState extends State<ChatScreen> {
                 style: TextStyle(color: Colors.black, fontSize: 16.0),
                 controller: messageTextEdittingController,
                 decoration: InputDecoration.collapsed(
-                  hintText: 'Type your message...',
+                  hintText: S.of(context).typeMessage,
                   hintStyle: TextStyle(color: kBackgroundColor),
                 ),
                 focusNode: focusNode,

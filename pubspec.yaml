@@ -48,6 +48,9 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
+  flutter_localizations:
+    sdk: flutter
+
   flutter_launcher_icons: "^0.9.0"
 
 flutter_icons:
@@ -70,3 +73,7 @@ flutter:
   - family: Nunito
     fonts:
     - asset: assets/fonts/Nunito-Bold.ttf
+flutter_intl:
+  enabled: true
+  main_locale: en
+#  class_name:

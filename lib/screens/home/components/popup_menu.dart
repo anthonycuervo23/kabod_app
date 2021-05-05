@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //my imports
@@ -61,8 +62,8 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                       Image.asset('assets/icons/results_icon.png'),
                       SizedBox(width: 10),
                       Text(checkResult(listOfResults)
-                          ? 'Edit Score'
-                          : 'Add Score'),
+                          ? S.of(context).editScore
+                          : S.of(context).addScore),
                     ],
                   ),
                 ),
@@ -80,20 +81,6 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                 },
               ),
               Divider(),
-              InkWell(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Image.asset('assets/icons/timer_icon.png'),
-                      SizedBox(width: 10),
-                      Text('Start Timer'),
-                    ],
-                  ),
-                ),
-                onTap: () {},
-              ),
-              Divider(),
               user.userModel.admin == true
                   ? InkWell(
                       child: Padding(
@@ -102,7 +89,7 @@ class _PopupWodMenuState extends State<PopupWodMenu> {
                           children: [
                             Image.asset('assets/icons/edit_icon.png'),
                             SizedBox(width: 10),
-                            Text('Edit WOD'),
+                            Text(S.of(context).editWod),
                           ],
                         ),
                       ),

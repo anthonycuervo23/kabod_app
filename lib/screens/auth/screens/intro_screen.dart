@@ -5,6 +5,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:path/path.dart' as Path;
 
@@ -60,7 +61,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   padding: const EdgeInsets.only(
                       left: kDefaultPadding, right: kDefaultPadding, top: 28),
                   child: Text(
-                    'You\'re almost ready to get started. We just need a couple more details to complete your profile.',
+                    S.of(context).introTitle,
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     textAlign: TextAlign.center,
                   ),
@@ -128,7 +129,8 @@ class _IntroScreenState extends State<IntroScreen> {
                           ? CircularProgressIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                   kBackgroundColor))
-                          : Text('CONTINUE', style: kTextButtonStyle),
+                          : Text(S.of(context).introContinueButton,
+                              style: kTextButtonStyle),
                       onPressed: _processing
                           ? null
                           : () async {
@@ -194,7 +196,7 @@ class _IntroScreenState extends State<IntroScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: kBackgroundColor,
-            title: Text('Pick an image',
+            title: Text(S.of(context).pickImage,
                 style: TextStyle(
                     color: kButtonColor,
                     fontSize: 30,
@@ -211,7 +213,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       onTap: () {
                         getImage(ImageSource.gallery);
                       },
-                      title: Text('Gallery',
+                      title: Text(S.of(context).fromGallery,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -221,7 +223,7 @@ class _IntroScreenState extends State<IntroScreen> {
                       onTap: () {
                         getImage(ImageSource.camera);
                       },
-                      title: Text('Camera',
+                      title: Text(S.of(context).fromCamera,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -234,7 +236,7 @@ class _IntroScreenState extends State<IntroScreen> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Cancel',
+                    S.of(context).cancel,
                     style: TextStyle(
                         color: kTextColor,
                         fontWeight: FontWeight.bold,

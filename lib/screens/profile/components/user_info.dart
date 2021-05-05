@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -19,7 +20,7 @@ class UserInfo extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
             alignment: Alignment.topLeft,
             child: Text(
-              'Personal information',
+              S.of(context).personalInformation,
               style: TextStyle(
                 color: kTextColor,
                 fontWeight: FontWeight.w500,
@@ -51,7 +52,7 @@ class UserInfo extends StatelessWidget {
                               color: kButtonColor,
                             ),
                             title: Text(
-                              'Birth date',
+                              S.of(context).introBirthDate,
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
@@ -66,7 +67,7 @@ class UserInfo extends StatelessWidget {
                               color: kButtonColor,
                             ),
                             title: Text(
-                              'email',
+                              'Email',
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
@@ -81,11 +82,12 @@ class UserInfo extends StatelessWidget {
                               color: kButtonColor,
                             ),
                             title: Text(
-                              'phone',
+                              S.of(context).introPhone,
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
-                              userRepository.userModel?.phone ?? 'phone',
+                              userRepository.userModel?.phone ??
+                                  S.of(context).introPhone,
                               style: TextStyle(
                                   fontSize: 20, color: kWhiteTextColor),
                             ),
@@ -96,7 +98,7 @@ class UserInfo extends StatelessWidget {
                               color: kButtonColor,
                             ),
                             title: Text(
-                              'joined date',
+                              S.of(context).joinedDate,
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(

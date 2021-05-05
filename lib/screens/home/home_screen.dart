@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 // my imports
@@ -61,7 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         DividerBig(),
                         DividerBig(),
                         Text(
-                            'Welcome, ${formatName(userRepository.userModel?.name ?? '')}',
+                            S.of(context).welcomeUser(formatName(
+                                userRepository.userModel?.name ?? '')),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(color: kTextColor)),
@@ -73,9 +75,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              bottom: TabBar(
-                  indicatorColor: kButtonColor,
-                  tabs: [Tab(text: 'Schedule'), Tab(text: 'WOD')]),
+              bottom: TabBar(indicatorColor: kButtonColor, tabs: [
+                Tab(text: S.of(context).appBarSchedule),
+                Tab(text: 'WOD')
+              ]),
             ),
           ),
           drawer: Theme(
@@ -105,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         DividerMedium(),
                         Text(
-                            DateFormat('EEEE, d MMM of y')
+                            DateFormat('EEEE, d MMM y')
                                 .format(mainScreenModel.selectedDate)
                                 .toString(),
                             style: TextStyle(
@@ -140,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           DividerMedium(),
                           Text(
-                              DateFormat('EEEE, d MMM of y')
+                              DateFormat('EEEE, d MMM y')
                                   .format(mainScreenModel.selectedDate)
                                   .toString(),
                               style: TextStyle(
@@ -178,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (selectedClasses.length < 1) {
       return Center(
           child: Text(
-        'THE SCHEDULE IS NOT AVAILABLE',
+        S.of(context).scheduleNotAvailable,
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
@@ -186,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedClasses[0].classDate.weekday == 7) {
       return Center(
           child: Text(
-        'NO CLASSES TODAY',
+        S.of(context).noClassesToday,
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
@@ -228,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         selectedClasses[0]
                                 .classAthletes[listOfClasses[index]]
                                 .contains(userRepository.user?.uid.toString())
-                            ? Text('Registered')
+                            ? Text(S.of(context).registered)
                             : Container(),
                       ],
                     ),
@@ -236,7 +239,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: ListTile(
                         title: Text(
                           listOfHours[index].hour != 12
-                              ? 'CrossFit Class'
+                              ? S.of(context).crossfitClass
                               : 'Open Box',
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
@@ -247,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .length ==
                                 selectedClasses[0].maxAthletes
                             ? Text(
-                                'COMPLETED',
+                                S.of(context).completed,
                                 style: TextStyle(
                                     color: kButtonColor,
                                     fontWeight: FontWeight.bold),
@@ -286,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (mainScreenModel.selectedDate.isBefore(firstDate)) {
       return Center(
           child: Text(
-        'THIS WOD IS NO LONGER AVAILABLE',
+        S.of(context).wodNotAvailable,
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
@@ -294,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
         .isAfter(today.add(Duration(days: 1)))) {
       return Center(
         child: Text(
-          'THIS WOD CANNOT BE VIEWED UNTIL ${df.format(mainScreenModel.selectedDate)}',
+          S
+              .of(context)
+              .wodAvailableDate(df.format(mainScreenModel.selectedDate)),
           style: TextStyle(fontSize: 20),
           textAlign: TextAlign.center,
         ),

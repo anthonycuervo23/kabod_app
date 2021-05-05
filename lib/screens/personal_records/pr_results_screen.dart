@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -57,7 +58,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         color: kButtonColor,
                       ),
                       SizedBox(width: 10),
-                      Text('Log New Score'),
+                      Text(S.of(context).newPr),
                     ],
                   ),
                 ),
@@ -70,7 +71,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         color: kButtonColor,
                       ),
                       SizedBox(width: 10),
-                      Text('Rename Exercise'),
+                      Text(S.of(context).renameExercise),
                     ],
                   ),
                 ),
@@ -83,7 +84,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         color: kButtonColor,
                       ),
                       SizedBox(width: 10),
-                      Text('Delete Exercise'),
+                      Text(S.of(context).deleteExercise),
                     ],
                   ),
                 ),
@@ -115,7 +116,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     selectedExercise: widget.selectedExercise)
                 : Center(
                     child: Text(
-                      'No data found, please add new score',
+                      S.of(context).noExerciseFound,
                       style: TextStyle(fontSize: 20),
                     ),
                   )),
@@ -140,10 +141,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
                         validator: (value) {
                           return value.isNotEmpty
                               ? null
-                              : "Enter exercise name";
+                              : S.of(context).enterExerciseName;
                         },
                         decoration: InputDecoration(
-                          hintText: "Please Enter Exercise",
+                          hintText: S.of(context).exerciseHint,
                           hintStyle: TextStyle(color: kTextColor),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: kButtonColor),
@@ -159,7 +160,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     ],
                   )),
               title: Text(
-                'New Exercise',
+                S.of(context).newExercise,
                 style: TextStyle(
                     color: kButtonColor,
                     fontSize: 30,
@@ -169,7 +170,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    'Cancel',
+                    S.of(context).cancel,
                     style: TextStyle(
                         color: kButtonColor,
                         fontWeight: FontWeight.bold,
@@ -194,7 +195,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
                     }
                   },
                   child: Text(
-                    'Rename',
+                    S.of(context).rename,
                     style: TextStyle(
                         color: kTextColor,
                         fontSize: 18,
@@ -215,21 +216,21 @@ class _ResultsScreenState extends State<ResultsScreen> {
         return AlertDialog(
           backgroundColor: kBackgroundColor,
           title: Text(
-            'Warning!',
+            S.of(context).warning,
             style: TextStyle(
                 color: kButtonColor, fontSize: 30, fontWeight: FontWeight.bold),
           ),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                Text('Are you sure want delete this item?'),
+                Text(S.of(context).confirmDialog),
               ],
             ),
           ),
           actions: [
             TextButton(
               child: Text(
-                'Yes',
+                S.of(context).yes,
                 style: TextStyle(color: kTextColor, fontSize: 18),
               ),
               onPressed: () {

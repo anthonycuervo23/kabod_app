@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:path/path.dart' as Path;
 import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -49,7 +50,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       appBar: AppBar(
         shape: kAppBarShape,
         title: Text(
-          'Save your Results',
+          S.of(context).appBarSaveResult,
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
@@ -101,9 +102,9 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                                   _image != null ? kButtonColor : kTextColor),
                           SizedBox(width: 8),
                           _image != null
-                              ? Text('Change Image',
+                              ? Text(S.of(context).changeImage,
                                   style: TextStyle(color: kButtonColor))
-                              : Text('Add Picture'),
+                              : Text(S.of(context).addPicture),
                         ],
                       ),
                     )),
@@ -120,7 +121,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(kBackgroundColor),
                   )
-                : Text('SAVE RESULT', style: kTextButtonStyle),
+                : Text(S.of(context).saveResultButton, style: kTextButtonStyle),
           ),
           DividerMedium(),
         ],
@@ -187,7 +188,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             backgroundColor: kBackgroundColor,
-            title: Text('Pick an image',
+            title: Text(S.of(context).pickImage,
                 style: TextStyle(
                     color: kButtonColor,
                     fontSize: 30,
@@ -204,7 +205,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                       onTap: () {
                         getImage(ImageSource.gallery);
                       },
-                      title: Text('Gallery',
+                      title: Text(S.of(context).fromGallery,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -214,7 +215,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                       onTap: () {
                         getImage(ImageSource.camera);
                       },
-                      title: Text('Camera',
+                      title: Text(S.of(context).fromCamera,
                           style: TextStyle(
                               color: kWhiteTextColor,
                               fontWeight: FontWeight.bold,
@@ -227,7 +228,7 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
                     Navigator.pop(context);
                   },
                   child: Text(
-                    'Cancel',
+                    S.of(context).cancel,
                     style: TextStyle(
                         color: kTextColor,
                         fontWeight: FontWeight.bold,

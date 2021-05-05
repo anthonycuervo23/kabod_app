@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -74,8 +75,8 @@ class _TabataScreenState extends State<TabataScreen> {
         key: _scaffoldKey,
         appBar: AppBar(
           centerTitle: true,
-          title:
-              Text('TIMERS', style: TextStyle(fontSize: 30, color: kTextColor)),
+          title: Text(S.of(context).appBarTimers,
+              style: TextStyle(fontSize: 22, color: kTextColor)),
           leading: IconButton(
             icon: Image.asset('assets/icons/drawer_icon.png'),
             onPressed: () {
@@ -93,8 +94,8 @@ class _TabataScreenState extends State<TabataScreen> {
                   _onSettingsChanged();
                   var snackBar = SnackBar(
                       duration: Duration(seconds: 1),
-                      content: Text(
-                          'Silent mode ${!widget.settings.silentMode ? 'de' : ''}activated'));
+                      content: Text(S.of(context).silentModeActive(
+                          !widget.settings.silentMode ? 'de' : '')));
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 },
                 tooltip: 'Toggle silent mode',
@@ -142,14 +143,14 @@ class _TabataScreenState extends State<TabataScreen> {
                         child: NumberPickerDialog.integer(
                           confirmWidget:
                               Text('OK', style: TextStyle(color: kTextColor)),
-                          cancelWidget: Text('CANCEL',
+                          cancelWidget: Text(S.of(context).cancelTimer,
                               style: TextStyle(color: kTextColor)),
                           selectedTextStyle:
                               TextStyle(fontSize: 24, color: kButtonColor),
                           minValue: 1,
                           maxValue: 10,
                           initialIntegerValue: _tabata.sets,
-                          title: Text('Sets in the workout'),
+                          title: Text(S.of(context).setsWorkout),
                         ),
                       );
                     },
@@ -161,7 +162,7 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Reps', style: kTimerHeadersStyle),
+                title: Text(S.of(context).reps, style: kTimerHeadersStyle),
                 subtitle: Text('${_tabata.reps}', style: kTimerInputStyle),
                 leading: Icon(Icons.repeat, color: kButtonColor),
                 onTap: () {
@@ -174,14 +175,14 @@ class _TabataScreenState extends State<TabataScreen> {
                         child: NumberPickerDialog.integer(
                           confirmWidget:
                               Text('OK', style: TextStyle(color: kTextColor)),
-                          cancelWidget: Text('CANCEL',
+                          cancelWidget: Text(S.of(context).cancelTimer,
                               style: TextStyle(color: kTextColor)),
                           selectedTextStyle:
                               TextStyle(fontSize: 24, color: kButtonColor),
                           minValue: 1,
                           maxValue: 20,
                           initialIntegerValue: _tabata.reps,
-                          title: Text('Reps in the workout'),
+                          title: Text(S.of(context).repsWorkout),
                         ),
                       );
                     },
@@ -196,7 +197,8 @@ class _TabataScreenState extends State<TabataScreen> {
                 height: 10,
               ),
               ListTile(
-                title: Text('Starting Countdown', style: kTimerHeadersStyle),
+                title: Text(S.of(context).startingCountdown,
+                    style: kTimerHeadersStyle),
                 subtitle: Text(formatTime(_tabata.startDelay),
                     style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -206,7 +208,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _tabata.startDelay,
-                        title: Text('Countdown before starting workout'),
+                        title: Text(S.of(context).countDownBeforeWorkout),
                       );
                     },
                   ).then((startDelay) {
@@ -217,7 +219,8 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Exercise Time', style: kTimerHeadersStyle),
+                title:
+                    Text(S.of(context).exerciseTime, style: kTimerHeadersStyle),
                 subtitle: Text(formatTime(_tabata.exerciseTime),
                     style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -227,7 +230,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _tabata.exerciseTime,
-                        title: Text('Excercise time per repetition'),
+                        title: Text(S.of(context).exerciseTimePerRepetition),
                       );
                     },
                   ).then((exerciseTime) {
@@ -238,7 +241,7 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Rest Time', style: kTimerHeadersStyle),
+                title: Text(S.of(context).restTime, style: kTimerHeadersStyle),
                 subtitle:
                     Text(formatTime(_tabata.restTime), style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -248,7 +251,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _tabata.restTime,
-                        title: Text('Rest time between repetitions'),
+                        title: Text(S.of(context).restTimeBetweenRepetitions),
                       );
                     },
                   ).then((restTime) {
@@ -259,7 +262,7 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Break Time', style: kTimerHeadersStyle),
+                title: Text(S.of(context).breakTime, style: kTimerHeadersStyle),
                 subtitle: Text(formatTime(_tabata.breakTime),
                     style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -269,7 +272,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _tabata.breakTime,
-                        title: Text('Break time between sets'),
+                        title: Text(S.of(context).breakTimeBetweenSets),
                       );
                     },
                   ).then((breakTime) {
@@ -282,7 +285,7 @@ class _TabataScreenState extends State<TabataScreen> {
               Divider(height: 10),
               ListTile(
                 title: Text(
-                  'Total Time',
+                  S.of(context).totalTime,
                   style: kTimerHeadersStyle,
                 ),
                 subtitle: Text(formatTime(_tabata.getTotalTime()),
@@ -317,14 +320,14 @@ class _TabataScreenState extends State<TabataScreen> {
                         child: NumberPickerDialog.integer(
                           confirmWidget:
                               Text('OK', style: TextStyle(color: kTextColor)),
-                          cancelWidget: Text('CANCEL',
+                          cancelWidget: Text(S.of(context).cancelTimer,
                               style: TextStyle(color: kTextColor)),
                           selectedTextStyle:
                               TextStyle(fontSize: 24, color: kButtonColor),
                           minValue: 1,
                           maxValue: 10,
                           initialIntegerValue: _emom.sets,
-                          title: Text('choose the amount of EMOM'),
+                          title: Text(S.of(context).chooseTheAmountOfEmom),
                         ),
                       );
                     },
@@ -336,7 +339,7 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Reps', style: kTimerHeadersStyle),
+                title: Text(S.of(context).reps, style: kTimerHeadersStyle),
                 subtitle: Text('${_emom.reps}', style: kTimerInputStyle),
                 leading: Icon(Icons.repeat, color: kButtonColor),
                 onTap: () {
@@ -349,14 +352,14 @@ class _TabataScreenState extends State<TabataScreen> {
                         child: NumberPickerDialog.integer(
                           confirmWidget:
                               Text('OK', style: TextStyle(color: kTextColor)),
-                          cancelWidget: Text('CANCEL',
+                          cancelWidget: Text(S.of(context).cancelTimer,
                               style: TextStyle(color: kTextColor)),
                           selectedTextStyle:
                               TextStyle(fontSize: 24, color: kButtonColor),
                           minValue: 1,
                           maxValue: 10,
                           initialIntegerValue: _emom.reps,
-                          title: Text('Sets inside the EMOM'),
+                          title: Text(S.of(context).setsInsideTheEmom),
                         ),
                       );
                     },
@@ -371,7 +374,8 @@ class _TabataScreenState extends State<TabataScreen> {
                 height: 10,
               ),
               ListTile(
-                title: Text('Starting Countdown', style: kTimerHeadersStyle),
+                title: Text(S.of(context).startingCountdown,
+                    style: kTimerHeadersStyle),
                 subtitle:
                     Text(formatTime(_emom.startDelay), style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -381,7 +385,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _emom.startDelay,
-                        title: Text('Countdown before starting workout'),
+                        title: Text(S.of(context).countDownBeforeWorkout),
                       );
                     },
                   ).then((startDelay) {
@@ -392,7 +396,8 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Type of EMOM', style: kTimerHeadersStyle),
+                title:
+                    Text(S.of(context).typeOfEmom, style: kTimerHeadersStyle),
                 subtitle: Text(formatTime(_emom.exerciseTime),
                     style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -402,7 +407,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationEmomPickerDialog(
                         initialDuration: _emom.exerciseTime,
-                        title: Text('Every minute or Every two minutes'),
+                        title: Text(S.of(context).setEmom),
                       );
                     },
                   ).then((exerciseTime) {
@@ -413,7 +418,7 @@ class _TabataScreenState extends State<TabataScreen> {
                 },
               ),
               ListTile(
-                title: Text('Break Time', style: kTimerHeadersStyle),
+                title: Text(S.of(context).breakTime, style: kTimerHeadersStyle),
                 subtitle:
                     Text(formatTime(_emom.breakTime), style: kTimerInputStyle),
                 leading: Icon(Icons.timer, color: kButtonColor),
@@ -423,7 +428,7 @@ class _TabataScreenState extends State<TabataScreen> {
                     builder: (BuildContext context) {
                       return DurationPickerDialog(
                         initialDuration: _emom.breakTime,
-                        title: Text('Break time between EMOM'),
+                        title: Text(S.of(context).breakTimeBetweenEmom),
                       );
                     },
                   ).then((breakTime) {
@@ -436,7 +441,7 @@ class _TabataScreenState extends State<TabataScreen> {
               Divider(height: 10),
               ListTile(
                 title: Text(
-                  'Total Time',
+                  S.of(context).totalTimeTimer,
                   style: kTimerHeadersStyle,
                 ),
                 subtitle: Text(

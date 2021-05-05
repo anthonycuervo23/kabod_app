@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/results/components/delete_result_button.dart';
 import 'package:kabod_app/screens/results/model/results_model.dart';
@@ -18,7 +19,7 @@ class EditResultScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
-        title: Text('Result Details',
+        title: Text(S.of(context).appBarResultDetails,
             style: TextStyle(
                 color: kTextColor,
                 fontSize: 30.0,
@@ -34,9 +35,10 @@ class EditResultScreen extends StatelessWidget {
         child: ListView(
           children: [
             DividerBig(),
-            Text('Wod name: ${currentWod.title}',
+            Text(S.of(context).wodNameResult(currentWod.title),
                 style: TextStyle(fontSize: 26)),
-            Text('Date: ${DateFormat('EEEE, d MMMM').format(currentWod.date)}'),
+            Text(S.of(context).wodDateResult(
+                DateFormat('EEEE, d MMMM').format(currentWod.date))),
             DividerBig(),
             currentResult.rx == true
                 ? Text('RX',
@@ -46,7 +48,7 @@ class EditResultScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
                     ))
-                : Text('Scale',
+                : Text(S.of(context).scale,
                     style: TextStyle(
                         fontSize: 24,
                         fontStyle: FontStyle.italic,
@@ -56,20 +58,23 @@ class EditResultScreen extends StatelessWidget {
               (currentResult.time == Duration() &&
                       currentResult.rounds == null &&
                       currentResult.customScore == null)
-                  ? 'Weight: ${currentResult.weight} lb'
+                  ? S.of(context).weightResult(currentResult.weight)
                   : (currentResult.time == Duration() &&
                           currentResult.customScore == null)
-                      ? 'Total Rounds and Reps: ${currentResult.rounds} rounds and ${currentResult.reps} reps'
+                      ? S.of(context).totalRepsRounds(
+                          currentResult.rounds, currentResult.reps)
                       : (currentResult.time != Duration())
-                          ? 'Final Time: ${currentResult.time}'
-                          : 'Score: ${currentResult.customScore}',
+                          ? S.of(context).finalTime(currentResult.time)
+                          : S
+                              .of(context)
+                              .scoreResult(currentResult.customScore),
               style: TextStyle(fontSize: 24),
             ),
             DividerMedium(),
             Text(
                 currentResult.comment != null
                     ? currentResult.comment
-                    : 'No comments',
+                    : S.of(context).noComments,
                 style: TextStyle(fontSize: 24)),
             DividerMedium(),
             currentResult.photoUrl != null
@@ -89,7 +94,7 @@ class EditResultScreen extends StatelessWidget {
                       ),
                     ),
                   )
-                : Text('No Photo to show', style: TextStyle(fontSize: 24)),
+                : Text(S.of(context).noPhoto, style: TextStyle(fontSize: 24)),
           ],
         ),
       ),

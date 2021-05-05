@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //My Imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 class AlertDialogWod extends StatelessWidget {
   final String content;
@@ -23,7 +24,8 @@ class AlertDialogWod extends StatelessWidget {
       content: Text(content),
       actions: [
         TextButton(
-            onPressed: () => Navigator.pop(context), child: Text('Close'))
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).closeButton))
       ],
     );
   }

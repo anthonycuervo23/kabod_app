@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 //my imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
 import 'package:kabod_app/screens/wods/components/delete_wod_button.dart';
 import 'package:kabod_app/screens/wods/components/add_wod_form.dart';
@@ -21,7 +22,10 @@ class _WodEditorScreenState extends State<WodEditorScreen> {
     return Scaffold(
       appBar: AppBar(
         shape: kAppBarShape,
-        title: Text(widget.currentWod != null ? 'Edit WOD' : 'Create WOD',
+        title: Text(
+            widget.currentWod != null
+                ? S.of(context).editWod
+                : S.of(context).createWod,
             style: TextStyle(
                 color: kTextColor,
                 fontSize: 30.0,

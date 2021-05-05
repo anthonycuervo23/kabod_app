@@ -3,6 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 //My imports
 import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/personal_records/components/pr_result_form.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -44,8 +45,8 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
         shape: kAppBarShape,
         title: Text(
           widget.currentResult != null
-              ? 'Save your Result'
-              : 'Edit your Result',
+              ? S.of(context).saveResult
+              : S.of(context).editResult,
           style: TextStyle(
               color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
         ),
@@ -90,8 +91,8 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
                   )
                 : Text(
                     widget.currentResult != null
-                        ? 'UPDATE RESULT'
-                        : 'SAVE RESULT',
+                        ? S.of(context).updateResultButton
+                        : S.of(context).saveResultButton,
                     style: kTextButtonStyle),
           ),
           DividerMedium(),

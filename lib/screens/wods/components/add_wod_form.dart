@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
@@ -56,7 +57,7 @@ class AddWodForm extends StatelessWidget {
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_type',
                   decoration: InputDecoration(
-                    labelText: 'WOD Type',
+                    labelText: S.of(context).wodType,
                     labelStyle: TextStyle(color: kTextColor),
                     border: InputBorder.none,
                   ),
@@ -79,7 +80,7 @@ class AddWodForm extends StatelessWidget {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: 'WOD Name',
+                    hintText: S.of(context).wodName,
                     hintStyle: TextStyle(color: kTextColor),
                   ),
                 ),
@@ -93,7 +94,7 @@ class AddWodForm extends StatelessWidget {
                   maxLines: 8,
                   keyboardType: TextInputType.multiline,
                   decoration: InputDecoration(
-                      hintText: 'WOD Description...',
+                      hintText: S.of(context).wodDescription,
                       hintStyle: TextStyle(color: kTextColor),
                       border: InputBorder.none),
                 ),
@@ -120,8 +121,7 @@ class AddWodForm extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (_) => AlertDialogWod(
-                          content:
-                              'you cannot update a WOD from a day that has already passed',
+                          content: S.of(context).cantUpdateWod,
                         ),
                       );
                     }
@@ -138,8 +138,7 @@ class AddWodForm extends StatelessWidget {
                       showDialog(
                         context: context,
                         builder: (_) => AlertDialogWod(
-                          content:
-                              'you cannot create a WOD from a day that has already passed',
+                          content: S.of(context).cantCreateWod,
                         ),
                       );
                     }
@@ -147,7 +146,9 @@ class AddWodForm extends StatelessWidget {
                 }
               },
               child: Text(
-                currentWod != null ? 'UPDATE' : 'SAVE',
+                currentWod != null
+                    ? S.of(context).updateButton
+                    : S.of(context).saveButton,
                 style: kTextButtonStyle,
               ))
         ],

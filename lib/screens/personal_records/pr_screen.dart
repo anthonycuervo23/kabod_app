@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kabod_app/generated/l10n.dart';
 
 //My imports
 import 'package:kabod_app/screens/commons/dividers.dart';
@@ -52,8 +53,8 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
       appBar: MyAppBar(
         scaffoldKey: _scaffoldKey,
         title: Text(
-          'Personal Records',
-          style: TextStyle(fontSize: 24),
+          S.of(context).appBarPersonalRecords,
+          style: TextStyle(fontSize: 24, color: kTextColor),
         ),
       ),
       drawer: Theme(
@@ -94,7 +95,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                         _filterExercises(value);
                       },
                       decoration: InputDecoration(
-                          hintText: 'Search...',
+                          hintText: S.of(context).searchExercise,
                           hintStyle:
                               TextStyle(color: kPrimaryColor, fontSize: 18),
                           enabledBorder: InputBorder.none,
@@ -119,9 +120,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                 builder: (context, snapshot) {
                   return filterExerciseList.length > 0
                       ? ExercisesList(exercises: filterExerciseList)
-                      : Center(
-                          child:
-                              Text('No data found, tap plus button to add!'));
+                      : Center(child: Text(S.of(context).noExercise));
                 },
               )),
             ),
@@ -161,10 +160,10 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                         validator: (value) {
                           return value.isNotEmpty
                               ? null
-                              : "Enter exercise name";
+                              : S.of(context).enterExerciseName;
                         },
                         decoration: InputDecoration(
-                          hintText: "Please Enter Exercise",
+                          hintText: S.of(context).exerciseHint,
                           hintStyle: TextStyle(color: kTextColor),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: kButtonColor),
@@ -180,7 +179,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                     ],
                   )),
               title: Text(
-                'New Exercise',
+                S.of(context).newExercise,
                 style: TextStyle(
                     color: kButtonColor,
                     fontSize: 30,
@@ -190,7 +189,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                 TextButton(
                   onPressed: () => Navigator.pop(context),
                   child: Text(
-                    'Cancel',
+                    S.of(context).cancel,
                     style: TextStyle(
                         color: kButtonColor,
                         fontWeight: FontWeight.bold,
@@ -208,7 +207,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                     }
                   },
                   child: Text(
-                    'Create',
+                    S.of(context).create,
                     style: TextStyle(
                         color: kTextColor,
                         fontSize: 18,

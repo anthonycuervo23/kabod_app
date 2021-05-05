@@ -40,6 +40,7 @@ class _WodCalendarState extends State<WodCalendar> {
         mainScreenModel.whenSelectedDay(day);
       },
       calendarController: _calendarController,
+      locale: Localizations.localeOf(context).languageCode,
       headerVisible: true,
       headerStyle: HeaderStyle(
           titleTextStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
