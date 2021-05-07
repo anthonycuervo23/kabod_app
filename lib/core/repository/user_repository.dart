@@ -53,7 +53,8 @@ class UserRepository extends ChangeNotifier {
 
   Future signOut() async {
     SharedPrefs.sharedPrefs.clear();
-    await _firebaseAuth.signOut();
+    _firebaseAuth.signOut();
+    _status = Status.Unauthenticated;
     _fsUser = null;
     _userListener.cancel();
     notifyListeners();

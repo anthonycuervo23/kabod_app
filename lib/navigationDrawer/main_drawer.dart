@@ -204,11 +204,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             S.of(context).drawerLogout,
                             style: kListTileTextStyle,
                           ),
-                          onTap: () {
-                            userRepository.signOut().then((value) {
-                              Navigator.popUntil(
-                                  context, (route) => route.isFirst);
-                            });
+                          onTap: () async {
+                            await userRepository.signOut();
+                            Navigator.pop(context);
+                            // Navigator.popUntil(
+                            //     context, (route) => route.isFirst);
                           }),
                     ),
                   ],

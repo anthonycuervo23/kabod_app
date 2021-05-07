@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
@@ -49,10 +48,11 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     fontWeight: FontWeight.bold,
                     fontSize: 22)),
             DividerSmall(),
-            durationFromString(widget.results[widget.index].time) != duration
-                ? Text(S.of(context).prTime(widget.results[widget.index].time),
-                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
-                : Container(),
+            // durationFromString(widget.results[widget.index].time) != duration
+            //        ?
+            Text(S.of(context).prTime(widget.results[widget.index].time),
+                style: TextStyle(color: kWhiteTextColor, fontSize: 18)),
+            //      : Container(),
             widget.results[widget.index].reps != null
                 ? Text(
                     S
@@ -76,18 +76,28 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
               child: ButtonBar(
                 children: [
                   TextButton(
-                    child: const Text('Editar',
+                    child: Text(S.of(context).editButton,
                         style: TextStyle(color: kWhiteTextColor)),
                     onPressed: () {
+                      print(widget.results.length);
                       Navigator.pushNamed(context, AppRoutes.editResultRoute,
                           arguments: [
                             widget.results[widget.index],
                             widget.selectedExercise
-                          ]);
+                          ]).then((result) {
+                        if (result != null) {
+                          // widget.results
+                          //     .remove(widget.results[widget.index].id);
+                          setState(() {
+                            widget.results[widget.index] = result;
+                            // widget.results.add(result);
+                          });
+                        }
+                      });
                     },
                   ),
                   TextButton(
-                    child: const Text('Borrar',
+                    child: Text(S.of(context).deleteButton,
                         style: TextStyle(color: kWhiteTextColor)),
                     onPressed: () {
                       _confirmDeleteDialog();
@@ -127,6 +137,9 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
               ),
               onPressed: () {
                 api.deleteResult(widget.results[widget.index].id);
+                setState(() {
+                  widget.results.removeAt(widget.index);
+                });
                 int count = 0;
                 Navigator.of(context).popUntil((_) => count++ >= 2);
               },

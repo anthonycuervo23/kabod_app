@@ -31,7 +31,7 @@
   "weight": "Peso",
   "required": "Requerido",
   "reps": "Repeticiones",
-  "noDataCalculator": "No hay datos disponibles",
+  "noDataCalculator": "No hay datos para calcular",
   "platesForWeight": "Discos para {weight} lb",
   "platesToLoad": " Carga estos discos en cada lado de una barra de 45lb",
   "weightNote": "Nota: {finalSum} lb es lo mas cercano que puedes llegar con los discos disponibles en tu box.",
@@ -102,7 +102,7 @@
   "rename": "Renombrar",
   "appBarPersonalRecords": "Records Personales",
   "searchExercise": "Buscar...",
-  "noExercise": "No se encontraron Datos, Toque el boton + para agregar",
+  "noExercise": "No se encontraron ejercicios, Toque el boton + para agregar",
   "create": "Crear",
   "saveResult": "Guardar el Resultado",
   "appBarSaveResult": "Guardar Resultado",
@@ -174,5 +174,6 @@
   "success": "Exito!",
   "tryAgain": "Intenta nuevamente",
   "continuoToSignIn": "Iniciar Sesion",
-  "wodNameFilter": "Nombre del WOD"
+  "wodNameFilter": "Nombre del WOD",
+  "unexpectedError": "Upps, algo salio mal. Ingresa mas tarde!"
 }

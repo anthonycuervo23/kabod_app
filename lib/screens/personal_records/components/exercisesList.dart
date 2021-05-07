@@ -7,7 +7,8 @@ import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 
 class ExercisesList extends StatelessWidget {
   final List<Exercise> exercises;
-  ExercisesList({Key key, this.exercises}) : super(key: key);
+  final Future fetch;
+  ExercisesList({Key key, this.exercises, this.fetch}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class ExercisesList extends StatelessWidget {
               child: InkWell(
                 onTap: () => Navigator.pushNamed(
                     context, AppRoutes.resultsRoute,
-                    arguments: exercises[index]),
+                    arguments: [exercises[index], fetch]),
                 child: ListTile(
                   leading: Icon(Icons.star, color: kButtonColor, size: 40),
                   title: Text(

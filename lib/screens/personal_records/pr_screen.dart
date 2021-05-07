@@ -115,14 +115,44 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
           Expanded(
             child: Container(
               child: Center(
-                  child: FutureBuilder(
-                future: _future,
-                builder: (context, snapshot) {
-                  return filterExerciseList.length > 0
-                      ? ExercisesList(exercises: filterExerciseList)
-                      : Center(child: Text(S.of(context).noExercise));
-                },
-              )),
+                child: FutureBuilder(
+                    future: _future,
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.waiting:
+                          return CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(kButtonColor),
+                          );
+                        default:
+                          if (snapshot.hasError) {
+                            print("Error on PR SCREEN: ${snapshot.error}");
+                            return Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Icon(Icons.error),
+                                  Text(S.of(context).unexpectedError)
+                                ],
+                              ),
+                            );
+                          } else if (!snapshot.hasData) {
+                            return Center(
+                                child: Text(
+                              S.of(context).noExercise,
+                              style: TextStyle(fontSize: 24),
+                            ));
+                          } else {
+                            return filterExerciseList.length > 0
+                                ? ExercisesList(
+                                    exercises: filterExerciseList,
+                                    fetch: loadList())
+                                : Text(S.of(context).noExercise);
+                          }
+                      }
+                    }),
+              ),
             ),
           ),
         ],
@@ -200,8 +230,14 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      api.createExercise(
-                          Exercise(exercise: _exerciseController.text));
+                      api
+                          .createExercise(
+                              Exercise(exercise: _exerciseController.text))
+                          .then((Exercise exercise) {
+                        if (exercise != null) {
+                          loadList();
+                        }
+                      });
                       _exerciseController.clear();
                       Navigator.of(context).pop();
                     }

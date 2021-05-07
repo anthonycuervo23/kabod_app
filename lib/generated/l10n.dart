@@ -355,10 +355,10 @@ class S {
     );
   }
 
-  /// `No Data Available`
+  /// `No Data to Calculate`
   String get noDataCalculator {
     return Intl.message(
-      'No Data Available',
+      'No Data to Calculate',
       name: 'noDataCalculator',
       desc: '',
       args: [],
@@ -1065,10 +1065,10 @@ class S {
     );
   }
 
-  /// `No data found, tap plus button to add!`
+  /// `No exercises found, tap plus button to add!`
   String get noExercise {
     return Intl.message(
-      'No data found, tap plus button to add!',
+      'No exercises found, tap plus button to add!',
       name: 'noExercise',
       desc: '',
       args: [],
@@ -1790,6 +1790,16 @@ class S {
     return Intl.message(
       'WOD Name',
       name: 'wodNameFilter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Upps, an unxepected error occured. Try again!`
+  String get unexpectedError {
+    return Intl.message(
+      'Upps, an unxepected error occured. Try again!',
+      name: 'unexpectedError',
       desc: '',
       args: [],
     );

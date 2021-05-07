@@ -109,16 +109,16 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
         _processing = true;
       });
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      api.createResult(
+      var result = await api.createResult(
           Result(
-            weight: int.parse(data['weight']) ?? null,
-            reps: int.parse(data['reps']) ?? null,
+            weight: data['weight'] != '' ? int.parse(data['weight']) : 0,
+            reps: data['reps'] != '' ? int.parse(data['reps']) : 0,
             time: stringFromDuration(initialTimer),
             comment: data['result_comment'] ?? null,
             createdAt: data['createdAt'].millisecondsSinceEpoch,
           ),
           widget.selectedExercise.id);
-      Navigator.pop(context);
+      Navigator.pop(context, result);
     }
   }
 
@@ -130,15 +130,15 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
         _processing = true;
       });
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      api.updateResult(
+      var result = await api.updateResult(
           widget.currentResult.id,
           Result(
-              weight: int.parse(data['weight']) ?? null,
-              reps: int.parse(data['reps']) ?? null,
+              weight: data['weight'] != '' ? int.parse(data['weight']) : 0,
+              reps: data['reps'] != '' ? int.parse(data['reps']) : 0,
               time: stringFromDuration(initialTimer),
               comment: data['result_comment'] ?? null,
               createdAt: data['createdAt'].millisecondsSinceEpoch));
-      Navigator.pop(context);
+      Navigator.pop(context, result);
     }
   }
 }

@@ -56,7 +56,7 @@ class UserInfo extends StatelessWidget {
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
-                              df.format(userRepository.userModel.birthDate),
+                              df.format(userRepository.userModel?.birthDate),
                               style: TextStyle(
                                   fontSize: 20, color: kWhiteTextColor),
                             ),
@@ -102,7 +102,7 @@ class UserInfo extends StatelessWidget {
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
-                              '${userRepository.userModel.registrationDate.day.toString()}-${userRepository.userModel.registrationDate.month.toString()}-${userRepository.userModel.registrationDate.year.toString()}',
+                              '${userRepository.userModel.registrationDate?.day.toString()}-${userRepository.userModel.registrationDate?.month.toString()}-${userRepository.userModel.registrationDate?.year.toString()}',
                               style: TextStyle(
                                   fontSize: 20, color: kWhiteTextColor),
                             ),
