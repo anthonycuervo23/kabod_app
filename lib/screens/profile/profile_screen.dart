@@ -95,7 +95,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   onTap: () async {
                     await userRepository.signOut();
-                    Navigator.pop(context);
+                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                 ),
               ],

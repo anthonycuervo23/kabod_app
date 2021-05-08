@@ -209,7 +209,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   gravity: ToastGravity.top);
             },
             child: Text(
-              S.of(context).cancelClassButton,
+              S.of(context).bookClassButton,
               style: kTextButtonStyle,
             )),
       );

@@ -31,7 +31,7 @@
   "weight": "Weight",
   "required": "Required",
   "reps": "Reps",
-  "noDataCalculator": "No Data Available",
+  "noDataCalculator": "No Data to Calculate",
   "platesForWeight": "Plates for {weight} lb",
   "platesToLoad": "Load these plates on each side of a 45lb bar",
   "weightNote": "Note: {finalSum} lb is as close as you can get with the plates you have setup.",
@@ -102,7 +102,7 @@
   "rename": "Rename",
   "appBarPersonalRecords": "Personal Records",
   "searchExercise": "Search...",
-  "noExercise": "No data found, tap plus button to add!",
+  "noExercise": "No exercises found, tap plus button to add!",
   "create": "Create",
   "saveResult": "Save your Result",
   "appBarSaveResult": "Save Result",
@@ -174,5 +174,6 @@
   "success": "Success!",
   "tryAgain": "Try again",
   "continuoToSignIn": "Continue to sign in",
-  "wodNameFilter": "WOD Name"
+  "wodNameFilter": "WOD Name",
+  "unexpectedError": "Upps, an unxepected error occured. Try again!"
 }

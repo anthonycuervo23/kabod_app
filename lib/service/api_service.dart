@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
 
 //My imports
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
@@ -10,7 +9,8 @@ class ApiService {
   // Fetch the currentUser, and then get its id token
   final User user = FirebaseAuth.instance.currentUser;
 
-  final String apiUrl = "http://10.0.2.2:8080/api/v1/exercises";
+  final String apiUrl =
+      "https://salty-harbor-85811.herokuapp.com/api/v1/exercises";
 
   // Fetch the list of Exercises
   Future<List<Exercise>> getExercises() async {
@@ -73,7 +73,7 @@ class ApiService {
     if (response.statusCode == 200) {
       return Exercise.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to post a Exercise');
+      return null;
     }
   }
 
@@ -171,7 +171,7 @@ class ApiService {
     if (response.statusCode == 200) {
       return Result.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to post a Result');
+      return null;
     }
   }
 
@@ -197,13 +197,13 @@ class ApiService {
     final Response response = await put(
       Uri.parse('$apiUrl/results/$id'),
       headers: header,
-      body: jsonEncode(data, toEncodable: myEncode),
+      body: jsonEncode(data),
     );
 
     if (response.statusCode == 200) {
       return Result.fromJson(json.decode(response.body));
     } else {
-      throw Exception('Failed to update a Result');
+      return null;
     }
   }
 
@@ -221,7 +221,7 @@ class ApiService {
     if (res.statusCode == 200) {
       print("Result deleted");
     } else {
-      throw "Failed to delete Result.";
+      return null;
     }
   }
 }

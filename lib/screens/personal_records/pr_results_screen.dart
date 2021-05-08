@@ -12,6 +12,7 @@ import 'package:kabod_app/service/api_service.dart';
 
 class ResultsScreen extends StatefulWidget {
   final Exercise selectedExercise;
+
   ResultsScreen({this.selectedExercise});
   @override
   _ResultsScreenState createState() => _ResultsScreenState();
@@ -22,6 +23,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
   final TextEditingController _exerciseController = TextEditingController();
   final ApiService api = ApiService();
   List<Result> resultsList;
+  var exercise;
 
   @override
   void initState() {
@@ -97,7 +99,14 @@ class _ResultsScreenState extends State<ResultsScreen> {
               onSelected: (int menu) {
                 if (menu == 1) {
                   Navigator.pushNamed(context, AppRoutes.addResultRoute,
-                      arguments: widget.selectedExercise);
+                          arguments: widget.selectedExercise)
+                      .then((result) {
+                    if (result != null) {
+                      setState(() {
+                        resultsList.add(result);
+                      });
+                    }
+                  });
                 } else if (menu == 2) {
                   _showEditExerciseDialog(context);
                 } else if (menu == 3) {
@@ -181,16 +190,23 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   onPressed: () {
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
-                      api.updateExercise(
-                          widget.selectedExercise.id,
-                          Exercise(
-                              exercise: _exerciseController.text,
-                              uid: Provider.of<UserRepository>(context,
-                                      listen: false)
-                                  .user
-                                  .uid));
+                      exercise = api
+                          .updateExercise(
+                              widget.selectedExercise.id,
+                              Exercise(
+                                  exercise: _exerciseController.text,
+                                  uid: Provider.of<UserRepository>(context,
+                                          listen: false)
+                                      .user
+                                      .uid))
+                          .then((value) {
+                        if (value != null) {
+                          exercise = widget.selectedExercise;
+                        }
+                      });
                       _exerciseController.clear();
                       int count = 0;
+                      //widget.fetch;
                       Navigator.of(context).popUntil((_) => count++ >= 2);
                     }
                   },

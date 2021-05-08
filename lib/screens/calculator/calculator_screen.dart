@@ -89,15 +89,14 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
                         return Center(child: Text("No formula selected"));
                       } else if (snapshot.hasError) {
                         print(
-                            "Error on _GridResultsState FutureBuilder: ${snapshot.error}");
+                            "Error on Calculator FutureBuilder: ${snapshot.error}");
                         return Center(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
                               Icon(Icons.error),
-                              Text(
-                                  "Upps, an unxepected error occured. Try again!")
+                              Text(S.of(context).unexpectedError)
                             ],
                           ),
                         );

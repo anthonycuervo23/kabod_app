@@ -64,9 +64,9 @@ class AppRoutes {
             builder: (_) =>
                 EditResultDetailsScreen(selectedExercise: settings.arguments));
       case resultsRoute:
+        List<dynamic> args = settings.arguments;
         return MaterialPageRoute(
-            builder: (_) =>
-                ResultsScreen(selectedExercise: settings.arguments));
+            builder: (_) => ResultsScreen(selectedExercise: args[0]));
       case personalRecordsRoute:
         return MaterialPageRoute(builder: (_) => PersonalRecordsScreen());
       case pictureDetailsRoute:
