@@ -130,7 +130,7 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
         _processing = true;
       });
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      var result = await api.updateResult(
+      await api.updateResult(
           widget.currentResult.id,
           Result(
               weight: data['weight'] != '' ? int.parse(data['weight']) : 0,
@@ -138,7 +138,8 @@ class _EditResultDetailsScreenState extends State<EditResultDetailsScreen> {
               time: stringFromDuration(initialTimer),
               comment: data['result_comment'] ?? null,
               createdAt: data['createdAt'].millisecondsSinceEpoch));
-      Navigator.pop(context, result);
+      int count = 0;
+      Navigator.of(context).popUntil((_) => count++ >= 2);
     }
   }
 }

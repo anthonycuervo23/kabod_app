@@ -84,16 +84,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                           arguments: [
                             widget.results[widget.index],
                             widget.selectedExercise
-                          ]).then((result) {
-                        if (result != null) {
-                          // widget.results
-                          //     .remove(widget.results[widget.index].id);
-                          setState(() {
-                            widget.results[widget.index] = result;
-                            // widget.results.add(result);
-                          });
-                        }
-                      });
+                          ]);
                     },
                   ),
                   TextButton(
@@ -135,8 +126,8 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                 S.of(context).yes,
                 style: TextStyle(color: kTextColor, fontSize: 18),
               ),
-              onPressed: () {
-                api.deleteResult(widget.results[widget.index].id);
+              onPressed: () async {
+                await api.deleteResult(widget.results[widget.index].id);
                 setState(() {
                   widget.results.removeAt(widget.index);
                 });

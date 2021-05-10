@@ -206,7 +206,8 @@ class _MyDrawerState extends State<MyDrawer> {
                           ),
                           onTap: () async {
                             await userRepository.signOut();
-                            Navigator.pop(context);
+                            Navigator.pushNamedAndRemoveUntil(context,
+                                AppRoutes.loginRoute, (Route route) => false);
                             // Navigator.popUntil(
                             //     context, (route) => route.isFirst);
                           }),

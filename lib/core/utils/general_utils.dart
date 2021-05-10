@@ -61,7 +61,7 @@ String formatName(String fullName) {
   String output = selectedWords.join(" ");
 
   if (appendLastName) {
-    output += ' ${initial}.';
+    output += ' $initial.';
   }
 
   return output;

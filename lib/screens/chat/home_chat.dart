@@ -190,8 +190,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
   void configLocalNotification() {
     var initializationSettingsAndroid =
         new AndroidInitializationSettings('notification_image');
-    var initializationSettings =
-        new InitializationSettings(android: initializationSettingsAndroid);
+    var initializationSettingsIOS =
+        new IOSInitializationSettings(requestAlertPermission: true);
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
