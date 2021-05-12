@@ -205,11 +205,11 @@ class _MyDrawerState extends State<MyDrawer> {
                             style: kListTileTextStyle,
                           ),
                           onTap: () async {
-                            await userRepository.signOut();
                             Navigator.pushNamedAndRemoveUntil(context,
                                 AppRoutes.loginRoute, (Route route) => false);
-                            // Navigator.popUntil(
-                            //     context, (route) => route.isFirst);
+                            Provider.of<DrawerStateInfo>(context, listen: false)
+                                .setCurrentDrawer(0);
+                            await userRepository.signOut();
                           }),
                     ),
                   ],

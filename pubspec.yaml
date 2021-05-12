@@ -74,6 +74,6 @@ flutter:
     fonts:
     - asset: assets/fonts/Nunito-Bold.ttf
 flutter_intl:
-  enabled: true
+  enabled: false
   main_locale: en
 #  class_name:

@@ -1,3 +1,4 @@
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:kabod_app/generated/l10n.dart';
@@ -15,7 +16,7 @@ import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 
-class AddWodForm extends StatelessWidget {
+class AddWodForm extends StatefulWidget {
   AddWodForm({
     Key key,
     @required GlobalKey<FormBuilderState> formKey,
@@ -27,24 +28,51 @@ class AddWodForm extends StatelessWidget {
   final Wod currentWod;
 
   @override
+  _AddWodFormState createState() => _AddWodFormState();
+}
+
+class _AddWodFormState extends State<AddWodForm> {
+  DateTime _dropDownDate;
+  @override
   Widget build(BuildContext context) {
     return FormBuilder(
-      key: _formKey,
+      key: widget._formKey,
       child: Column(
         children: [
           DefaultCard(
-            child: FormBuilderDateTimePicker(
-              validator: FormBuilderValidators.required(context),
-              name: 'wod_date',
-              initialValue: currentWod != null
-                  ? currentWod.date
-                  : Provider.of<MainScreenModel>(context).selectedDate ??
-                      DateTime.now(),
-              inputType: InputType.date,
-              format: DateFormat('EEEE, dd MMMM, yyyy'),
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  prefixIcon: Image.asset('assets/icons/calendar_icon.png')),
+            child: DateTimeField(
+              decoration: (InputDecoration(
+                  suffixIcon: Icon(
+                    Icons.arrow_drop_down,
+                    color: Colors.white70,
+                    size: 35,
+                  ),
+                  hintStyle: TextStyle(
+                      color: kTextColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
+                  hintText: S.of(context).selectDay)),
+              style: TextStyle(
+                fontSize: 18,
+                color: kWhiteTextColor,
+              ),
+              format: DateFormat("EEEE d MMMM, y"),
+              onShowPicker: (context, currentValue) {
+                return showDatePicker(
+                    context: context,
+                    firstDate: DateTime(2021, 3, 21),
+                    initialDate: widget.currentWod != null
+                        ? widget.currentWod.date
+                        : Provider.of<MainScreenModel>(context, listen: false)
+                                .selectedDate ??
+                            DateTime.now(),
+                    lastDate: DateTime.now());
+              },
+              onChanged: (newValue) {
+                setState(() {
+                  _dropDownDate = newValue;
+                });
+              },
             ),
           ),
           DividerBig(),
@@ -52,7 +80,7 @@ class AddWodForm extends StatelessWidget {
             children: [
               DefaultCard(
                 child: FormBuilderDropdown(
-                  initialValue: currentWod?.type,
+                  initialValue: widget.currentWod?.type,
                   dropdownColor: kBackgroundColor,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_type',
@@ -74,7 +102,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
-                  initialValue: currentWod?.title,
+                  initialValue: widget.currentWod?.title,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_name',
                   textInputAction: TextInputAction.next,
@@ -88,7 +116,7 @@ class AddWodForm extends StatelessWidget {
               DividerMedium(),
               DefaultCard(
                 child: FormBuilderTextField(
-                  initialValue: currentWod?.description,
+                  initialValue: widget.currentWod?.description,
                   validator: FormBuilderValidators.required(context),
                   name: 'wod_description',
                   maxLines: 8,
@@ -104,17 +132,16 @@ class AddWodForm extends StatelessWidget {
           DividerMedium(),
           ReusableButton(
               onPressed: () async {
-                bool validated = _formKey.currentState.validate();
+                bool validated = widget._formKey.currentState.validate();
                 if (validated) {
-                  _formKey.currentState.save();
-                  if (currentWod != null) {
-                    final data =
-                        Map<String, dynamic>.from(_formKey.currentState.value);
-                    data['wod_date'] =
-                        (data['wod_date'] as DateTime).millisecondsSinceEpoch;
+                  widget._formKey.currentState.save();
+                  if (widget.currentWod != null) {
+                    final data = Map<String, dynamic>.from(
+                        widget._formKey.currentState.value);
+                    data['wod_date'] = _dropDownDate.millisecondsSinceEpoch;
                     bool isSuccessful = await context
                         .read<WodRepository>()
-                        .updateWod(currentWod.id, data);
+                        .updateWod(widget.currentWod.id, data);
                     if (isSuccessful) {
                       Navigator.pop(context);
                     } else {
@@ -126,10 +153,9 @@ class AddWodForm extends StatelessWidget {
                       );
                     }
                   } else {
-                    final data =
-                        Map<String, dynamic>.from(_formKey.currentState.value);
-                    data['wod_date'] =
-                        (data['wod_date'] as DateTime).millisecondsSinceEpoch;
+                    final data = Map<String, dynamic>.from(
+                        widget._formKey.currentState.value);
+                    data['wod_date'] = _dropDownDate.millisecondsSinceEpoch;
                     bool isSuccessful =
                         await context.read<WodRepository>().addWod(data);
                     if (isSuccessful) {
@@ -146,7 +172,7 @@ class AddWodForm extends StatelessWidget {
                 }
               },
               child: Text(
-                currentWod != null
+                widget.currentWod != null
                     ? S.of(context).updateButton
                     : S.of(context).saveButton,
                 style: kTextButtonStyle,

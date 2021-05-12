@@ -4,6 +4,7 @@ import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My imports
+import 'package:kabod_app/navigationDrawer/model/drawer_notifier.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
@@ -94,8 +95,11 @@ class ProfileScreen extends StatelessWidget {
                         fontWeight: FontWeight.w400),
                   ),
                   onTap: () async {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, AppRoutes.loginRoute, (Route route) => false);
+                    Provider.of<DrawerStateInfo>(context, listen: false)
+                        .setCurrentDrawer(0);
                     await userRepository.signOut();
-                    Navigator.popUntil(context, (route) => route.isFirst);
                   },
                 ),
               ],

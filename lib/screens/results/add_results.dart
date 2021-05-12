@@ -147,6 +147,8 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
               .uploadFile(path, _image);
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
       data['time'] = stringFromDuration(initialTimer);
+      // data['result_date'] =
+      //     DateFormat('MMMM d, y').format(widget.currentWod.date);
       data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
       data['result_photo'] = _uploadedFileURL;
       data['wod_name'] = widget.currentWod.title;
@@ -167,6 +169,8 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
       });
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
       data['time'] = stringFromDuration(initialTimer);
+      // data['result_date'] =
+      //     DateFormat('MMMM d, y').format(widget.currentWod.date);
       data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
       data['reps'] = data['reps'] != null ? int.parse(data['reps']) : null;
       data['rounds'] =

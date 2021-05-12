@@ -76,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               bottom: TabBar(indicatorColor: kButtonColor, tabs: [
-                Tab(text: S.of(context).appBarSchedule),
-                Tab(text: 'WOD')
+                Tab(text: 'WOD'),
+                Tab(text: S.of(context).appBarSchedule)
               ]),
             ),
           ),
@@ -98,6 +98,39 @@ class _HomeScreenState extends State<HomeScreen> {
               : Container(),
           body: TabBarView(
             children: [
+              StreamBuilder<List<Wod>>(
+                  stream: mainScreenModel.wodStream,
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      final List<Wod> wods = snapshot.data;
+                      mainScreenModel.groupWods(wods);
+                      return Column(
+                        children: [
+                          DividerMedium(),
+                          Text(
+                              DateFormat('EEEE, d MMM y')
+                                  .format(mainScreenModel.selectedDate)
+                                  .toString(),
+                              style: TextStyle(
+                                  fontSize: 28, color: kWhiteTextColor)),
+                          DividerMedium(),
+                          displayWodList(wods, mainScreenModel)
+                        ],
+                      );
+                    }
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    kButtonColor)));
+                      default:
+                        return Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    kButtonColor)));
+                    }
+                  }),
               StreamBuilder<List<Classes>>(
                 stream: mainScreenModel.classesStream,
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -133,39 +166,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                 },
               ),
-              StreamBuilder<List<Wod>>(
-                  stream: mainScreenModel.wodStream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (snapshot.hasData) {
-                      final List<Wod> wods = snapshot.data;
-                      mainScreenModel.groupWods(wods);
-                      return Column(
-                        children: [
-                          DividerMedium(),
-                          Text(
-                              DateFormat('EEEE, d MMM y')
-                                  .format(mainScreenModel.selectedDate)
-                                  .toString(),
-                              style: TextStyle(
-                                  fontSize: 28, color: kWhiteTextColor)),
-                          DividerMedium(),
-                          displayWodList(wods, mainScreenModel)
-                        ],
-                      );
-                    }
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return Center(
-                            child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    kButtonColor)));
-                      default:
-                        return Center(
-                            child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                    kButtonColor)));
-                    }
-                  }),
             ],
           )),
     );
@@ -238,7 +238,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Flexible(
                       child: ListTile(
                         title: Text(
-                          listOfHours[index].hour != 12
+                          listOfHours[index].hour != 11
                               ? S.of(context).crossfitClass
                               : 'Open Box',
                           style:

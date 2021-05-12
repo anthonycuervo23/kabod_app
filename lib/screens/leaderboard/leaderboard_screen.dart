@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:intl/intl.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
 
 //My Imports
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/screens/leaderboard/components/leaderboard_cards.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
@@ -487,6 +487,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                 Center(
                   child: Text(
                     S.of(context).noScoreWithFilter,
+                    textAlign: TextAlign.center,
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
