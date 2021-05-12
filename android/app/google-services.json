@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "135417827785-2omh8qfmgng1tdlaue0u7j5a3eeipfl0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jeancuervo.kabod_app",
+            "certificate_hash": "e9d3c7aa6ee629f8418626a343a214e71d81177b"
+          }
+        },
+        {
           "client_id": "135417827785-jgae5ktlqdgk3icuitlirri8ici5l886.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "135417827785-jgae5ktlqdgk3icuitlirri8ici5l886.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "135417827785-ols5pojilsd4got1e163t2jc2evepv5t.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.jeancuervo.kabodApp"
+              }
             }
           ]
         }
