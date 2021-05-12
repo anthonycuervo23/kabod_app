@@ -54,9 +54,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .doc(listOfUsers[i].id.toString())
           .collection("results")
           .where('result_date', isEqualTo: _dropDownDate)
-          .orderBy('time', descending: false)
           .orderBy('rounds', descending: true)
           .orderBy('weight', descending: true)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByDate);
     }
@@ -89,9 +89,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .doc(listOfUsers[i].id.toString())
           .collection("results")
           .where('wod_date', isEqualTo: _dropDownDate)
-          .orderBy('time', descending: false)
           .orderBy('rounds', descending: true)
           .orderBy('weight', descending: true)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByWodName);
     }
@@ -126,9 +126,9 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
           .collection("results")
           .where('wod_date', isEqualTo: selectedDate)
           .where('wod_name', isEqualTo: wodName)
-          .orderBy('time', descending: false)
           .orderBy('rounds', descending: true)
           .orderBy('weight', descending: true)
+          .orderBy('time', descending: false)
           .snapshots()
           .listen(createListOfResultsByWodNameAndGender);
     }

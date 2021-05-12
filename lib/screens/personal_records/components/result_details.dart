@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
@@ -48,11 +49,10 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     fontWeight: FontWeight.bold,
                     fontSize: 22)),
             DividerSmall(),
-            // durationFromString(widget.results[widget.index].time) != duration
-            //        ?
-            Text(S.of(context).prTime(widget.results[widget.index].time),
-                style: TextStyle(color: kWhiteTextColor, fontSize: 18)),
-            //      : Container(),
+            durationFromString(widget.results[widget.index].time) != duration
+                ? Text(S.of(context).prTime(widget.results[widget.index].time),
+                    style: TextStyle(color: kWhiteTextColor, fontSize: 18))
+                : Container(),
             widget.results[widget.index].reps != null
                 ? Text(
                     S
@@ -65,7 +65,7 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                     S.of(context).prWeight(widget.results[widget.index].weight),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
-            widget.results[widget.index].comment != null
+            widget.results[widget.index].comment != ''
                 ? Text(
                     S
                         .of(context)
