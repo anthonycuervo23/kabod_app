@@ -5,6 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
@@ -140,13 +141,14 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
-              child: CachedNetworkImage(
-                imageUrl: profileUrl,
-                placeholder: (context, url) => CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
-                height: 60,
-                width: 60,
-              ),
+              child: checkUrl(profileUrl),
+              // CachedNetworkImage(
+              //   imageUrl: profileUrl,
+              //   placeholder: (context, url) => CircularProgressIndicator(
+              //       valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
+              //   height: 60,
+              //   width: 60,
+              // ),
             ),
             SizedBox(width: 12),
             Column(
@@ -156,6 +158,29 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
         ),
       ),
     );
+  }
+
+  Widget checkUrl(String url) {
+    try {
+      return CachedNetworkImage(
+        imageUrl: url,
+        placeholder: (context, url) => CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
+        height: 60,
+        width: 60,
+      );
+    } catch (e) {
+      return CircleAvatar(
+          radius: MediaQuery.of(context).size.width * 0.08,
+          backgroundColor: Colors.grey[400].withOpacity(
+            0.4,
+          ),
+          child: FaIcon(
+            FontAwesomeIcons.user,
+            color: kWhiteTextColor,
+            size: MediaQuery.of(context).size.width * 0.1,
+          ));
+    }
   }
 
   Widget searchUsersList() {

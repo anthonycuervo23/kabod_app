@@ -102,7 +102,8 @@ class UserInfo extends StatelessWidget {
                               style: TextStyle(color: kButtonColor),
                             ),
                             subtitle: Text(
-                              '${userRepository.userModel.registrationDate?.day.toString()}-${userRepository.userModel.registrationDate?.month.toString()}-${userRepository.userModel.registrationDate?.year.toString()}',
+                              DateFormat('MMMM d, y').format(
+                                  userRepository.userModel?.registrationDate),
                               style: TextStyle(
                                   fontSize: 20, color: kWhiteTextColor),
                             ),

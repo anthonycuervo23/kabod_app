@@ -3,7 +3,6 @@ import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
 
 //My Imports
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:kabod_app/screens/timers/models/settings_model.dart';
 import 'package:kabod_app/service/sharedPreferences.dart';
 import 'package:kabod_app/core/presentation/constants.dart';
@@ -23,8 +22,7 @@ class MyDrawer extends StatefulWidget {
 class _MyDrawerState extends State<MyDrawer> {
   @override
   Widget build(BuildContext context) {
-    final currentDrawer =
-        Provider.of<DrawerStateInfo>(context).getCurrentDrawer;
+    final currentPage = this.widget.currentPage;
     final userRepository = Provider.of<UserRepository>(context);
     return Container(
       width: 250,
@@ -54,170 +52,126 @@ class _MyDrawerState extends State<MyDrawer> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    Container(
-                      decoration: currentDrawer == 0 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading: Image.asset('assets/icons/home_icon.png'),
-                        title: Text(S.of(context).drawerHome,
-                            style: kListTileTextStyle),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage == AppRoutes.homeRoute)
-                            return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(0);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.homeRoute);
-                        },
-                      ),
+                    DrawerTile(
+                        currentPage: currentPage,
+                        position: 0,
+                        copy: S.of(context).drawerHome,
+                        imagePath: 'assets/icons/home_icon.png',
+                        route: AppRoutes.homeRoute),
+                    DrawerTile(
+                        currentPage: currentPage,
+                        position: 1,
+                        copy: S.of(context).drawerLeaderBoard,
+                        imagePath: 'assets/icons/whiteboard_icon.png',
+                        route: AppRoutes.leaderBoardRoute),
+                    DrawerTile(
+                        currentPage: currentPage,
+                        position: 2,
+                        copy: S.of(context).drawerCalculator,
+                        imagePath: 'assets/icons/calculator_icon.png',
+                        route: AppRoutes.calculatorRoute),
+                    DrawerTile(
+                      currentPage: currentPage,
+                      position: 3,
+                      copy: S.of(context).drawerTimers,
+                      imagePath: 'assets/icons/timer_icon.png',
+                      route: AppRoutes.timersRoute,
+                      arguments: [
+                        Settings(SharedPrefs.sharedPrefs),
+                        SharedPrefs.sharedPrefs,
+                      ],
                     ),
-                    Container(
-                      decoration: currentDrawer == 1 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading:
-                            Image.asset('assets/icons/whiteboard_icon.png'),
-                        title: Text(
-                          S.of(context).drawerLeaderBoard,
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage ==
-                              AppRoutes.leaderBoardRoute) return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(1);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.leaderBoardRoute);
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 2 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading:
-                            Image.asset('assets/icons/calculator_icon.png'),
-                        title: Text(
-                          S.of(context).drawerCalculator,
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage ==
-                              AppRoutes.calculatorRoute) return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(2);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.calculatorRoute);
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 3 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading: Image.asset('assets/icons/timer_icon.png'),
-                        title: Text(
-                          S.of(context).drawerTimers,
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage == AppRoutes.timersRoute)
-                            return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(3);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.timersRoute,
-                              arguments: [
-                                Settings(SharedPrefs.sharedPrefs),
-                                SharedPrefs.sharedPrefs,
-                              ]);
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 4 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading:
-                            Image.asset('assets/icons/performance_icon.png'),
-                        title: Text(
-                          S.of(context).drawerPersonalRecords,
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage ==
-                              AppRoutes.personalRecordsRoute) return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(4);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.personalRecordsRoute);
-                        },
-                      ),
-                    ),
-                    Container(
-                      decoration: currentDrawer == 5 ? kListTileSelected : null,
-                      child: ListTile(
-                        leading: Image.asset('assets/icons/chat_icon.png'),
-                        title: Text(
-                          S.of(context).drawerChat,
-                          style: kListTileTextStyle,
-                        ),
-                        onTap: () {
-                          Navigator.popUntil(context, (route) => route.isFirst);
-                          if (this.widget.currentPage == AppRoutes.chatRoute)
-                            return;
-
-                          Provider.of<DrawerStateInfo>(context, listen: false)
-                              .setCurrentDrawer(5);
-
-                          Navigator.pushReplacementNamed(
-                              context, AppRoutes.chatRoute,
-                              arguments: userRepository.user.uid);
-                        },
-                      ),
+                    DrawerTile(
+                        currentPage: currentPage,
+                        position: 4,
+                        copy: S.of(context).drawerPersonalRecords,
+                        imagePath: 'assets/icons/performance_icon.png',
+                        route: AppRoutes.personalRecordsRoute),
+                    DrawerTile(
+                      currentPage: currentPage,
+                      copy: S.of(context).drawerChat,
+                      position: 5,
+                      imagePath: 'assets/icons/chat_icon.png',
+                      route: AppRoutes.chatRoute,
+                      arguments: userRepository.user.uid,
                     ),
                   ],
                 ),
                 Column(
                   children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Color(0xFF121212).withOpacity(0.5),
-                          borderRadius: BorderRadius.all(Radius.circular(12))),
-                      child: ListTile(
-                          leading: FaIcon(
-                            FontAwesomeIcons.signOutAlt,
-                            size: 30,
-                            color: kButtonColor,
-                          ),
-                          title: Text(
-                            S.of(context).drawerLogout,
-                            style: kListTileTextStyle,
-                          ),
-                          onTap: () async {
-                            Navigator.pushNamedAndRemoveUntil(context,
-                                AppRoutes.loginRoute, (Route route) => false);
-                            Provider.of<DrawerStateInfo>(context, listen: false)
-                                .setCurrentDrawer(0);
-                            await userRepository.signOut();
-                          }),
-                    ),
+                    DrawerTile(
+                        decoration: BoxDecoration(
+                            color: Color(0xFF121212).withOpacity(0.5),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12))),
+                        currentPage: currentPage,
+                        position: 0,
+                        copy: S.of(context).drawerLogout,
+                        imagePath: 'assets/icons/logout_icon.png',
+                        onTap: () async {
+                          Navigator.pushNamedAndRemoveUntil(context,
+                              AppRoutes.loginRoute, (Route route) => false);
+                          Provider.of<DrawerStateInfo>(context, listen: false)
+                              .setCurrentDrawer(0);
+                          await userRepository.signOut();
+                        })
                   ],
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class DrawerTile extends StatelessWidget {
+  const DrawerTile(
+      {Key key,
+      @required this.currentPage,
+      @required this.position,
+      @required this.imagePath,
+      this.route,
+      this.arguments,
+      @required this.copy,
+      this.decoration,
+      this.onTap})
+      : super(key: key);
+  final currentPage;
+  final int position;
+  final String imagePath;
+  final String route;
+  final Object arguments;
+  final String copy;
+  final Decoration decoration;
+  final Function onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final currentDrawer =
+        Provider.of<DrawerStateInfo>(context).getCurrentDrawer;
+    Decoration localDecoration =
+        currentDrawer == position ? kListTileSelected : null;
+    if (decoration != null) {
+      localDecoration = decoration;
+    }
+    return Container(
+      decoration: localDecoration,
+      child: ListTile(
+        leading: Image.asset(imagePath),
+        title: Text(copy, style: kListTileTextStyle),
+        onTap: onTap ??
+            () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+              if (this.currentPage == route) return;
+
+              Provider.of<DrawerStateInfo>(context, listen: false)
+                  .setCurrentDrawer(position);
+
+              Navigator.pushReplacementNamed(context, route,
+                  arguments: arguments);
+            },
       ),
     );
   }

@@ -144,6 +144,8 @@ class _IntroScreenState extends State<IntroScreen> {
                                 data['birth_date'] =
                                     (data['birth_date'] as DateTime)
                                         .millisecondsSinceEpoch;
+                                data['photo_url'] =
+                                    'https://res.cloudinary.com/drhs1q5p3/image/upload/v1621001103/profile_image_vvtpvb.jpg';
                                 await introScreenProvider.addProfileInfo(
                                     data, userRepository.user.uid);
                                 introScreenProvider.finishIntroScreen(

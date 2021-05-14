@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/generated/l10n.dart';
+import 'package:kabod_app/service/notifications.dart';
 import 'package:provider/provider.dart';
 
 //My imports
@@ -21,7 +22,9 @@ class ClassDetailScreen extends StatefulWidget {
   final Classes currentClass;
   final List<DateTime> listOfHours;
   final int index;
-  ClassDetailScreen({this.currentClass, this.listOfHours, this.index});
+  final NotificationManager manager;
+  ClassDetailScreen(
+      {this.manager, this.currentClass, this.listOfHours, this.index});
   @override
   _ClassDetailScreenState createState() => _ClassDetailScreenState();
 }
@@ -189,6 +192,12 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
               await context
                   .read<ClassesRepository>()
                   .addUserToClass(widget.currentClass.id, data);
+              widget.manager.showNotificationDaily(
+                  data,
+                  'Proxima clase',
+                  'Tu clase esta por empezar',
+                  widget.listOfHours[widget.index].hour,
+                  widget.listOfHours[widget.index].minute);
               Navigator.pop(context);
               ToastUtil.show(
                   ToastDecorator(
@@ -225,6 +234,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             await context
                 .read<ClassesRepository>()
                 .removeUserFromClass(widget.currentClass.id, data);
+            widget.manager.removeReminder(data);
             Navigator.pop(context);
             ToastUtil.show(
                 ToastDecorator(
