@@ -142,13 +142,6 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
             ClipRRect(
               borderRadius: BorderRadius.circular(40),
               child: checkUrl(profileUrl),
-              // CachedNetworkImage(
-              //   imageUrl: profileUrl,
-              //   placeholder: (context, url) => CircularProgressIndicator(
-              //       valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
-              //   height: 60,
-              //   width: 60,
-              // ),
             ),
             SizedBox(width: 12),
             Column(
@@ -240,7 +233,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
               icon: 'launch_background',
             ),
           ),
-          payload: json.encode(message),
+          payload: jsonEncode(message),
         );
       }
     });
@@ -257,11 +250,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
               channel.id,
               channel.name,
               channel.description,
-              //      one that already exists in example app.
-              icon: 'launch_background',
+              icon: '@drawable/notification_image',
             ),
           ),
-          payload: json.encode(message),
+          payload: jsonEncode(message),
         );
       }
     });
