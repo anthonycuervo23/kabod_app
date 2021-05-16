@@ -18,13 +18,13 @@ import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
 
+import '../../main.dart';
+
 class ClassDetailScreen extends StatefulWidget {
   final Classes currentClass;
   final List<DateTime> listOfHours;
   final int index;
-  final NotificationManager manager;
-  ClassDetailScreen(
-      {this.manager, this.currentClass, this.listOfHours, this.index});
+  ClassDetailScreen({this.currentClass, this.listOfHours, this.index});
   @override
   _ClassDetailScreenState createState() => _ClassDetailScreenState();
 }
@@ -192,12 +192,14 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
               await context
                   .read<ClassesRepository>()
                   .addUserToClass(widget.currentClass.id, data);
-              widget.manager.showNotificationDaily(
-                  data,
-                  'Proxima clase',
-                  'Tu clase esta por empezar',
-                  widget.listOfHours[widget.index].hour,
-                  widget.listOfHours[widget.index].minute);
+              scheduleNotification(
+                  notifsPlugin:
+                      flutterLocalNotificationsPlugin, //Or whatever you've named it in main.dart
+                  id: DateTime.now().toString(),
+                  title: 'Reminder',
+                  body: "A scheduled Notification",
+                  scheduledTime: DateTime
+                      .now()); //Or whenever you actually want to trigger it
               Navigator.pop(context);
               ToastUtil.show(
                   ToastDecorator(
@@ -234,7 +236,6 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             await context
                 .read<ClassesRepository>()
                 .removeUserFromClass(widget.currentClass.id, data);
-            widget.manager.removeReminder(data);
             Navigator.pop(context);
             ToastUtil.show(
                 ToastDecorator(

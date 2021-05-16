@@ -24,6 +24,8 @@ import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/core/repository/results_repository.dart';
 
+import 'service/notifications.dart';
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message ${message.messageId}');
@@ -51,6 +53,8 @@ const AndroidNotificationChannel channel = AndroidNotificationChannel(
   enableVibration: true,
 );
 
+NotificationAppLaunchDetails notifLaunch;
+
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
@@ -64,6 +68,11 @@ Future<void> main() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+
+  notifLaunch =
+      await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
+  await initNotifications(flutterLocalNotificationsPlugin);
+  requestIOSPermissions(flutterLocalNotificationsPlugin);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
