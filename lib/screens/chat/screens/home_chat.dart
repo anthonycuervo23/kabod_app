@@ -15,7 +15,7 @@ import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/main.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
-import 'package:kabod_app/screens/chat/chat_room.dart';
+import 'package:kabod_app/screens/chat/screens/chat_room.dart';
 import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
 import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';

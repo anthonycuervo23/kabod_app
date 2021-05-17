@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kabod_app/screens/auth/screens/login_screens_controller.dart';
 import 'package:kabod_app/screens/auth/screens/reset_password_screen.dart';
 import 'package:kabod_app/screens/calculator/calculator_screen.dart';
-import 'package:kabod_app/screens/chat/home_chat.dart';
+import 'package:kabod_app/screens/chat/screens/home_chat.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
 import 'package:kabod_app/screens/leaderboard/leaderboard_screen.dart';

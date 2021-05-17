@@ -43,7 +43,6 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.jeancuervo.kabod_app"
         minSdkVersion 16
         targetSdkVersion 29
