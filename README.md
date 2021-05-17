@@ -1,9 +1,6 @@
-## # CrossFit Kabod app - a Gym Management app in flutter [![GitHub stars](https://img.shields.io/github/stars/anthonycuervo23/kabod_app?style=social)](https://github.com/login?return_to=%2Fanthonycuervo23%kabod_app) ![GitHub forks](https://img.shields.io/github/forks/anthonycuervo23/kabod_app?style=social) 
-![Dart CI](https://github.com/anthonycuervo23/kabod_app/workflows/Dart%20CI/badge.svg) ![GitHub pull requests](https://img.shields.io/github/issues-pr/anthonycuervo23/kabod_app) ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/anthonycuervo23/kabod_app) ![GitHub last commit](https://img.shields.io/github/last-commit/anthonycuervo23/kabod_app)  ![GitHub issues](https://img.shields.io/github/issues-raw/anthonycuervo23/kabod_app) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/anthonycuervo23/kabod_app) 
+## CrossFit Kabod app - a Gym Management app in flutter [![GitHub stars](https://img.shields.io/github/stars/anthonycuervo23/kabod_app?style=social)](https://github.com/login?return_to=%2Fanthonycuervo23%kabod_app) ![GitHub forks](https://img.shields.io/github/forks/anthonycuervo23/kabod_app?style=social) 
+![GitHub pull requests](https://img.shields.io/github/issues-pr/anthonycuervo23/kabod_app) ![GitHub closed pull requests](https://img.shields.io/github/issues-pr-closed/anthonycuervo23/kabod_app) ![GitHub last commit](https://img.shields.io/github/last-commit/anthonycuervo23/kabod_app)  ![GitHub issues](https://img.shields.io/github/issues-raw/anthonycuervo23/kabod_app) [![Open Source Love](https://badges.frapsoft.com/os/v2/open-source.svg?v=103)](https://github.com/anthonycuervo23/kabod_app) 
 
-<a href="https://github.com/Solido/awesome-flutter">
-   <img alt="Awesome Flutter" src="https://img.shields.io/badge/Awesome-Flutter-blue.svg?longCache=true&style=flat-square" />
-</a>
 
 
 A working Twitter clone written in Flutter using Firebase auth,realtime,firestore database and storage.
