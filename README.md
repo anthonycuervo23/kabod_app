@@ -3,13 +3,12 @@
 
 
 
-A working Twitter clone written in Flutter using Firebase auth,realtime,firestore database and storage.
+A working Gym Management written in Flutter using Firebase auth,firestore database and storage.
 
 
 ## Download App
-<a href="https://play.google.com/store/apps/details?id=com.jeancuervo.kabod_app"><img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" width="200"></img></a>
-<a href="https://apps.apple.com/us/app/crossfit-kabod/id1567053900"><img src="https://autoescuelaones.files.wordpress.com/2017/12/itunes-app-store-logo.png" width="200"></img></a>
-
+[![Get it from iTunes](https://lisk.io/sites/default/files/pictures/2020-01/download_on_the_app_store_badge.svg)](https://apps.apple.com/us/app/crossfit-kabod/id1567053900)
+[![Get it on Google Play](https://lisk.io/sites/default/files/pictures/2020-01/download_on_the_play_store_badge.svg)](https://play.google.com/store/apps/details?id=com.jeancuervo.kabod_app)
 
 ## Features
 
