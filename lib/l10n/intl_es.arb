@@ -59,12 +59,13 @@
   "addScore": "Añadir Resultado",
   "startTimer": "Iniciar Temporizador",
   "editWod": "Editar WOD",
-  "welcomeUser": "Bienvenido {username}",
+  "welcomeUserMan": "Bienvenido {username}",
+  "welcomeUserWoman": "Bienvenida {username}",
   "scheduleNotAvailable": "EL HORARIO NO ESTA DISPONIBLE",
   "noClassesToday": "NO HAY CLASES PROGRAMADAS PARA HOY",
   "registered": "Registrado",
   "completed": "COMPLETADO",
-  "athletesInClass": "{athletes} / {limits} Participantes",
+  "athletesInClass": "{athletes} / {limits} Inscritos.",
   "wodNotAvailable": "ESTE WOD YA NO ESTA DISPONIBLE",
   "wodAvailableDate": "ESTE WOD SERA VISIBLE EL DIA {date}",
   "appBarLeaderBoard": "Resultados",
@@ -175,5 +176,7 @@
   "tryAgain": "Intenta nuevamente",
   "continuoToSignIn": "Iniciar Sesion",
   "wodNameFilter": "Nombre del WOD",
-  "unexpectedError": "Upps, algo salio mal. Ingresa mas tarde!"
+  "unexpectedError": "Upps, algo salio mal. Ingresa mas tarde!",
+  "notificationTitle": "Date prisa!",
+  "notificationBody": "Tu clase está a punto de comenzar"
 }

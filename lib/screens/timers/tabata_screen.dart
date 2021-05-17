@@ -357,7 +357,7 @@ class _TabataScreenState extends State<TabataScreen> {
                           selectedTextStyle:
                               TextStyle(fontSize: 24, color: kButtonColor),
                           minValue: 1,
-                          maxValue: 10,
+                          maxValue: 60,
                           initialIntegerValue: _emom.reps,
                           title: Text(S.of(context).setsInsideTheEmom),
                         ),

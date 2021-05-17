@@ -19,7 +19,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es';
 
-  static m0(athletes, limits) => "${athletes} / ${limits} Participantes";
+  static m0(athletes, limits) => "${athletes} / ${limits} Inscritos.";
 
   static m1(subscribers, limit) => "${subscribers} de ${limit}";
 
@@ -49,11 +49,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m14(username) => "Bienvenido ${username}";
 
-  static m15(date) => "ESTE WOD SERA VISIBLE EL DIA ${date}";
+  static m15(username) => "Bienvenida ${username}";
 
-  static m16(wodDate) => "Fecha: ${wodDate}";
+  static m16(date) => "ESTE WOD SERA VISIBLE EL DIA ${date}";
 
-  static m17(wodName) => "Nombre de Wod: ${wodName}";
+  static m17(wodDate) => "Fecha: ${wodDate}";
+
+  static m18(wodName) => "Nombre de Wod: ${wodName}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -151,12 +153,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "noComments" : MessageLookupByLibrary.simpleMessage("No hay comentarios"),
     "noDataCalculator" : MessageLookupByLibrary.simpleMessage("No hay datos para calcular"),
     "noExercise" : MessageLookupByLibrary.simpleMessage("No se encontraron ejercicios, Toque el boton + para agregar"),
-    "noExerciseFound" : MessageLookupByLibrary.simpleMessage("No hay datos, por favor añade un nuevo ejercicio"),
+    "noExerciseFound" : MessageLookupByLibrary.simpleMessage("No hay datos, por favor añade un nuevo resultado"),
     "noPhoto" : MessageLookupByLibrary.simpleMessage("No hay foto para mostrar"),
     "noScoreFound" : MessageLookupByLibrary.simpleMessage("NO SE ENCONTRARON DATOS"),
     "noScoreWithFilter" : MessageLookupByLibrary.simpleMessage("NO SE ENCONTRARON RESULTADOS CON ESTOS FILTROS"),
     "noUsersFound" : MessageLookupByLibrary.simpleMessage("No tienes chats activos"),
     "notAnImage" : MessageLookupByLibrary.simpleMessage("Este archivo no es una imagen"),
+    "notificationBody" : MessageLookupByLibrary.simpleMessage("Tu clase está a punto de comenzar"),
+    "notificationTitle" : MessageLookupByLibrary.simpleMessage("Date prisa!"),
     "openImage" : MessageLookupByLibrary.simpleMessage("Abrir imagen..."),
     "optionalComments" : MessageLookupByLibrary.simpleMessage("Comentarios Opcionales..."),
     "personalInformation" : MessageLookupByLibrary.simpleMessage("Informacion Personal"),
@@ -224,13 +228,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "weight" : MessageLookupByLibrary.simpleMessage("Peso"),
     "weightNote" : m12,
     "weightResult" : m13,
-    "welcomeUser" : m14,
-    "wodAvailableDate" : m15,
-    "wodDateResult" : m16,
+    "welcomeUserMan" : m14,
+    "welcomeUserWoman" : m15,
+    "wodAvailableDate" : m16,
+    "wodDateResult" : m17,
     "wodDescription" : MessageLookupByLibrary.simpleMessage("Descripcion del WOD..."),
     "wodName" : MessageLookupByLibrary.simpleMessage("Nombre del WOD : "),
     "wodNameFilter" : MessageLookupByLibrary.simpleMessage("Nombre del WOD"),
-    "wodNameResult" : m17,
+    "wodNameResult" : m18,
     "wodNotAvailable" : MessageLookupByLibrary.simpleMessage("ESTE WOD YA NO ESTA DISPONIBLE"),
     "wodType" : MessageLookupByLibrary.simpleMessage("Tipo de WOD"),
     "yes" : MessageLookupByLibrary.simpleMessage("Si")

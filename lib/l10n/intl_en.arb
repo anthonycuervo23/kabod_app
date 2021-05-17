@@ -59,12 +59,13 @@
   "addScore": "Add Score",
   "startTimer": "Start Timer",
   "editWod": "Edit WOD",
-  "welcomeUser": "Welcome {username}",
+  "welcomeUserMan": "Welcome {username}",
+  "welcomeUserWoman": "Welcome {username}",
   "scheduleNotAvailable": "THE SCHEDULE IS NOT AVAILABLE",
   "noClassesToday": "NO CLASSES TODAY",
   "registered": "Registered",
   "completed": "COMPLETED",
-  "athletesInClass": "{athletes} / {limits} Participants",
+  "athletesInClass": "{athletes} / {limits} Participants.",
   "wodNotAvailable": "THIS WOD IS NO LONGER AVAILABLE",
   "wodAvailableDate": "THIS WOD CANNOT BE VIEWED UNTIL {date}",
   "appBarLeaderBoard": "Leader Board",
@@ -175,5 +176,7 @@
   "tryAgain": "Try again",
   "continuoToSignIn": "Continue to sign in",
   "wodNameFilter": "WOD Name",
-  "unexpectedError": "Upps, an unxepected error occured. Try again!"
+  "unexpectedError": "Upps, an unxepected error occured. Try again!",
+  "notificationTitle": "Hurry up!",
+  "notificationBody": "Your class is about to start"
 }

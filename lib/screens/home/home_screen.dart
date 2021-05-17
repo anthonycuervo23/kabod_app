@@ -62,8 +62,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         DividerBig(),
                         DividerBig(),
                         Text(
-                            S.of(context).welcomeUser(formatName(
-                                userRepository.userModel?.name ?? '')),
+                            userRepository.userModel?.gender == 'Femenino'
+                                ? S.of(context).welcomeUserWoman(formatName(
+                                    userRepository.userModel?.name ?? ''))
+                                : S.of(context).welcomeUserMan(formatName(
+                                    userRepository.userModel?.name ?? '')),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(color: kTextColor)),
@@ -257,7 +260,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 textAlign: TextAlign.center,
                               )
                             : Text(
-                                '${selectedClasses[0].classAthletes[listOfClasses[index]].length} / ${selectedClasses[0].maxAthletes} Participants',
+                                S.of(context).athletesInClass(
+                                    selectedClasses[0]
+                                        .classAthletes[listOfClasses[index]]
+                                        .length,
+                                    selectedClasses[0].maxAthletes),
                                 style: TextStyle(color: kTextColor),
                                 textAlign: TextAlign.center,
                               ),

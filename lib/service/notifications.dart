@@ -1,6 +1,7 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart'
     as notifs;
 import 'package:rxdart/rxdart.dart' as rxSub;
+import 'package:timezone/timezone.dart';
 
 class NotificationClass {
   final int id;
@@ -52,17 +53,19 @@ void requestIOSPermissions(
         sound: true,
       );
 }
-// Future<void> removeReminder({notifs.FlutterLocalNotificationsPlugin notifsPlugin,
-// int id}) {
-//   notifsPlugin.cancel(id);
-// }
+
+Future<void> removeNotification(
+    {notifs.FlutterLocalNotificationsPlugin notifsPlugin, int notificationId}) {
+  notifsPlugin.cancel(notificationId);
+}
 
 Future<void> scheduleNotification(
     {notifs.FlutterLocalNotificationsPlugin notifsPlugin,
     String id,
     String title,
     String body,
-    DateTime scheduledTime}) async {
+    int notificationId,
+    TZDateTime scheduledTime}) async {
   var androidSpecifics = notifs.AndroidNotificationDetails(
     id, // This specifies the ID of the Notification
     'Scheduled notification', // This specifies the name of the notification channel
@@ -72,66 +75,9 @@ Future<void> scheduleNotification(
   var iOSSpecifics = notifs.IOSNotificationDetails();
   var platformChannelSpecifics =
       notifs.NotificationDetails(android: androidSpecifics, iOS: iOSSpecifics);
-  //await notifsPlugin.zonedSchedule(0, title, "Scheduled notification", scheduledTime, notificationDetails, uiLocalNotificationDateInterpretation: uiLocalNotificationDateInterpretation, androidAllowWhileIdle: androidAllowWhileIdle)
-  await notifsPlugin.schedule(0, title, "Scheduled notification", scheduledTime,
-      platformChannelSpecifics); // This literally schedules the notification
+  await notifsPlugin.zonedSchedule(
+      notificationId, title, body, scheduledTime, platformChannelSpecifics,
+      uiLocalNotificationDateInterpretation:
+          notifs.UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle: true);
 }
-// class NotificationManager {
-//   var flutterLocalNotificationsPlugin;
-//
-//   NotificationManager() {
-//     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-//     initNotifications();
-//   }
-//
-//   getNotificationInstance() {
-//     return flutterLocalNotificationsPlugin;
-//   }
-//
-//   void initNotifications() {
-//     // initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
-//     var initializationSettingsAndroid =
-//         new AndroidInitializationSettings('@mipmap/launcher_icon');
-//     var initializationSettingsIOS = IOSInitializationSettings(
-//         onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-//
-//     var initializationSettings = InitializationSettings(
-//         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-//
-//     flutterLocalNotificationsPlugin.initialize(initializationSettings,
-//         onSelectNotification: onSelectNotification);
-//   }
-//
-//   void showNotificationDaily(
-//       Map id, String title, String body, int hour, int minute) async {
-//     var time = new Time(hour, minute, 0);
-//     await flutterLocalNotificationsPlugin.showDailyAtTime(
-//         id, title, body, time, getPlatformChannelSpecfics());
-//     print('Notification Succesfully Scheduled at ${time.toString()}');
-//   }
-//
-//   getPlatformChannelSpecfics() {
-//     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-//         'your channel id', 'your channel name', 'your channel description',
-//         importance: Importance.max,
-//         priority: Priority.high,
-//         ticker: 'Medicine Reminder');
-//     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-//     var platformChannelSpecifics = NotificationDetails(
-//         android: androidPlatformChannelSpecifics,
-//         iOS: iOSPlatformChannelSpecifics);
-//
-//     return platformChannelSpecifics;
-//   }
-//
-//   Future onSelectNotification(String payload) async {
-//     print('Notification clicked');
-//     return Future.value(0);
-//   }
-//
-//   Future onDidReceiveLocalNotification(
-//       int id, String title, String body, String payload) async {
-//     return Future.value(1);
-//   }
-//
-// }

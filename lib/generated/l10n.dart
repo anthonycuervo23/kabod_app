@@ -636,10 +636,20 @@ class S {
   }
 
   /// `Welcome {username}`
-  String welcomeUser(Object username) {
+  String welcomeUserMan(Object username) {
     return Intl.message(
       'Welcome $username',
-      name: 'welcomeUser',
+      name: 'welcomeUserMan',
+      desc: '',
+      args: [username],
+    );
+  }
+
+  /// `Welcome {username}`
+  String welcomeUserWoman(Object username) {
+    return Intl.message(
+      'Welcome $username',
+      name: 'welcomeUserWoman',
       desc: '',
       args: [username],
     );
@@ -685,10 +695,10 @@ class S {
     );
   }
 
-  /// `{athletes} / {limits} Participants`
+  /// `{athletes} / {limits} Participants.`
   String athletesInClass(Object athletes, Object limits) {
     return Intl.message(
-      '$athletes / $limits Participants',
+      '$athletes / $limits Participants.',
       name: 'athletesInClass',
       desc: '',
       args: [athletes, limits],
@@ -1800,6 +1810,26 @@ class S {
     return Intl.message(
       'Upps, an unxepected error occured. Try again!',
       name: 'unexpectedError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hurry up!`
+  String get notificationTitle {
+    return Intl.message(
+      'Hurry up!',
+      name: 'notificationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Your class is about to start`
+  String get notificationBody {
+    return Intl.message(
+      'Your class is about to start',
+      name: 'notificationBody',
       desc: '',
       args: [],
     );

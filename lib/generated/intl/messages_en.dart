@@ -19,7 +19,7 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static m0(athletes, limits) => "${athletes} / ${limits} Participants";
+  static m0(athletes, limits) => "${athletes} / ${limits} Participants.";
 
   static m1(subscribers, limit) => "${subscribers} of ${limit}";
 
@@ -49,11 +49,13 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static m14(username) => "Welcome ${username}";
 
-  static m15(date) => "THIS WOD CANNOT BE VIEWED UNTIL ${date}";
+  static m15(username) => "Welcome ${username}";
 
-  static m16(wodDate) => "Date: ${wodDate}";
+  static m16(date) => "THIS WOD CANNOT BE VIEWED UNTIL ${date}";
 
-  static m17(wodName) => "Wod Name: ${wodName}";
+  static m17(wodDate) => "Date: ${wodDate}";
+
+  static m18(wodName) => "Wod Name: ${wodName}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static _notInlinedMessages(_) => <String, Function> {
@@ -157,6 +159,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "noScoreWithFilter" : MessageLookupByLibrary.simpleMessage("NO RESULTS FOUND FOR THIS FILTERING"),
     "noUsersFound" : MessageLookupByLibrary.simpleMessage("You don\'t have active chats"),
     "notAnImage" : MessageLookupByLibrary.simpleMessage("This file is not an image"),
+    "notificationBody" : MessageLookupByLibrary.simpleMessage("Your class is about to start"),
+    "notificationTitle" : MessageLookupByLibrary.simpleMessage("Hurry up!"),
     "openImage" : MessageLookupByLibrary.simpleMessage("Open image..."),
     "optionalComments" : MessageLookupByLibrary.simpleMessage("Optional comments..."),
     "personalInformation" : MessageLookupByLibrary.simpleMessage("Personal information"),
@@ -224,13 +228,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "weight" : MessageLookupByLibrary.simpleMessage("Weight"),
     "weightNote" : m12,
     "weightResult" : m13,
-    "welcomeUser" : m14,
-    "wodAvailableDate" : m15,
-    "wodDateResult" : m16,
+    "welcomeUserMan" : m14,
+    "welcomeUserWoman" : m15,
+    "wodAvailableDate" : m16,
+    "wodDateResult" : m17,
     "wodDescription" : MessageLookupByLibrary.simpleMessage("WOD Description..."),
     "wodName" : MessageLookupByLibrary.simpleMessage("WOD Name: "),
     "wodNameFilter" : MessageLookupByLibrary.simpleMessage("WOD Name"),
-    "wodNameResult" : m17,
+    "wodNameResult" : m18,
     "wodNotAvailable" : MessageLookupByLibrary.simpleMessage("THIS WOD IS NO LONGER AVAILABLE"),
     "wodType" : MessageLookupByLibrary.simpleMessage("WOD Type"),
     "yes" : MessageLookupByLibrary.simpleMessage("Yes")

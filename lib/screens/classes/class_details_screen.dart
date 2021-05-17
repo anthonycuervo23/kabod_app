@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/service/notifications.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 //My imports
 import 'package:kabod_app/core/repository/classes_repository.dart';
@@ -183,6 +184,11 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             : true,
         child: ReusableButton(
             onPressed: () async {
+              var time = tz.TZDateTime.from(
+                widget.listOfHours[widget.index]
+                    .subtract(Duration(minutes: 10)),
+                tz.local,
+              );
               final Map<String, dynamic> data = {
                 'class_athletes': {
                   keys[widget.index]:
@@ -193,13 +199,12 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   .read<ClassesRepository>()
                   .addUserToClass(widget.currentClass.id, data);
               scheduleNotification(
-                  notifsPlugin:
-                      flutterLocalNotificationsPlugin, //Or whatever you've named it in main.dart
-                  id: DateTime.now().toString(),
-                  title: 'Reminder',
-                  body: "A scheduled Notification",
-                  scheduledTime: DateTime
-                      .now()); //Or whenever you actually want to trigger it
+                  notifsPlugin: flutterLocalNotificationsPlugin,
+                  id: widget.listOfHours[widget.index].toString(),
+                  notificationId: widget.listOfHours[widget.index].hashCode,
+                  title: S.of(context).notificationTitle,
+                  body: S.of(context).notificationBody,
+                  scheduledTime: time);
               Navigator.pop(context);
               ToastUtil.show(
                   ToastDecorator(
@@ -236,6 +241,9 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             await context
                 .read<ClassesRepository>()
                 .removeUserFromClass(widget.currentClass.id, data);
+            removeNotification(
+                notifsPlugin: flutterLocalNotificationsPlugin,
+                notificationId: widget.listOfHours[widget.index].hashCode);
             Navigator.pop(context);
             ToastUtil.show(
                 ToastDecorator(
