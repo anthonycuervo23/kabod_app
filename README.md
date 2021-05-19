@@ -5,6 +5,12 @@
 
 A working Gym Management written in Flutter using Firebase auth,firestore database and storage.
 
+## NOTE: 
+* This app was intentionally created to be used in a specific crossfit called [![@CrossFitKabod](https://www.instagram.com/crossfitkabod/)
+* . If you want to use the application you must enter with the following credentials: 
+* user: test@email.com 
+* password: test123
+
 
 ## Download App
 [![Get it from iTunes](https://lisk.io/sites/default/files/pictures/2020-01/download_on_the_app_store_badge.svg)](https://apps.apple.com/us/app/crossfit-kabod/id1567053900)
