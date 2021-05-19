@@ -66,7 +66,7 @@ class _AddWodFormState extends State<AddWodForm> {
                         : Provider.of<MainScreenModel>(context, listen: false)
                                 .selectedDate ??
                             DateTime.now(),
-                    lastDate: DateTime.now());
+                    lastDate: DateTime(2030, 12, 24));
               },
               onChanged: (newValue) {
                 setState(() {
