@@ -227,13 +227,7 @@ class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
                                   itemBuilder: (context, index) {
                                     print(index);
                                     if (index >= 1) {
-                                      print('Greater than 1');
-                                      if (_filteredList[index].rounds ==
-                                          _filteredList[index - 1].rounds) {
-                                        print('Same');
-                                      } else {
-                                        i++;
-                                      }
+                                      i++;
                                     }
                                     return InkWell(
                                       onTap: _filteredList[index].photoUrl ==

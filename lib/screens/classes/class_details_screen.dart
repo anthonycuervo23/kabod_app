@@ -111,9 +111,10 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        widget.listOfHours[widget.index].hour != 12
-                            ? S.of(context).crossfitClass
-                            : 'Open Box',
+                        widget.listOfHours[widget.index].hour == 11 ||
+                                widget.listOfHours[widget.index].hour == 10
+                            ? 'Open Box'
+                            : S.of(context).crossfitClass,
                         style: TextStyle(fontSize: 24, color: kWhiteTextColor),
                       ),
                       Text(
@@ -169,6 +170,20 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
     );
   }
 
+  addClassToCount(userRepository) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userRepository.user.uid)
+        .update({'totalClasses': userRepository.userModel.totalClasses + 1});
+  }
+
+  deleteClassToCount(userRepository) async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userRepository.user.uid)
+        .update({'totalClasses': userRepository.userModel.totalClasses - 1});
+  }
+
   Widget bookingOrCancelButton() {
     final UserRepository userRepository = Provider.of<UserRepository>(context);
     final bool userSubscribed = _isAthleteSubscribe(userRepository.user.uid);
@@ -205,6 +220,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
                   title: S.of(context).notificationTitle,
                   body: S.of(context).notificationBody,
                   scheduledTime: time);
+              addClassToCount(userRepository);
               Navigator.pop(context);
               ToastUtil.show(
                   ToastDecorator(
@@ -244,6 +260,7 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
             removeNotification(
                 notifsPlugin: flutterLocalNotificationsPlugin,
                 notificationId: widget.listOfHours[widget.index].hashCode);
+            deleteClassToCount(userRepository);
             Navigator.pop(context);
             ToastUtil.show(
                 ToastDecorator(

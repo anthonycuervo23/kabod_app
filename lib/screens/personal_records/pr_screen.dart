@@ -147,7 +147,7 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                             return filterExerciseList.length > 0
                                 ? ExercisesList(
                                     exercises: filterExerciseList,
-                                    fetch: loadList())
+                                    fetch: _future)
                                 : Text(S.of(context).noExercise);
                           }
                       }

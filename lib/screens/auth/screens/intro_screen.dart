@@ -144,6 +144,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                 data['birth_date'] =
                                     (data['birth_date'] as DateTime)
                                         .millisecondsSinceEpoch;
+                                data['totalClasses'] = 0;
                                 data['photo_url'] =
                                     'https://res.cloudinary.com/drhs1q5p3/image/upload/v1621001103/profile_image_vvtpvb.jpg';
                                 await introScreenProvider.addProfileInfo(
@@ -169,6 +170,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                 data['birth_date'] =
                                     (data['birth_date'] as DateTime)
                                         .millisecondsSinceEpoch;
+                                data['totalClasses'] = 0;
                                 _uploadedFileURL = await introScreenProvider
                                     .uploadFile(path, _image);
                                 data['photo_url'] = _uploadedFileURL;

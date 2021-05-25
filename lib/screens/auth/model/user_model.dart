@@ -12,6 +12,7 @@ class UserModel {
   String photoUrl;
   DateTime birthDate;
   bool introSeen;
+  int totalClasses;
 
   UserModel(
       {this.id,
@@ -24,6 +25,7 @@ class UserModel {
       this.lastLoggedIn,
       this.registrationDate,
       this.photoUrl,
+      this.totalClasses,
       this.introSeen});
 
   UserModel.fromMap(String id, Map<String, dynamic> data) {
@@ -37,6 +39,7 @@ class UserModel {
     lastLoggedIn = data['last_logged_in']?.toDate();
     registrationDate = data['registration_date']?.toDate();
     photoUrl = data['photo_url'];
+    totalClasses = data['totalClasses'];
     introSeen = data['intro_seen'];
   }
 
@@ -51,6 +54,7 @@ class UserModel {
     lastLoggedIn = snapshot['last_logged_in']?.toDate();
     registrationDate = snapshot['registration_date']?.toDate();
     photoUrl = snapshot['photo_url'];
+    totalClasses = snapshot['totalClasses'];
     introSeen = snapshot['intro_seen'];
   }
 
@@ -66,6 +70,7 @@ class UserModel {
     data['last_logged_in'] = lastLoggedIn;
     data['registration_date'] = registrationDate;
     data['photo_url'] = photoUrl;
+    data['totalClasses'] = totalClasses;
     data['intro_seen'] = introSeen;
     return data;
   }

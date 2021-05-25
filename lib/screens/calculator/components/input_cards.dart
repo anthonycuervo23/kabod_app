@@ -37,7 +37,7 @@ class _TextInputCardState extends State<TextInputCard>
   void dispose() {
     super.dispose();
     _controller.dispose();
-    _focus.dispose();
+    _focus?.dispose();
   }
 
   @override

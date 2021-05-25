@@ -1,6 +1,13 @@
 DateTime beginningOfDay(date) =>
     DateTime(date.year, date.month, date.day, 0, 0, 0);
 
+DateTime firstDayOfMonth(date) => DateTime(date.year, date.month + 1);
+//
+// DateTime lastDayOfMonth =
+// new DateTime(now.year, now.month + 1, 0);
+// DateTime firstDayOfMonth = new DateTime(now.year, now.month + 1);
+//
+
 List<DateTime> dateTimeFromStrings(List<String> listOfClasses) {
   List<DateTime> listOfHours = [];
   for (int i = 0; i < listOfClasses.length; i++) {

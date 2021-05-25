@@ -507,7 +507,6 @@ class ChatScreenState extends State<ChatScreen> {
   }
 
   readLocal() async {
-    print(myId);
     FirebaseFirestore.instance
         .collection('users')
         .doc(myId)

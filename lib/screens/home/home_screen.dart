@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/generated/l10n.dart';
@@ -188,8 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
         style: TextStyle(fontSize: 20),
         textAlign: TextAlign.center,
       ));
-    } else if (selectedClasses[0].classDate.weekday == 6 ||
-        selectedClasses[0].classDate.weekday == 7) {
+    } else if (selectedClasses[0].classDate.weekday == 7) {
       return Center(
           child: Text(
         S.of(context).noClassesToday,
@@ -241,9 +241,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     Flexible(
                       child: ListTile(
                         title: Text(
-                          listOfHours[index].hour != 11
-                              ? S.of(context).crossfitClass
-                              : 'Open Box',
+                          listOfHours[index].hour == 11 ||
+                                  listOfHours[index].hour == 10
+                              ? 'Open Box'
+                              : S.of(context).crossfitClass,
                           style:
                               TextStyle(fontSize: 24, color: kWhiteTextColor),
                           textAlign: TextAlign.center,
@@ -289,9 +290,43 @@ class _HomeScreenState extends State<HomeScreen> {
         .where(
             (element) => mainScreenModel.selectedDate.day == element.date.day)
         .toList();
-
-    if (mainScreenModel.selectedDate.weekday == 6 ||
-        mainScreenModel.selectedDate.weekday == 7) {
+    if (Provider.of<UserRepository>(context, listen: false).userModel.admin ==
+        true) {
+      return Expanded(
+        child: ListView.builder(
+          shrinkWrap: true,
+          physics: AlwaysScrollableScrollPhysics(),
+          itemCount: selectedWods.length,
+          itemBuilder: (BuildContext context, int index) {
+            Wod wod = selectedWods[index];
+            print(index);
+            return DefaultCard(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ListTileTheme(
+                    contentPadding: EdgeInsets.all(0),
+                    child: ListTile(
+                      title: Text(wod.title,
+                          style:
+                              TextStyle(fontSize: 24, color: kWhiteTextColor)),
+                      subtitle: Text(wod.type, style: TextStyle(fontSize: 18)),
+                      trailing: Container(
+                          width: 100,
+                          height: 100,
+                          child: PopupWodMenu(currentWod: wod)),
+                    ),
+                  ),
+                  DividerSmall(),
+                  Text(wod.description, style: TextStyle(fontSize: 20)),
+                  DividerSmall(),
+                ],
+              ),
+            );
+          },
+        ),
+      );
+    } else if (mainScreenModel.selectedDate.weekday == 7) {
       return RestDayMessage();
     } else if (mainScreenModel.selectedDate.isBefore(firstDate)) {
       return Center(
