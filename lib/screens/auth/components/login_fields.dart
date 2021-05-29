@@ -14,6 +14,7 @@ class LoginField extends StatefulWidget {
   FocusNode focusNode;
   VoidCallback onEditingComplete;
   final Function validator;
+  final TextInputType inputType;
   final Function onPressed;
   final TextEditingController controller;
   LoginField(
@@ -22,6 +23,7 @@ class LoginField extends StatefulWidget {
       this.isPassword = true,
       this.isSecure = false,
       this.key,
+      this.inputType,
       this.textInputAction,
       this.focusNode,
       this.controller,
@@ -42,6 +44,7 @@ class _LoginFieldState extends State<LoginField> {
       onEditingComplete: widget.onEditingComplete,
       focusNode: !widget.isPassword ? null : widget.focusNode,
       validator: widget.validator,
+      keyboardType: widget.inputType,
       controller: widget.controller,
       obscureText: widget.isSecure,
       style: TextStyle(fontSize: 16),

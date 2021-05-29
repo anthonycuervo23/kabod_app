@@ -53,6 +53,7 @@ class _GetLoginFormState extends State<GetLoginForm> {
                   labelText: 'E-Mail',
                   hintText: S.of(context).loginFormHintEmail,
                   isPassword: false,
+                  inputType: TextInputType.emailAddress,
                   textInputAction: TextInputAction.next,
                   onEditingComplete: () =>
                       FocusScope.of(context).requestFocus(_passwordField),

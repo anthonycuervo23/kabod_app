@@ -46,6 +46,7 @@ class ShowSubscribedUsers extends StatelessWidget {
               Text(
                 user.name,
                 style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.center,
               ),
             ],
           );
