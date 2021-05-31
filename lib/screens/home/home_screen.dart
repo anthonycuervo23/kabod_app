@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/generated/l10n.dart';
+import 'package:kabod_app/screens/commons/customUrlText.dart';
 import 'package:provider/provider.dart';
 
 // my imports
@@ -334,7 +335,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   DividerSmall(),
-                  Text(wod.description, style: TextStyle(fontSize: 20)),
+                  UrlText(
+                      text: wod.description, style: TextStyle(fontSize: 20)),
                   DividerSmall(),
                 ],
               ),
@@ -389,7 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   DividerSmall(),
-                  Text(wod.description, style: TextStyle(fontSize: 20)),
+                  UrlText(
+                      text: wod.description, style: TextStyle(fontSize: 20)),
                   DividerSmall(),
                 ],
               ),

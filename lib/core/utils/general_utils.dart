@@ -1,3 +1,5 @@
+import 'package:url_launcher/url_launcher.dart';
+
 DateTime beginningOfDay(date) =>
     DateTime(date.year, date.month, date.day, 0, 0, 0);
 
@@ -85,4 +87,12 @@ String formatTime(Duration duration) {
   String minutes = (duration.inMinutes).toString().padLeft(2, '0');
   String seconds = (duration.inSeconds % 60).toString().padLeft(2, '0');
   return '$minutes:$seconds';
+}
+
+launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    print('Could not launch $url');
+  }
 }
