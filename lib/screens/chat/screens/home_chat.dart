@@ -266,20 +266,8 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     configLocalNotification();
     getNotification();
 
-    getToken();
+    // getToken();
     super.initState();
-  }
-
-  getToken() async {
-    String token = await FirebaseMessaging.instance.getToken().then((token) {
-      print('token: $token');
-      FirebaseFirestore.instance
-          .collection('users')
-          .doc(myUserId)
-          .update({'pushToken': token});
-    }).catchError((err) {
-      Fluttertoast.showToast(msg: err.message.toString());
-    });
   }
 
   @override

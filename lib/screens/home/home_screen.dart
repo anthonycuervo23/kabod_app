@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/generated/l10n.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     today = DateTime.now();
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
+    getToken();
+    FirebaseMessaging.instance.subscribeToTopic('generalNotification');
+  }
+
+  getToken() async {
+    String token = await FirebaseMessaging.instance.getToken().then((token) {
+      print('token: $token');
+      FirebaseFirestore.instance
+          .collection('users')
+          .doc(Provider.of<UserRepository>(context, listen: false).user.uid)
+          .update({'pushToken': token});
+    }).catchError((err) {
+      Fluttertoast.showToast(msg: err.message.toString());
+    });
   }
 
   @override
