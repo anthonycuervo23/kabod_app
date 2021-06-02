@@ -17,6 +17,24 @@ class UrlText extends StatelessWidget {
     Iterable<Match> _matches = reg.allMatches(text);
     List<_ResultMatch> resultMatches = [];
     int start = 0;
+    // _matches.where((match) {
+    //   if (match.group(0).isEmpty) {
+    //     return false;
+    //   }
+    //   return true;
+    // }).map((match) {
+    //   if (start != match.start) {
+    //     _ResultMatch result1 = _ResultMatch();
+    //     result1.isUrl = false;
+    //     result1.text = text.substring(start, match.start);
+    //     resultMatches.add(result1);
+    //   }
+    //   _ResultMatch result2 = _ResultMatch();
+    //   result2.isUrl = true;
+    //   result2.text = match.group(0);
+    //   resultMatches.add(result2);
+    //   start = match.end;
+    // });
     for (Match match in _matches) {
       if (match.group(0).isNotEmpty) {
         if (start != match.start) {
@@ -25,7 +43,6 @@ class UrlText extends StatelessWidget {
           result1.text = text.substring(start, match.start);
           resultMatches.add(result1);
         }
-
         _ResultMatch result2 = _ResultMatch();
         result2.isUrl = true;
         result2.text = match.group(0);
