@@ -135,13 +135,14 @@ class MyApp extends StatelessWidget {
               .millisecondsSinceEpoch;
           DateTime firstDate =
               beginningOfDay(DateTime(today.year, today.month, 1));
+          DateTime lastDate = endOfDay(lastDayOfMonth(today));
           Stream<List<Classes>> _classesStream =
               ClassesRepository(FirebaseFirestore.instance)
                   .getClassesOfTheDay(firstDayOfTheWeek, lastDayOfTheWeek);
           Stream<List<Wod>> _wodsStream =
               WodRepository(FirebaseFirestore.instance).getWods(
                   firstDate.millisecondsSinceEpoch,
-                  today.millisecondsSinceEpoch);
+                  lastDate.millisecondsSinceEpoch);
           return MainScreenModel(
               selectedDate: DateTime.now(),
               wodStream: _wodsStream,
