@@ -53,12 +53,13 @@ class Result {
         wodType = data['wod_type'],
         userPhoto = data['user_photo'],
         userName = data['user_name'],
-        userId = data['user_id'],
+        userId = data['userId'],
         gender = data['gender'],
         id = id;
 
   factory Result.fromFireStore(DocumentSnapshot doc) {
     Map data = doc.data();
+    print(data['result_date'].runtimeType);
     return Result(
       id: doc.id,
       time: durationFromString(data['time']),
@@ -74,8 +75,12 @@ class Result {
       wodType: data['wod_type'],
       userPhoto: data['user_photo'],
       userName: data['user_name'],
-      userId: data['user_id'],
+      userId: data['userId'],
       gender: data['gender'],
     );
+  }
+  @override
+  String toString() {
+    return 'Result{time: $time, reps: $reps, rounds: $rounds, date: $date , ${date.millisecondsSinceEpoch}, id: $id, weight: $weight, customScore: $customScore, wodType: $wodType, rx: $rx, comment: $comment, photoUrl: $photoUrl, userId: $userId, wodName: $wodName, gender: $gender, userName: $userName, userPhoto: $userPhoto}';
   }
 }

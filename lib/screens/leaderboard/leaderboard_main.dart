@@ -1,0 +1,444 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
+
+//My Imports
+import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
+import 'package:kabod_app/navigationDrawer/main_drawer.dart';
+import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/commons/dividers.dart';
+import 'package:kabod_app/screens/leaderboard/components/leaderboard_cards.dart';
+import 'package:kabod_app/screens/results/model/results_model.dart';
+
+class LeaderBoardScreen extends StatefulWidget {
+  @override
+  _LeaderBoardScreenState createState() => _LeaderBoardScreenState();
+}
+
+class _LeaderBoardScreenState extends State<LeaderBoardScreen> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  List<String> allWodNames = [];
+  String _dropDownGender;
+  DateTime _dropDownDate;
+  String _dropDownWodName;
+  bool disableWodName = true;
+  bool disableGender = true;
+  List<Result> _filteredList = [];
+
+  Future<List<Result>> _getListFiltered(
+      DateTime selectedDate, String wodName, String gender) async {
+    List<Result> allResultsList = [];
+    Query query = FirebaseFirestore.instance.collection("results");
+    if (selectedDate != null) {
+      query = query.where('result_date',
+          isEqualTo: selectedDate.millisecondsSinceEpoch);
+      if (wodName != null) {
+        query = query.where('wod_name', isEqualTo: wodName);
+
+        if (gender != null) query = query.where('gender', isEqualTo: gender);
+      }
+    } else
+      query = query.orderBy('result_date', descending: true);
+
+    return await query.get().then((value) {
+      value.docs.forEach((item) {
+        allWodNames.add(item.data()['wod_name']);
+        allResultsList.add(Result.fromFireStore(item));
+      });
+
+      if (_dropDownWodName != null)
+        allResultsList.sort((item2, item1) {
+          return (item1.rounds != null &&
+                  item2.rounds != null &&
+                  item1.rounds != item2.rounds)
+              ? item1.rounds.compareTo(item2.rounds)
+              : (item1.weight != null &&
+                      item2.weight != null &&
+                      item1.weight != item2.weight)
+                  ? int.parse(item1.weight).compareTo(int.parse(item2.weight))
+                  : (item1.time != item2.time)
+                      ? item2.time.compareTo(item1.time)
+                      : (item1.reps != null &&
+                              item2.reps != null &&
+                              item1.reps != item2.reps)
+                          ? item1.reps.compareTo(item2.reps)
+                          : (item1.customScore != null &&
+                                  item2.customScore != null &&
+                                  item1.customScore != item2.customScore)
+                              ? int.parse(item1.customScore)
+                                  .compareTo(int.parse(item2.customScore))
+                              : item1.date.isAfter(item2.date)
+                                  ? 1
+                                  : -1;
+        });
+      return allResultsList;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    TextStyle kNameStyle = TextStyle(fontSize: 20, color: Colors.white);
+    TextStyle medalSize = TextStyle(fontSize: 40);
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: MyAppBar(
+          scaffoldKey: _scaffoldKey,
+          shape: kAppBarShape,
+          title: Text(
+            S.of(context).appBarLeaderBoard,
+            style: TextStyle(
+                color: kTextColor, fontSize: 30.0, fontWeight: FontWeight.bold),
+          ),
+        ),
+        drawer: Theme(
+          data: Theme.of(context).copyWith(canvasColor: Colors.transparent),
+          child: MyDrawer(AppRoutes.leaderBoardRoute),
+        ),
+        body: FutureBuilder(
+          future: _getListFiltered(
+              _dropDownDate, _dropDownWodName, _dropDownGender),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) _filteredList = snapshot.data;
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Flexible(
+                  child: Column(
+                    children: [
+                      Container(
+                        height: size.height * 0.3,
+                        child: Stack(
+                          children: [
+                            Container(
+                              height: size.height * 0.3 - 27,
+                              decoration: BoxDecoration(
+                                color: kPrimaryColor,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(20),
+                                  bottomRight: Radius.circular(20),
+                                ),
+                              ),
+                            ),
+                            Positioned(
+                              child: Column(
+                                children: [
+                                  getWodDateDropdown(),
+                                  getWodNameDropdown(disableWodName),
+                                  getGenderDropdown(disableGender),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      DividerSmall(),
+                      if (snapshot.connectionState == ConnectionState.done)
+                        if (snapshot.hasData)
+                          (_filteredList.isEmpty
+                              /*? Center(
+                          child: Text(
+                            S
+                                .of(context)
+                                .enterFilters,
+                            style: TextStyle(fontSize: 24),
+                            textAlign: TextAlign.center,
+                          ))
+                          : _filteredList.length == 0 && firstTime == false*/
+                              ? Column(
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        S.of(context).noScoreWithFilter,
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                    ),
+                                    DividerBig(),
+                                    Image.asset('assets/images/search_icon.png')
+                                  ],
+                                )
+                              : Expanded(
+                                  child: ListView.builder(
+                                      itemCount: _filteredList.length,
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          key: ObjectKey(_filteredList[index]),
+                                          onTap: _filteredList[index]
+                                                      .photoUrl ==
+                                                  null
+                                              ? null
+                                              : () => Navigator.pushNamed(
+                                                  context,
+                                                  AppRoutes.pictureDetailsRoute,
+                                                  arguments:
+                                                      _filteredList[index]
+                                                          .photoUrl),
+                                          child: LeaderBoardCard(
+                                            userName: Text(
+                                                _filteredList[index].userName,
+                                                style: kNameStyle),
+                                            score: (_filteredList[index].rounds ==
+                                                        null &&
+                                                    _filteredList[index].time ==
+                                                        Duration() &&
+                                                    _filteredList[index]
+                                                            .customScore ==
+                                                        null)
+                                                ? '${_filteredList[index].weight} lb'
+                                                : (_filteredList[index].time ==
+                                                            Duration() &&
+                                                        _filteredList[index]
+                                                                .customScore ==
+                                                            null)
+                                                    ? S.of(context).roundsAndReps(
+                                                        _filteredList[index]
+                                                            .rounds,
+                                                        _filteredList[index]
+                                                            .reps)
+                                                    : (_filteredList[index].time !=
+                                                            Duration())
+                                                        ? stringFromDuration(
+                                                            _filteredList[index]
+                                                                .time)
+                                                        : _filteredList[index]
+                                                            .customScore,
+                                            type: new Text(
+                                                _filteredList[index].rx == true
+                                                    ? 'RX'
+                                                    : S.of(context).scale,
+                                                style: _filteredList[index]
+                                                            .rx ==
+                                                        true
+                                                    ? TextStyle(
+                                                        fontSize: 18,
+                                                        color: kButtonColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontStyle:
+                                                            FontStyle.italic)
+                                                    : TextStyle(
+                                                        fontSize: 14,
+                                                        color: kTextColor,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontStyle:
+                                                            FontStyle.italic)),
+                                            place: _dropDownWodName != null
+                                                ? index == 0
+                                                    ? Text("🥇",
+                                                        style: medalSize)
+                                                    : index == 1
+                                                        ? Text(
+                                                            "🥈",
+                                                            style: medalSize,
+                                                          )
+                                                        : index == 2
+                                                            ? Text(
+                                                                "🥉",
+                                                                style:
+                                                                    medalSize,
+                                                              )
+                                                            : SizedBox(
+                                                                height: 50)
+                                                : SizedBox(height: 50),
+                                            comment:
+                                                _filteredList[index].comment !=
+                                                        null
+                                                    ? Text(_filteredList[index]
+                                                        .comment)
+                                                    : Container(),
+                                            picture: _filteredList[index]
+                                                        .userPhoto !=
+                                                    null
+                                                ? CachedNetworkImageProvider(
+                                                    _filteredList[index]
+                                                        .userPhoto,
+                                                  )
+                                                : null,
+                                            pictureIcon: _filteredList[index]
+                                                        .userPhoto ==
+                                                    null
+                                                ? FaIcon(
+                                                    FontAwesomeIcons.user,
+                                                    color: kWhiteTextColor,
+                                                    size: MediaQuery.of(context)
+                                                            .size
+                                                            .width *
+                                                        0.1,
+                                                  )
+                                                : Container(),
+                                            commentPhoto:
+                                                _filteredList[index].photoUrl !=
+                                                        null
+                                                    ? FaIcon(
+                                                        FontAwesomeIcons.image,
+                                                        size: 20,
+                                                        color: kTextColor,
+                                                      )
+                                                    : Container(),
+                                          ),
+                                        );
+                                      }),
+                                ))
+                        else if (snapshot.hasError)
+                          Container(),
+                    ],
+                  ),
+                )
+              ],
+            );
+          },
+        ));
+  }
+
+  Widget getWodDateDropdown() {
+    final format = DateFormat("EEEE d MMMM, y");
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: kButtonColor, width: 1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: DateTimeField(
+          decoration: (InputDecoration(
+              suffixIcon: Icon(
+                Icons.arrow_drop_down,
+                color: Colors.white70,
+                size: 35,
+              ),
+              hintStyle: TextStyle(
+                  color: kTextColor, fontSize: 18, fontWeight: FontWeight.bold),
+              hintText: S.of(context).selectDay)),
+          style: TextStyle(
+            fontSize: 18,
+            color: kWhiteTextColor,
+          ),
+          format: format,
+          onShowPicker: (context, currentValue) {
+            return showDatePicker(
+                context: context,
+                firstDate: DateTime(2021, 3, 21),
+                initialDate: currentValue ?? DateTime.now(),
+                lastDate: DateTime.now());
+          },
+          onChanged: (newValue) {
+            setState(() {
+              allWodNames = [];
+              _dropDownDate = newValue;
+              disableWodName = false;
+              _dropDownWodName = null;
+              _dropDownGender = null;
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget getWodNameDropdown(enableDropDown) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: kButtonColor, width: 1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: IgnorePointer(
+          ignoring: enableDropDown,
+          child: DropdownButton(
+            items: allWodNames
+                    .toSet()
+                    ?.map<DropdownMenuItem>(
+                      (wodName) => DropdownMenuItem(
+                        child: Text(wodName),
+                        value: '$wodName',
+                      ),
+                    )
+                    ?.toList() ??
+                [],
+            onChanged: (newValue) {
+              setState(() {
+                disableGender = false;
+                _dropDownWodName = newValue;
+                _dropDownGender = null;
+              });
+            },
+            isExpanded: true,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 36,
+            underline: SizedBox(),
+            hint: Text(
+              S.of(context).wodNameFilter,
+              style: TextStyle(
+                  color: kTextColor, fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            dropdownColor: kBackgroundColor,
+            style: TextStyle(color: kWhiteTextColor, fontSize: 18),
+            //isExpanded: true,
+            value: _dropDownWodName,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget getGenderDropdown(enableDropDown) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      child: Container(
+        padding: EdgeInsets.only(left: 16, right: 16),
+        decoration: BoxDecoration(
+          border: Border.all(color: kButtonColor, width: 1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: IgnorePointer(
+          ignoring: enableDropDown,
+          child: DropdownButton<String>(
+            value: _dropDownGender,
+            onChanged: (String newValue) {
+              setState(() {
+                if (newValue == "Todo") {
+                  _dropDownGender = null;
+                } else {
+                  _dropDownGender = newValue;
+                }
+              });
+            },
+            items: <String>[
+                  'Todo',
+                  'Masculino',
+                  'Femenino',
+                ].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                })?.toList() ??
+                [],
+            isExpanded: true,
+            icon: Icon(Icons.arrow_drop_down),
+            iconSize: 36,
+            underline: SizedBox(),
+            hint: Text(
+              S.of(context).filterGender,
+              style: TextStyle(
+                  color: kTextColor, fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            dropdownColor: kBackgroundColor,
+            style: TextStyle(color: kWhiteTextColor, fontSize: 18),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -29,9 +29,10 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
   Future loadList() {
     Future<List<Exercise>> futureExercises = api.getExercises();
     futureExercises.then((exercisesList) {
-      setState(() {
-        this.filterExerciseList = this.exercisesList = exercisesList;
-      });
+      if (mounted)
+        setState(() {
+          this.filterExerciseList = this.exercisesList = exercisesList;
+        });
     });
     return futureExercises;
   }
@@ -144,6 +145,9 @@ class _PersonalRecordsScreenState extends State<PersonalRecordsScreen> {
                               style: TextStyle(fontSize: 24),
                             ));
                           } else {
+                            filterExerciseList.forEach((element) => element
+                                .results
+                                .forEach((element) => print(element)));
                             return filterExerciseList.length > 0
                                 ? ExercisesList(
                                     exercises: filterExerciseList,

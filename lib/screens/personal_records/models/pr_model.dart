@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 class Exercise {
   final String id;
   final String uid;
@@ -43,5 +45,10 @@ class Result {
       comment: parsedJson['comment'],
       createdAt: parsedJson['createdAt'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'Result{id: $id, weight: $weight, reps: $reps, time: $time, comment: $comment, createdAt: $createdAt}';
   }
 }

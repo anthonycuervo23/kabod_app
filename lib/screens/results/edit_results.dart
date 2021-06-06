@@ -8,12 +8,11 @@ import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/results/components/delete_result_button.dart';
 import 'package:kabod_app/screens/results/model/results_model.dart';
-import 'package:kabod_app/screens/wods/model/wod_model.dart';
 
 class EditResultScreen extends StatelessWidget {
   final Result currentResult;
-  final Wod currentWod;
-  EditResultScreen({this.currentResult, this.currentWod});
+
+  EditResultScreen({this.currentResult});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,10 +34,10 @@ class EditResultScreen extends StatelessWidget {
         child: ListView(
           children: [
             DividerBig(),
-            Text(S.of(context).wodNameResult(currentWod.title),
+            Text(S.of(context).wodNameResult(currentResult.wodName),
                 style: TextStyle(fontSize: 26)),
             Text(S.of(context).wodDateResult(
-                DateFormat('EEEE, d MMMM').format(currentWod.date))),
+                DateFormat('EEEE, d MMMM').format(currentResult.date))),
             DividerBig(),
             currentResult.rx == true
                 ? Text('RX',

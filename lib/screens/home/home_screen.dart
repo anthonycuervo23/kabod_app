@@ -3,25 +3,26 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/core/model/main_screen_model.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
-import 'package:kabod_app/screens/commons/customUrlText.dart';
-import 'package:provider/provider.dart';
 
 // my imports
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
-import 'package:kabod_app/core/repository/user_repository.dart';
-import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
-import 'package:kabod_app/core/model/main_screen_model.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/wods/model/wod_model.dart';
+import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/commons/customUrlText.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
-import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/screens/home/components/main_calendar.dart';
 import 'package:kabod_app/screens/home/components/popup_menu.dart';
-import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime today;
   DateTime firstDate;
+  List<Result> results = [];
 
   @override
   void initState() {
@@ -307,8 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .where(
             (element) => mainScreenModel.selectedDate.day == element.date.day)
         .toList();
-    if (Provider.of<UserRepository>(context, listen: false).userModel.admin ==
-        true) {
+    if (Provider.of<UserRepository>(context, listen: false).userModel.admin) {
       return Expanded(
         child: ListView.builder(
           shrinkWrap: true,
@@ -331,7 +332,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       trailing: Container(
                           width: 100,
                           height: 100,
-                          child: PopupWodMenu(currentWod: wod)),
+                          child: PopupWodMenu(
+                            currentWod: wod,
+                          )),
                     ),
                   ),
                   DividerSmall(),

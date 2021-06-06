@@ -3,31 +3,24 @@ import 'package:intl/intl.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 import 'package:kabod_app/service/api_service.dart';
 
-class ResultDetailWidget extends StatefulWidget {
-  const ResultDetailWidget(
-      {Key key, @required this.results, this.selectedExercise, this.index})
+class ResultDetailWidget extends StatelessWidget {
+  ResultDetailWidget(
+      {Key key, @required this.result, this.index, this.onDelete, this.onEdit})
       : super(key: key);
 
-  final List<Result> results;
-  final Exercise selectedExercise;
+  final Result result;
   final int index;
-
-  @override
-  _ResultDetailWidgetState createState() => _ResultDetailWidgetState();
-}
-
-class _ResultDetailWidgetState extends State<ResultDetailWidget> {
-  _ResultDetailWidgetState();
+  final Function(int) onDelete;
+  final Function(int) onEdit;
 
   final ApiService api = ApiService();
-  Duration duration = Duration();
+  final Duration duration = Duration();
 
   @override
   Widget build(BuildContext context) {
@@ -39,37 +32,29 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
           children: [
             DividerMedium(),
             Text(
-                widget.results[widget.index].createdAt != null
+                result.createdAt != null
                     ? DateFormat('MMMM d, y').format(
-                        DateTime.fromMillisecondsSinceEpoch(
-                            widget.results[widget.index].createdAt))
+                        DateTime.fromMillisecondsSinceEpoch(result.createdAt))
                     : 'No Date',
                 style: TextStyle(
                     color: kWhiteTextColor,
                     fontWeight: FontWeight.bold,
                     fontSize: 22)),
             DividerSmall(),
-            durationFromString(widget.results[widget.index].time) != duration
-                ? Text(S.of(context).prTime(widget.results[widget.index].time),
+            durationFromString(result.time) != duration
+                ? Text(S.of(context).prTime(result.time),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
-            widget.results[widget.index].reps != null
-                ? Text(
-                    S
-                        .of(context)
-                        .prReps(widget.results[widget.index].reps.toString()),
+            result.reps != null
+                ? Text(S.of(context).prReps(result.reps.toString()),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
-            widget.results[widget.index].weight != null
-                ? Text(
-                    S.of(context).prWeight(widget.results[widget.index].weight),
+            result.weight != null
+                ? Text(S.of(context).prWeight(result.weight),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
-            widget.results[widget.index].comment != ''
-                ? Text(
-                    S
-                        .of(context)
-                        .prComment(widget.results[widget.index].comment),
+            result.comment != ''
+                ? Text(S.of(context).prComment(result.comment),
                     style: TextStyle(color: kWhiteTextColor, fontSize: 18))
                 : Container(),
             ButtonTheme(
@@ -78,75 +63,17 @@ class _ResultDetailWidgetState extends State<ResultDetailWidget> {
                   TextButton(
                     child: Text(S.of(context).editButton,
                         style: TextStyle(color: kWhiteTextColor)),
-                    onPressed: () {
-                      print(widget.results.length);
-                      Navigator.pushNamed(context, AppRoutes.editResultRoute,
-                          arguments: [
-                            widget.results[widget.index],
-                            widget.selectedExercise
-                          ]);
-                    },
+                    onPressed: () => onEdit(index),
                   ),
                   TextButton(
                     child: Text(S.of(context).deleteButton,
                         style: TextStyle(color: kWhiteTextColor)),
-                    onPressed: () {
-                      _confirmDeleteDialog();
-                    },
-                  ),
+                    onPressed: () => onDelete(index),
+                  )
                 ],
               ),
             ),
           ]),
-    );
-  }
-
-  Future<void> _confirmDeleteDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: kBackgroundColor,
-          title: Text(
-            S.of(context).warning,
-            style: TextStyle(
-                color: kButtonColor, fontSize: 30, fontWeight: FontWeight.bold),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: [
-                Text(S.of(context).confirmDialog),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              child: Text(
-                S.of(context).yes,
-                style: TextStyle(color: kTextColor, fontSize: 18),
-              ),
-              onPressed: () async {
-                await api.deleteResult(widget.results[widget.index].id);
-                setState(() {
-                  widget.results.removeAt(widget.index);
-                });
-                int count = 0;
-                Navigator.of(context).popUntil((_) => count++ >= 2);
-              },
-            ),
-            TextButton(
-              child: const Text(
-                'No',
-                style: TextStyle(color: kTextColor, fontSize: 18),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

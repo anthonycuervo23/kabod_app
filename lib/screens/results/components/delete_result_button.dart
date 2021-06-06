@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/repository/results_repository.dart';
-import 'package:kabod_app/core/repository/user_repository.dart';
 
 class DeleteResultButton extends StatelessWidget {
   final String currentResultId;
@@ -55,9 +54,7 @@ class DeleteResultButton extends StatelessWidget {
             ) ??
             false;
         if (confirm) {
-          await context.read<ResultRepository>().deleteResult(
-              Provider.of<UserRepository>(context, listen: false).user.uid,
-              currentResultId);
+          await context.read<ResultRepository>().deleteResult(currentResultId);
           Navigator.pop(context);
         }
       },

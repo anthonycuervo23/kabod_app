@@ -23,6 +23,7 @@ class LeaderBoardCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      key: UniqueKey(),
       margin: const EdgeInsets.symmetric(
         vertical: 16.0,
         horizontal: 24.0,
