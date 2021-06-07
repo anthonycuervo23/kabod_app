@@ -1,11 +1,8 @@
-import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //My imports
@@ -13,7 +10,6 @@ import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/chat_repository.dart';
 import 'package:kabod_app/generated/l10n.dart';
-import 'package:kabod_app/main.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/chat/screens/chat_room.dart';
@@ -28,9 +24,6 @@ class HomeChatScreen extends StatefulWidget {
 
 class _HomeChatScreenState extends State<HomeChatScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   bool isSearching = false;
   String myName, myProfilePic, myUserId, myEmail;
   Stream chatRoomsStream;
@@ -208,68 +201,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     getChatRooms();
   }
 
-  void configLocalNotification() {
-    var initializationSettingsAndroid =
-        new AndroidInitializationSettings('notification_image');
-    var initializationSettingsIOS =
-        new IOSInitializationSettings(requestAlertPermission: true);
-    var initializationSettings = new InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future<void> getNotification() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (message.data != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          message.data.hashCode,
-          message.data['title'],
-          message.data['body'],
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              //      one that already exists in example app.
-              icon: 'launch_background',
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // notification = message.data;
-      AndroidNotification android = message.notification?.android;
-      if (message.data != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          message.data.hashCode,
-          message.data['title'],
-          message.data['body'],
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              icon: '@drawable/notification_image',
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
-  }
-
   @override
   void initState() {
     athleteNameController.addListener(_onSearchChanged);
     onScreenLoaded();
-    configLocalNotification();
-    getNotification();
-
-    // getToken();
     super.initState();
   }
 

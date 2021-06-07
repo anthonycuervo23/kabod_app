@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/screens/personal_records/components/exercisesList.dart';
 import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
-import 'package:kabod_app/screens/personal_records/pr_results_screen.dart';
 
 void main() {
   testWidgets('make sure we render exercise list', (WidgetTester tester) async {

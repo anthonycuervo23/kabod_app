@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kabod_app/core/model/main_screen_model.dart';
@@ -9,6 +12,7 @@ import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
 import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
+import 'package:kabod_app/main.dart';
 
 // my imports
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
@@ -34,6 +38,74 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime today;
   DateTime firstDate;
   List<Result> results = [];
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('notification_image');
+    var initializationSettingsIOS =
+        new IOSInitializationSettings(requestAlertPermission: true);
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> getNotification() async {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      if (message != null) {
+        Navigator.pushNamed(context, AppRoutes.chatRoute);
+      }
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+          payload: jsonEncode(message),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // notification = message.data;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              icon: '@drawable/notification_image',
+            ),
+          ),
+          payload: jsonEncode(message),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Navigator.pushNamed(context, AppRoutes.chatRoute);
+    });
+  }
 
   @override
   void initState() {
@@ -42,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
     getToken();
     FirebaseMessaging.instance.subscribeToTopic('generalNotification');
+    configLocalNotification();
+    getNotification();
   }
 
   getToken() async {
