@@ -55,10 +55,12 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     var showFilteredUsers = [];
     if (athleteNameController.text != '') {
       for (var user in allUsers) {
-        var name = UserModel.fromSnapshot(user).name.toLowerCase();
-
-        if (name.contains(athleteNameController.text.toLowerCase())) {
-          showFilteredUsers.add(user);
+        bool userInfo = UserModel.fromSnapshot(user).introSeen;
+        if (userInfo == true) {
+          var name = UserModel.fromSnapshot(user).name?.toLowerCase();
+          if (name.contains(athleteNameController.text.toLowerCase())) {
+            showFilteredUsers.add(user);
+          }
         }
       }
     } else {
@@ -223,6 +225,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(getFilteredUsers());
     return Scaffold(
       key: _scaffoldKey,
       appBar: MyAppBar(
