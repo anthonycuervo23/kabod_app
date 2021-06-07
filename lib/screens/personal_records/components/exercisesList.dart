@@ -8,6 +8,7 @@ import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
 class ExercisesList extends StatelessWidget {
   final List<Exercise> exercises;
   final Future fetch;
+
   ExercisesList({Key key, this.exercises, this.fetch}) : super(key: key);
 
   @override
@@ -16,6 +17,7 @@ class ExercisesList extends StatelessWidget {
         itemCount: exercises == null ? 0 : exercises.length,
         itemBuilder: (BuildContext context, int index) {
           return Card(
+              key: ValueKey(exercises[index].id),
               elevation: 0,
               color: kPrimaryColor,
               shape: RoundedRectangleBorder(

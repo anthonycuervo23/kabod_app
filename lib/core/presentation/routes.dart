@@ -7,7 +7,7 @@ import 'package:kabod_app/screens/calculator/calculator_screen.dart';
 import 'package:kabod_app/screens/chat/screens/home_chat.dart';
 import 'package:kabod_app/screens/classes/class_details_screen.dart';
 import 'package:kabod_app/screens/home/home_screen.dart';
-import 'package:kabod_app/screens/leaderboard/leaderboard_screen.dart';
+import 'package:kabod_app/screens/leaderboard/leaderboard_main.dart';
 import 'package:kabod_app/screens/leaderboard/picture_details_screen.dart';
 import 'package:kabod_app/screens/personal_records/result_editor_screen.dart';
 import 'package:kabod_app/screens/personal_records/pr_results_screen.dart';

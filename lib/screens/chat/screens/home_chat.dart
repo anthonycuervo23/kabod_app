@@ -1,10 +1,8 @@
-import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 //My imports
@@ -12,7 +10,6 @@ import 'package:kabod_app/core/presentation/constants.dart';
 import 'package:kabod_app/core/presentation/routes.dart';
 import 'package:kabod_app/core/repository/chat_repository.dart';
 import 'package:kabod_app/generated/l10n.dart';
-import 'package:kabod_app/main.dart';
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/chat/screens/chat_room.dart';
@@ -27,9 +24,6 @@ class HomeChatScreen extends StatefulWidget {
 
 class _HomeChatScreenState extends State<HomeChatScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   bool isSearching = false;
   String myName, myProfilePic, myUserId, myEmail;
   Stream chatRoomsStream;
@@ -61,10 +55,12 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     var showFilteredUsers = [];
     if (athleteNameController.text != '') {
       for (var user in allUsers) {
-        var name = UserModel.fromSnapshot(user).name.toLowerCase();
-
-        if (name.contains(athleteNameController.text.toLowerCase())) {
-          showFilteredUsers.add(user);
+        bool userInfo = UserModel.fromSnapshot(user).introSeen;
+        if (userInfo == true) {
+          var name = UserModel.fromSnapshot(user).name?.toLowerCase();
+          if (name.contains(athleteNameController.text.toLowerCase())) {
+            showFilteredUsers.add(user);
+          }
         }
       }
     } else {
@@ -111,6 +107,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
               shrinkWrap: true,
               itemBuilder: (context, index) {
                 QueryDocumentSnapshot ds = snapshot.data.docs[index];
+
                 return ChatRoomListTile(
                     ds.data()["lastMessage"], ds.id, myUserId);
               },
@@ -179,6 +176,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
   Widget searchUsersList() {
     return ListView.builder(
       itemCount: filteredUsers.length,
+      physics: new NeverScrollableScrollPhysics(),
       shrinkWrap: true,
       itemBuilder: (context, index) {
         QueryDocumentSnapshot ds = filteredUsers[index];
@@ -187,7 +185,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
         } else {
           return searchListUserTile(
               profileUrl: ds.data()["photo_url"],
-              name: ds.data()["name"],
+              name: ds.data()["name"] == null ? "" : ds.data()["name"],
               userId: ds.data()["user_id"],
               email: ds.data()['email']);
         }
@@ -205,68 +203,10 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
     getChatRooms();
   }
 
-  void configLocalNotification() {
-    var initializationSettingsAndroid =
-        new AndroidInitializationSettings('notification_image');
-    var initializationSettingsIOS =
-        new IOSInitializationSettings(requestAlertPermission: true);
-    var initializationSettings = new InitializationSettings(
-        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  }
-
-  Future<void> getNotification() async {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      //RemoteNotification notification = message.notification;
-      AndroidNotification android = message.notification?.android;
-      if (message.data != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          message.data.hashCode,
-          message.data['title'],
-          message.data['body'],
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              //      one that already exists in example app.
-              icon: 'launch_background',
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // notification = message.data;
-      AndroidNotification android = message.notification?.android;
-      if (message.data != null && android != null) {
-        flutterLocalNotificationsPlugin.show(
-          message.data.hashCode,
-          message.data['title'],
-          message.data['body'],
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              channel.id,
-              channel.name,
-              channel.description,
-              icon: '@drawable/notification_image',
-            ),
-          ),
-          payload: jsonEncode(message),
-        );
-      }
-    });
-  }
-
   @override
   void initState() {
     athleteNameController.addListener(_onSearchChanged);
     onScreenLoaded();
-    configLocalNotification();
-    getNotification();
-
-    // getToken();
     super.initState();
   }
 
@@ -285,6 +225,7 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print(getFilteredUsers());
     return Scaffold(
       key: _scaffoldKey,
       appBar: MyAppBar(
@@ -367,7 +308,9 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
 
 class ChatRoomListTile extends StatefulWidget {
   final String lastMessage, chatRoomId, myUsername;
-  ChatRoomListTile(this.lastMessage, this.chatRoomId, this.myUsername);
+
+  ChatRoomListTile(this.lastMessage, this.chatRoomId, this.myUsername)
+      : super(key: ValueKey(chatRoomId));
 
   @override
   _ChatRoomListTileState createState() => _ChatRoomListTileState();
@@ -377,24 +320,33 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
   String profilePicUrl = "", name = "", username = "";
 
   getThisUserInfo() async {
-    username =
+    String uname =
         widget.chatRoomId.replaceAll(widget.myUsername, "").replaceAll("_", "");
-    QuerySnapshot querySnapshot = await ChatRepository().getUserInfo(username);
-    name = "${querySnapshot.docs[0].data()["name"]}";
-    profilePicUrl = "${querySnapshot.docs[0].data()["photo_url"]}";
-
-    setState(() {});
+    if (uname != username) {
+      username = uname;
+      QuerySnapshot querySnapshot =
+          await ChatRepository().getUserInfo(username);
+      if (querySnapshot.docs.isNotEmpty) {
+        name = "${querySnapshot.docs[0].data()["name"]}";
+        profilePicUrl = "${querySnapshot.docs[0].data()["photo_url"]}";
+      } else {
+        name = "unknown";
+        profilePicUrl = null;
+      }
+      if (mounted) setState(() {});
+    }
   }
 
   @override
   void initState() {
-    getThisUserInfo();
     super.initState();
+    getThisUserInfo();
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onTap: () {
         Navigator.push(
             context,
@@ -407,15 +359,8 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: CachedNetworkImage(
-                imageUrl: profilePicUrl,
-                placeholder: (context, url) => CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
-                height: 55,
-                width: 55,
-              ),
-            ),
+                borderRadius: BorderRadius.circular(30),
+                child: checkUrl(profilePicUrl)),
             SizedBox(width: 12),
             Expanded(
               child: Column(
@@ -439,5 +384,28 @@ class _ChatRoomListTileState extends State<ChatRoomListTile> {
         ),
       ),
     );
+  }
+
+  Widget checkUrl(String url) {
+    try {
+      return CachedNetworkImage(
+        imageUrl: url,
+        placeholder: (context, url) => CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(kButtonColor)),
+        height: 60,
+        width: 60,
+      );
+    } catch (e) {
+      return CircleAvatar(
+          radius: MediaQuery.of(context).size.width * 0.08,
+          backgroundColor: Colors.grey[400].withOpacity(
+            0.4,
+          ),
+          child: FaIcon(
+            FontAwesomeIcons.user,
+            color: kWhiteTextColor,
+            size: MediaQuery.of(context).size.width * 0.1,
+          ));
+    }
   }
 }

@@ -1,27 +1,30 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:kabod_app/generated/l10n.dart';
-import 'package:path/path.dart' as Path;
-import 'package:provider/provider.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/repository/intro_profile_repository.dart';
 
 //My imports
 import 'package:kabod_app/core/repository/results_repository.dart';
-import 'package:kabod_app/core/repository/intro_profile_repository.dart';
-import 'package:kabod_app/screens/results/components/add_results_form.dart';
-import 'package:kabod_app/core/presentation/constants.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/core/repository/user_repository.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
+import 'package:kabod_app/generated/l10n.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_button.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
+import 'package:kabod_app/screens/results/components/add_results_form.dart';
 import 'package:kabod_app/screens/wods/model/wod_model.dart';
+import 'package:path/path.dart' as Path;
+import 'package:provider/provider.dart';
 
 class AddResultsScreen extends StatefulWidget {
   final Wod currentWod;
+
   AddResultsScreen({this.currentWod});
+
   @override
   _AddResultsScreenState createState() => _AddResultsScreenState();
 }
@@ -134,55 +137,39 @@ class _AddResultsScreenState extends State<AddResultsScreen> {
         Provider.of<ResultRepository>(context, listen: false);
     UserRepository userRepository =
         Provider.of<UserRepository>(context, listen: false);
-    bool validated = _formKey.currentState.validate();
-    if (validated && _image != null) {
+
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      setState(() {
-        _processing = true;
-      });
-      String path =
-          '${'users'}/${userRepository.user.uid}/${'result_photos'}/${Path.basename(_image.path)}';
-      _uploadedFileURL =
-          await Provider.of<IntroRepository>(context, listen: false)
-              .uploadFile(path, _image);
       final data = Map<String, dynamic>.from(_formKey.currentState.value);
+      print('dateStamp: ${widget.currentWod.date.millisecondsSinceEpoch}');
+      setState(() => _processing = true);
+
+      if (_image != null) {
+        String path =
+            '${'users'}/${userRepository.user.uid}/${'result_photos'}/${Path.basename(_image.path)}';
+        _uploadedFileURL =
+            await Provider.of<IntroRepository>(context, listen: false)
+                .uploadFile(path, _image);
+        data['result_photo'] = _uploadedFileURL;
+      }
       data['time'] = stringFromDuration(initialTimer);
-      // data['result_date'] =
-      //     DateFormat('MMMM d, y').format(widget.currentWod.date);
-      data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
-      data['result_photo'] = _uploadedFileURL;
+
+      data['result_date'] = DateFormat('yyyy-MM-dd')
+          .parse(DateFormat("yyyy-MM-dd").format(widget.currentWod.date))
+          .millisecondsSinceEpoch;
       data['wod_name'] = widget.currentWod.title;
       data['reps'] = data['reps'] != null ? int.parse(data['reps']) : null;
       data['rounds'] =
           data['rounds'] != null ? int.parse(data['rounds']) : null;
+      data['userId'] = userRepository.user.uid;
       data['weight'] = data['weight'] ?? null;
       data['user_name'] = userRepository.userModel.name;
       data['user_photo'] = userRepository.userModel.photoUrl;
       data['gender'] = userRepository.userModel.gender;
       data['wod_type'] = widget.currentWod.type;
-      resultRepository.addResult(data, userRepository.user.uid);
-      Navigator.pop(context);
-    } else if (validated && _image == null) {
-      _formKey.currentState.save();
-      setState(() {
-        _processing = true;
-      });
-      final data = Map<String, dynamic>.from(_formKey.currentState.value);
-      data['time'] = stringFromDuration(initialTimer);
-      // data['result_date'] =
-      //     DateFormat('MMMM d, y').format(widget.currentWod.date);
-      data['result_date'] = widget.currentWod.date.millisecondsSinceEpoch;
-      data['reps'] = data['reps'] != null ? int.parse(data['reps']) : null;
-      data['rounds'] =
-          data['rounds'] != null ? int.parse(data['rounds']) : null;
-      data['weight'] = data['weight'] ?? null;
-      data['wod_name'] = widget.currentWod.title;
-      data['wod_type'] = widget.currentWod.type;
-      data['user_name'] = userRepository.userModel.name;
-      data['user_photo'] = userRepository.userModel.photoUrl;
-      data['gender'] = userRepository.userModel.gender;
-      resultRepository.addResult(data, userRepository.user.uid);
-      Navigator.pop(context);
+      print("datStamped  uploaded ${data['result_date']}");
+
+      resultRepository.addResult(data, () => Navigator.pop(context));
     }
   }
 

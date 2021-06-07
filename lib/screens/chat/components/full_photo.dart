@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:photo_view/photo_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 
 //My imports
 import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:photo_view/photo_view.dart';
 
 class FullPhoto extends StatelessWidget {
   final String url;
@@ -31,7 +31,7 @@ class FullPhotoScreen extends StatefulWidget {
   FullPhotoScreen({Key key, @required this.url}) : super(key: key);
 
   @override
-  State createState() => FullPhotoScreenState(url: url);
+  FullPhotoScreenState createState() => FullPhotoScreenState(url: url);
 }
 
 class FullPhotoScreenState extends State<FullPhotoScreen> {
@@ -46,7 +46,10 @@ class FullPhotoScreenState extends State<FullPhotoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: PhotoView(imageProvider: CachedNetworkImageProvider(url)));
+    print("url = $url");
+    return url != null
+        ? Container(
+            child: PhotoView(imageProvider: CachedNetworkImageProvider(url)))
+        : Container();
   }
 }

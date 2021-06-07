@@ -173,6 +173,7 @@ class ChatScreenState extends State<ChatScreen> {
                       child: TextButton(
                         child: Material(
                           child: CachedNetworkImage(
+                            imageUrl: document.data()['message'],
                             placeholder: (context, url) => Container(
                               child: CircularProgressIndicator(
                                 valueColor:
@@ -200,7 +201,6 @@ class ChatScreenState extends State<ChatScreen> {
                               ),
                               clipBehavior: Clip.hardEdge,
                             ),
-                            imageUrl: document.data()['message'],
                             width: 200.0,
                             height: 200.0,
                             fit: BoxFit.cover,
@@ -245,6 +245,7 @@ class ChatScreenState extends State<ChatScreen> {
                 isLastMessageLeft(index)
                     ? Material(
                         child: CachedNetworkImage(
+                          imageUrl: widget.profilePic,
                           placeholder: (context, url) => Container(
                             child: CircularProgressIndicator(
                               strokeWidth: 1.0,
@@ -255,7 +256,6 @@ class ChatScreenState extends State<ChatScreen> {
                             height: 35.0,
                             padding: EdgeInsets.all(10.0),
                           ),
-                          imageUrl: widget.profilePic,
                           width: 35.0,
                           height: 35.0,
                           fit: BoxFit.cover,
@@ -293,6 +293,7 @@ class ChatScreenState extends State<ChatScreen> {
                             child: TextButton(
                               child: Material(
                                 child: CachedNetworkImage(
+                                  imageUrl: document.data()['message'],
                                   placeholder: (context, url) => Container(
                                     child: CircularProgressIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
@@ -321,7 +322,6 @@ class ChatScreenState extends State<ChatScreen> {
                                     ),
                                     clipBehavior: Clip.hardEdge,
                                   ),
-                                  imageUrl: document.data()['message'],
                                   width: 200.0,
                                   height: 200.0,
                                   fit: BoxFit.cover,

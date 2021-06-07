@@ -1,27 +1,32 @@
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
+import 'package:kabod_app/core/model/main_screen_model.dart';
+import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/core/presentation/routes.dart';
+import 'package:kabod_app/core/repository/user_repository.dart';
+import 'package:kabod_app/core/utils/general_utils.dart';
 import 'package:kabod_app/generated/l10n.dart';
-import 'package:kabod_app/screens/commons/customUrlText.dart';
-import 'package:provider/provider.dart';
+import 'package:kabod_app/main.dart';
 
 // my imports
 import 'package:kabod_app/navigationDrawer/main_drawer.dart';
 import 'package:kabod_app/screens/classes/model/classes_model.dart';
-import 'package:kabod_app/core/utils/general_utils.dart';
-import 'package:kabod_app/core/repository/user_repository.dart';
-import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
-import 'package:kabod_app/core/model/main_screen_model.dart';
-import 'package:kabod_app/core/presentation/routes.dart';
-import 'package:kabod_app/screens/wods/model/wod_model.dart';
+import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/commons/customUrlText.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
-import 'package:kabod_app/screens/commons/appbar.dart';
+import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/screens/home/components/main_calendar.dart';
 import 'package:kabod_app/screens/home/components/popup_menu.dart';
-import 'package:kabod_app/core/presentation/constants.dart';
+import 'package:kabod_app/screens/personal_records/models/pr_model.dart';
+import 'package:kabod_app/screens/wods/model/wod_model.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -32,6 +37,75 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   DateTime today;
   DateTime firstDate;
+  List<Result> results = [];
+  final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  void configLocalNotification() {
+    var initializationSettingsAndroid =
+        new AndroidInitializationSettings('notification_image');
+    var initializationSettingsIOS =
+        new IOSInitializationSettings(requestAlertPermission: true);
+    var initializationSettings = new InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> getNotification() async {
+    FirebaseMessaging.instance
+        .getInitialMessage()
+        .then((RemoteMessage message) {
+      if (message != null) {
+        Navigator.pushNamed(context, AppRoutes.chatRoute);
+      }
+    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //RemoteNotification notification = message.notification;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              //      one that already exists in example app.
+              icon: 'launch_background',
+            ),
+          ),
+          payload: jsonEncode(message),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      // notification = message.data;
+      AndroidNotification android = message.notification?.android;
+      if (message.data != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+          message.data.hashCode,
+          message.data['title'],
+          message.data['body'],
+          NotificationDetails(
+            android: AndroidNotificationDetails(
+              channel.id,
+              channel.name,
+              channel.description,
+              icon: '@drawable/notification_image',
+            ),
+          ),
+          payload: jsonEncode(message),
+        );
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print('A new onMessageOpenedApp event was published!');
+      Navigator.pushNamed(context, AppRoutes.chatRoute);
+    });
+  }
 
   @override
   void initState() {
@@ -40,6 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
     firstDate = beginningOfDay(DateTime(today.year, today.month, 1));
     getToken();
     FirebaseMessaging.instance.subscribeToTopic('generalNotification');
+    configLocalNotification();
+    getNotification();
   }
 
   getToken() async {
@@ -307,8 +383,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .where(
             (element) => mainScreenModel.selectedDate.day == element.date.day)
         .toList();
-    if (Provider.of<UserRepository>(context, listen: false).userModel.admin ==
-        true) {
+    if (Provider.of<UserRepository>(context, listen: false).userModel.admin) {
       return Expanded(
         child: ListView.builder(
           shrinkWrap: true,
@@ -331,7 +406,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       trailing: Container(
                           width: 100,
                           height: 100,
-                          child: PopupWodMenu(currentWod: wod)),
+                          child: PopupWodMenu(
+                            currentWod: wod,
+                          )),
                     ),
                   ),
                   DividerSmall(),
