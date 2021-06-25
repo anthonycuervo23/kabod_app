@@ -23,11 +23,15 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>in order tu capture new picture</string>
+	<string>This let you take photos and update profile picture</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>in order to record sound video</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>in order to select an image from gallery</string>
+	<string>This let you share photos from your library</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
