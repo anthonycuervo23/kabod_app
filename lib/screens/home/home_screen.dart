@@ -119,7 +119,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   getToken() async {
-    String token = await FirebaseMessaging.instance.getToken().then((token) {
+    //String token =
+    await FirebaseMessaging.instance.getToken().then((token) {
       print('token: $token');
       FirebaseFirestore.instance
           .collection('users')

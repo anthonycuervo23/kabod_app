@@ -45,7 +45,7 @@ void main() {
     expect(find.byType(ListTile), findsNWidgets(2));
     expect(find.text('squat'), findsNWidgets(1));
     expect(find.text('run'), findsNWidgets(1));
-    Finder textFinder = find.text('squat');
+    //Finder textFinder = find.text('squat');
     // await tester.tap(textFinder);
     // await tester.pump();
     // expect(find.byType(ResultsScreen), findsOneWidget);

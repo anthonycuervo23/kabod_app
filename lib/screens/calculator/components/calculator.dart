@@ -56,6 +56,7 @@ class Calculator {
       case "Wathen":
         return 100 * weight / (48.8 + 53.8 * pow(e, -0.075 * reps));
     }
+    return null;
   }
 
   static double _estimateWeight(double rm, int reps, String formula) {
@@ -73,6 +74,7 @@ class Calculator {
       case "Wathen":
         return rm * (48.8 + 53.8 * pow(e, -0.075 * reps)) / 100;
     }
+    return null;
   }
 
   static List _platesOnBar = [];

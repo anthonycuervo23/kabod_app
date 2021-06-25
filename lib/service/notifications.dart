@@ -54,7 +54,7 @@ void requestIOSPermissions(
       );
 }
 
-Future<void> removeNotification(
+void removeNotification(
     {notifs.FlutterLocalNotificationsPlugin notifsPlugin, int notificationId}) {
   notifsPlugin.cancel(notificationId);
 }

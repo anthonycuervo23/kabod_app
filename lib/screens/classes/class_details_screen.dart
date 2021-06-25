@@ -190,11 +190,11 @@ class _ClassDetailScreenState extends State<ClassDetailScreen> {
     final DateTime userSubscribedToClass =
         _userSubscribedToClass(userRepository.user.uid);
     if (!userSubscribed &&
-        widget.currentClass.classAthletes[keys[widget.index]].length <= 10) {
+        widget.currentClass.classAthletes[keys[widget.index]].length <= 12) {
       return Visibility(
         visible: widget.listOfHours[widget.index].isBefore(DateTime.now()) ||
                 widget.currentClass.classAthletes[keys[widget.index]].length >=
-                    10
+                    12
             ? false
             : true,
         child: ReusableButton(
