@@ -542,8 +542,8 @@ class ChatScreenState extends State<ChatScreen> {
     String fileName = DateTime.now().millisecondsSinceEpoch.toString();
     Reference reference = FirebaseStorage.instance.ref().child(fileName);
     TaskSnapshot uploadTask = await reference.putFile(imageFile);
-    var storageTaskSnapshot =
-        await uploadTask.ref.getDownloadURL().then((downloadUrl) {
+    // var storageTaskSnapshot =
+    await uploadTask.ref.getDownloadURL().then((downloadUrl) {
       imageUrl = downloadUrl;
       setState(() {
         isLoading = false;

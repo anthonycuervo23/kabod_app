@@ -56,6 +56,8 @@ double doubleFromString(String s) {
 String formatName(String fullName) {
   bool appendLastName = false;
 
+  fullName = fullName.trimRight();
+
   List<String> tempList = fullName.split(" ");
 
   int start = 0;
