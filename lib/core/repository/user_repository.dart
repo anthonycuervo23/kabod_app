@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:device_info/device_info.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 
@@ -7,6 +9,9 @@ import 'package:flutter/foundation.dart';
 import 'package:kabod_app/screens/auth/model/user_model.dart';
 import 'package:kabod_app/screens/chat/helpers/sharedPreferences_helper.dart';
 import 'package:kabod_app/service/sharedPreferences.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:kabod_app/screens/auth/model/device_model.dart';
+import 'package:kabod_app/core/repository/user_db_service.dart';
 
 enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
@@ -17,6 +22,7 @@ class UserRepository extends ChangeNotifier {
   String _error;
   StreamSubscription _userListener;
   UserModel _fsUser;
+  Device currentDevice;
   bool _loading;
   FirebaseFirestore _db = FirebaseFirestore.instance;
 
@@ -102,12 +108,16 @@ class UserRepository extends ChangeNotifier {
 
   Future<void> _saveUserRecord() async {
     if (_user == null) return;
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String buildNumber = packageInfo.buildNumber;
+    String version = packageInfo.version;
     UserModel user = UserModel(
       email: _user.email,
       name: _user.displayName,
       admin: false,
       photoUrl: _user.photoURL,
       id: _user.uid,
+      currentVersion: "$version+$buildNumber",
       registrationDate: DateTime.now().toUtc(),
       lastLoggedIn: DateTime.now().toUtc(),
       introSeen: false,
@@ -119,10 +129,72 @@ class UserRepository extends ChangeNotifier {
     if ((await userDB.get()).exists) {
       await userDB.update({
         'last_logged_in': FieldValue.serverTimestamp(),
+        'currentVersion': "$version+$buildNumber",
       });
     } else {
       await userDB.set(user.toMap());
     }
+    _saveDevice(user);
+  }
+
+  Future<void> _saveDevice(UserModel user) async {
+    DeviceInfoPlugin devicePlugin = DeviceInfoPlugin();
+    String deviceId;
+    DeviceDetails deviceDescription;
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo deviceInfo = await devicePlugin.androidInfo;
+      deviceId = deviceInfo.androidId;
+      deviceDescription = DeviceDetails(
+        device: deviceInfo.device,
+        model: deviceInfo.model,
+        osVersion: deviceInfo.version.sdkInt.toString(),
+        platform: 'android',
+      );
+    }
+    if (Platform.isIOS) {
+      IosDeviceInfo deviceInfo = await devicePlugin.iosInfo;
+      deviceId = deviceInfo.identifierForVendor;
+      deviceDescription = DeviceDetails(
+        osVersion: deviceInfo.systemVersion,
+        device: deviceInfo.name,
+        model: deviceInfo.utsname.machine,
+        platform: 'ios',
+      );
+    }
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    String buildNumber = packageInfo.buildNumber;
+    String version = packageInfo.version;
+    String currentVersion = "$version+$buildNumber";
+    final nowMS = DateTime.now().toUtc().millisecondsSinceEpoch;
+    final userDB = _db.collection('users').doc(_user.uid);
+    if (user.currentVersion != currentVersion) {
+      await userDB.update({
+        'last_logged_in': FieldValue.serverTimestamp(),
+        'currentVersion': "$version+$buildNumber",
+      });
+    }
+    userDeviceDBS.collection = "users/${user.id}/devices";
+    Device existing = await userDeviceDBS.getSingle(deviceId);
+    if (existing != null) {
+      await userDeviceDBS.updateData(deviceId, {
+        'last_updated_at': nowMS,
+        'expired': false,
+        'uninstalled': false,
+      });
+      currentDevice = existing;
+    } else {
+      Device device = Device(
+        createdAt: DateTime.now().toUtc(),
+        deviceInfo: deviceDescription,
+        expired: false,
+        id: deviceId,
+        lastUpdatedAt: nowMS,
+        uninstalled: false,
+      );
+      await userDeviceDBS.create(device.toMap(), id: deviceId);
+      currentDevice = device;
+    }
+    notifyListeners();
   }
 
   @override

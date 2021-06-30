@@ -13,6 +13,7 @@ class UserModel {
   DateTime birthDate;
   bool introSeen;
   int totalClasses;
+  String currentVersion;
 
   UserModel(
       {this.id,
@@ -25,6 +26,7 @@ class UserModel {
       this.lastLoggedIn,
       this.registrationDate,
       this.photoUrl,
+      this.currentVersion,
       this.totalClasses,
       this.introSeen});
 
@@ -39,6 +41,7 @@ class UserModel {
     lastLoggedIn = data['last_logged_in']?.toDate();
     registrationDate = data['registration_date']?.toDate();
     photoUrl = data['photo_url'];
+    currentVersion = data['currentVersion'];
     totalClasses = data['totalClasses'];
     introSeen = data['intro_seen'];
   }
@@ -54,6 +57,7 @@ class UserModel {
     lastLoggedIn = snapshot['last_logged_in']?.toDate();
     registrationDate = snapshot['registration_date']?.toDate();
     photoUrl = snapshot['photo_url'];
+    currentVersion = snapshot['currentVersion'];
     totalClasses = snapshot['totalClasses'];
     introSeen = snapshot['intro_seen'];
   }
@@ -70,6 +74,7 @@ class UserModel {
     data['last_logged_in'] = lastLoggedIn;
     data['registration_date'] = registrationDate;
     data['photo_url'] = photoUrl;
+    data['currentVersion'] = currentVersion;
     data['totalClasses'] = totalClasses;
     data['intro_seen'] = introSeen;
     return data;

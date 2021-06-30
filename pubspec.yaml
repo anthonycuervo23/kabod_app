@@ -6,7 +6,7 @@ description: A new Flutter application.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
-version: 1.0.5+6
+version: 1.0.6+7
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -47,6 +47,9 @@ dependencies:
   firebase_in_app_messaging: ^0.5.0+5
   quiver: ^3.0.1
   rxdart:
+  package_info_plus: ^1.0.3
+  device_info: ^2.0.2
+  firebase_helpers:
 
 
 dev_dependencies:
