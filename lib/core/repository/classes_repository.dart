@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:quiver/iterables.dart';
+import 'package:rxdart/rxdart.dart';
 
 //My imports
 import 'package:kabod_app/screens/auth/model/user_model.dart';
@@ -34,19 +35,39 @@ class ClassesRepository {
     return await _firestore.collection('classes').doc(id).update(data);
   }
 
-  Stream<List<UserModel>> getListOfUsers({@required List<dynamic> listUid}) {
-    var ref = _firestore.collection('users');
-    if (listUid.isNotEmpty)
-      return ref
-          .where('user_id', whereIn: listUid)
+  Stream<List<UserModel>> getListOfUsers({List<dynamic> listUid}) {
+    if (listUid.isNotEmpty) {
+      final memberChunks = partition(listUid, 10);
+      List<Stream<List<UserModel>>> streams = [];
+      memberChunks.forEach((chunk) => streams.add(_firestore
+          .collection('users')
+          .where('user_id', whereIn: chunk)
           .snapshots()
-          .map((QuerySnapshot snapshot) {
-        return snapshot.docs
-            .map(
-              (document) => UserModel.fromMap(document.id, document.data()),
-            )
-            .toList();
-      });
+          .map((snapshot) => snapshot.docs
+              .map(
+                  (document) => UserModel.fromMap(document.id, document.data()))
+              .toList())));
+      if (streams.length == 1) {
+        return ZipStream(streams, (values) => values.first);
+      }
+      return ZipStream.zip2(streams[0], streams[1], (a, b) => a + b);
+    }
     return null;
   }
+
+  // Stream<List<UserModel>> getListOfUsers({@required List<dynamic> listUid}) {
+  //   var ref = _firestore.collection('users');
+  //   if (listUid.isNotEmpty)
+  //     return ref
+  //         .where('user_id', whereIn: listUid)
+  //         .snapshots()
+  //         .map((QuerySnapshot snapshot) {
+  //       return snapshot.docs
+  //           .map(
+  //             (document) => UserModel.fromMap(document.id, document.data()),
+  //           )
+  //           .toList();
+  //     });
+  //   return null;
+  // }
 }

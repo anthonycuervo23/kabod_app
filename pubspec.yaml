@@ -45,6 +45,8 @@ dependencies:
   table_calendar: ^2.3.3
   url_launcher: ^6.0.4
   firebase_in_app_messaging: ^0.5.0+5
+  quiver: ^3.0.1
+  rxdart:
 
 
 dev_dependencies:
