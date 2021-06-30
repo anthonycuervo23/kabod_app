@@ -224,6 +224,8 @@ PODS:
     - Firebase/Firestore (= 8.0.0)
     - firebase_core
     - Flutter
+  - device_info (0.0.1):
+    - Flutter
   - Firebase/Auth (8.0.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 8.0.0)
@@ -377,6 +379,8 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - package_info_plus (0.4.5):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - PromisesObjC (1.2.12)
@@ -395,6 +399,7 @@ PODS:
 DEPENDENCIES:
   - audioplayers (from `.symlinks/plugins/audioplayers/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_in_app_messaging (from `.symlinks/plugins/firebase_in_app_messaging/ios`)
@@ -406,6 +411,7 @@ DEPENDENCIES:
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - image_cropper (from `.symlinks/plugins/image_cropper/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
+  - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - screen (from `.symlinks/plugins/screen/ios`)
   - shared_preferences (from `.symlinks/plugins/shared_preferences/ios`)
@@ -443,6 +449,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/audioplayers/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -465,6 +473,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/image_cropper/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
+  package_info_plus:
+    :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   screen:
@@ -481,6 +491,7 @@ SPEC CHECKSUMS:
   audioplayers: 455322b54050b30ea4b1af7cd9e9d105f74efa8c
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 5b07886d6bbe570c7904fe2541eb2c8802d70c83
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
   Firebase: 73c3e3b216ec1ecbc54d2ffdd4670c65c749edb1
   firebase_auth: df06751eb6e66686f6f2af4f2d36c9c381b26ed0
   firebase_core: a9b69f8583dc992f1b15f376b4918537c1804bb4
@@ -510,6 +521,7 @@ SPEC CHECKSUMS:
   image_picker: 50e7c7ff960e5f58faa4d1f4af84a771c671bc4a
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   screen: abd91ca7bf3426e1cc3646d27e9b2358d6bf07b0
