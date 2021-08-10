@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId "com.jeancuervo.kabod_app"
-        minSdkVersion 16
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

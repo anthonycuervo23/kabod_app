@@ -31,7 +31,7 @@ class UserModel {
       this.introSeen});
 
   UserModel.fromMap(String id, Map<String, dynamic> data) {
-    id = id;
+    this.id = id;
     name = data['name'];
     admin = data['admin'];
     phone = data['phone'];

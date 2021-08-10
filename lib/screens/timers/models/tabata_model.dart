@@ -156,7 +156,7 @@ class Workout {
     if (_settings.silentMode) {
       return Future.value();
     }
-    return player.play(sound);
+    // return player.play(sound);
   }
 
   _startRest() {
