@@ -43,7 +43,7 @@ class _WodCalendarState extends State<WodCalendar> {
       locale: Localizations.localeOf(context).languageCode,
       headerVisible: true,
       headerStyle: HeaderStyle(
-          titleTextStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
+          titleTextStyle: TextStyle(fontSize: 20, color: kWhiteTextColor),
           titleTextBuilder: (date, locale) =>
               DateFormat.MMMM(locale).format(date),
           formatButtonVisible: false,
@@ -54,10 +54,10 @@ class _WodCalendarState extends State<WodCalendar> {
       calendarStyle: CalendarStyle(
         markersMaxAmount: 1,
         markersColor: kButtonColor,
-        eventDayStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
-        contentPadding: EdgeInsets.only(top: 20),
-        weekdayStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
-        weekendStyle: TextStyle(fontSize: 26, color: kWhiteTextColor),
+        eventDayStyle: TextStyle(fontSize: 20, color: kWhiteTextColor),
+        contentPadding: EdgeInsets.only(top: 10),
+        weekdayStyle: TextStyle(fontSize: 20, color: kWhiteTextColor),
+        weekendStyle: TextStyle(fontSize: 20, color: kWhiteTextColor),
       ),
       daysOfWeekStyle: DaysOfWeekStyle(
         weekendStyle: TextStyle(color: kTextColor),

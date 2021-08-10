@@ -21,6 +21,7 @@ import 'package:kabod_app/screens/commons/appbar.dart';
 import 'package:kabod_app/screens/commons/customUrlText.dart';
 import 'package:kabod_app/screens/commons/dividers.dart';
 import 'package:kabod_app/screens/commons/reusable_card.dart';
+import 'package:kabod_app/screens/home/components/Story.dart';
 import 'package:kabod_app/screens/home/components/calendar_wod_message.dart';
 import 'package:kabod_app/screens/home/components/main_calendar.dart';
 import 'package:kabod_app/screens/home/components/popup_menu.dart';
@@ -142,20 +143,23 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
           key: _scaffoldKey,
           appBar: PreferredSize(
-            preferredSize: Size.fromHeight(size.height * 0.42),
+            preferredSize: Size.fromHeight(size.height * 0.50),
             child: MyAppBar(
               scaffoldKey: _scaffoldKey,
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 title: Padding(
-                  padding: const EdgeInsets.all(kDefaultPadding),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: kDefaultPadding),
                   child: Center(
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         DividerBig(),
                         DividerBig(),
+                        DividerSmall(),
+                        //username
                         Text(
                             userRepository.userModel?.gender == 'Femenino'
                                 ? S.of(context).welcomeUserWoman(formatName(
@@ -165,7 +169,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(color: kTextColor)),
-                        DividerBig(),
+                        //stories
+                        Container(
+                          height: 55,
+                          width: size.width,
+                          child: Story(userId: userRepository?.userModel?.id),
+                        ),
+                        DividerSmall(),
                         WodCalendar(),
                         DividerSmall(),
                       ],

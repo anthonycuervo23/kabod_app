@@ -29,7 +29,7 @@ class AudioSelectListItem extends StatelessWidget {
       trailing: IconButton(
         icon: Icon(Icons.play_circle_outline, color: kButtonColor),
         onPressed: () {
-          player.play(value);
+          // player.play(value);
         },
       ),
       title: Text(title, style: kTimerInputStyle),
