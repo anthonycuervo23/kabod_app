@@ -1,6 +1,5 @@
 import 'dart:convert';
-import 'package:audioplayers/audioplayers.dart';
-//import 'package:audioplayers/audio_cache.dart';
+import 'package:audioplayers/audio_cache.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var player = AudioCache(prefix: 'assets/sounds/');

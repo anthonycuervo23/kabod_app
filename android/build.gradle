@@ -1,4 +1,5 @@
 buildscript {
+    ext.flutterFFmpegPackage = 'video-lts'
     ext.kotlin_version = '1.5.10'
     repositories {
         google()
