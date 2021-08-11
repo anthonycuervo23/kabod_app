@@ -54,14 +54,15 @@ class _Story extends State<Story> {
         stream: _loadUserStories(userId, storiesQuery.snapshots()),
         builder: (context, AsyncSnapshot<Iterable<UserStories>> snapshot) {
           if (snapshot.hasData) userStories = snapshot.data.toList();
-          print("Stories " + myStories?.toMap().toString());
+          //print("Stories " + myStories?.toMap().toString());
           return Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 5),
                 child: GestureDetector(
                   onTap: () async {
-                    if (await Permission.camera.isGranted || await Permission.camera.request().isGranted){
+                    if (await Permission.camera.isGranted ||
+                        await Permission.camera.request().isGranted) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -119,51 +120,57 @@ class _Story extends State<Story> {
                   ),
                 ),
               ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: userStories.length,
+              Expanded(
+                child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final user = userStories[index];
-                    bool isNewStoryAvail = !user
-                        .stories[user.stories.length - 1].viewed
-                        .contains(userId);
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => StoryViewer(
-                                    userStories: userStories,
-                                    initialPage: index)));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(60),
-                              border: Border.all(
-                                  width: 2,
-                                  color: isNewStoryAvail
-                                      ? kButtonColor
-                                      : Colors.transparent)),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(60),
-                            child: userStories[index].profilePicURL != null
-                                ? CachedNetworkImage(
-                                    imageUrl: userStories[index].profilePicURL,
-                                    placeholder: (context, url) =>
-                                        CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    kButtonColor)))
-                                : Image.asset(
-                                    'assets/images/profile_image.jpg'),
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: userStories.length,
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) {
+                        final user = userStories[index];
+                        bool isNewStoryAvail = !user
+                            .stories[user.stories.length - 1].viewed
+                            .contains(userId);
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => StoryViewer(
+                                        userStories: userStories,
+                                        initialPage: index)));
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 5),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(60),
+                                  border: Border.all(
+                                      width: 2,
+                                      color: isNewStoryAvail
+                                          ? kButtonColor
+                                          : Colors.transparent)),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(60),
+                                child: userStories[index].profilePicURL != null
+                                    ? CachedNetworkImage(
+                                        imageUrl:
+                                            userStories[index].profilePicURL,
+                                        placeholder: (context, url) =>
+                                            CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(kButtonColor)))
+                                    : Image.asset(
+                                        'assets/images/profile_image.jpg'),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    );
-                  }),
+                        );
+                      }),
+                ),
+              ),
             ],
           );
         });
