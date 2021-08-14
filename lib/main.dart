@@ -145,12 +145,13 @@ class MyApp extends StatelessWidget {
               selectedDate: DateTime.now(),
               wodStream: _wodsStream,
               classesStream: _classesStream);
-        }),
+        },),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),
         Provider<ClassesRepository>(
             create: (_) => ClassesRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<ResultRepository>(
+
             create: (_) => ResultRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<DrawerStateInfo>(
             create: (_) => DrawerStateInfo()),
