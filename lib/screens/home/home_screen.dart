@@ -285,7 +285,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .where((element) =>
             mainScreenModel.selectedDate.day == element.classDate.day)
         .toList();
-
     if (selectedClasses.length < 1) {
       return Center(
           child: Text(
