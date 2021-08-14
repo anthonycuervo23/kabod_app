@@ -123,35 +123,37 @@ class MyApp extends StatelessWidget {
             create: (_) => IntroRepository(
                 FirebaseFirestore.instance, FirebaseStorage.instance)),
         ChangeNotifierProvider(create: (_) => UserRepository.instance()),
-        ChangeNotifierProvider(create: (_) {
-          DateTime today = DateTime.now();
-          // final firstDayOfTheWeek = today
-          //     .subtract(Duration(days: today.weekday))
-          //     .millisecondsSinceEpoch;
-          final lastDayOfTheWeek = today
-              .add(Duration(days: 7 - today.weekday))
-              .millisecondsSinceEpoch;
-          final DateTime firstDate =
-              beginningOfDay(DateTime(today.year, today.month, 1));
-          DateTime lastDate = endOfDay(lastDayOfMonth(today));
-          Stream<List<Classes>> _classesStream =
-              ClassesRepository(FirebaseFirestore.instance).getClassesOfTheDay(
-                  firstDate.millisecondsSinceEpoch, lastDayOfTheWeek);
-          Stream<List<Wod>> _wodsStream =
-              WodRepository(FirebaseFirestore.instance).getWods(
-                  firstDate.millisecondsSinceEpoch,
-                  lastDate.millisecondsSinceEpoch);
-          return MainScreenModel(
-              selectedDate: DateTime.now(),
-              wodStream: _wodsStream,
-              classesStream: _classesStream);
-        },),
+        ChangeNotifierProvider(
+          create: (_) {
+            DateTime today = DateTime.now();
+            // final firstDayOfTheWeek = today
+            //     .subtract(Duration(days: today.weekday))
+            //     .millisecondsSinceEpoch;
+            final lastDayOfTheWeek = today
+                .add(Duration(days: 7 - today.weekday))
+                .millisecondsSinceEpoch;
+            final DateTime firstDate =
+                beginningOfDay(DateTime(today.year, today.month, 1));
+            DateTime lastDate = endOfDay(lastDayOfMonth(today));
+            Stream<List<Classes>> _classesStream =
+                ClassesRepository(FirebaseFirestore.instance)
+                    .getClassesOfTheDay(
+                        firstDate.millisecondsSinceEpoch, lastDayOfTheWeek);
+            Stream<List<Wod>> _wodsStream =
+                WodRepository(FirebaseFirestore.instance).getWods(
+                    firstDate.millisecondsSinceEpoch,
+                    lastDate.millisecondsSinceEpoch);
+            return MainScreenModel(
+                selectedDate: DateTime.now(),
+                wodStream: _wodsStream,
+                classesStream: _classesStream);
+          },
+        ),
         Provider<WodRepository>(
             create: (_) => WodRepository(FirebaseFirestore.instance)),
         Provider<ClassesRepository>(
             create: (_) => ClassesRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<ResultRepository>(
-
             create: (_) => ResultRepository(FirebaseFirestore.instance)),
         ChangeNotifierProvider<DrawerStateInfo>(
             create: (_) => DrawerStateInfo()),
