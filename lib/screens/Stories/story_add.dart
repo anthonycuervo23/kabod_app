@@ -48,7 +48,8 @@ class _AddStory extends State<AddStory> {
               onPressed: !widget.shareButtonEnable
                   ? null
                   : () async {
-                      File file = await widget.getFile();
+                File file = await widget.getFile();
+                file.readAsBytes();
                       if (file != null && file.existsSync()) {
                         setState(() {
                           isLoading = true;

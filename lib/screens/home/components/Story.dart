@@ -61,8 +61,12 @@ class _Story extends State<Story> {
                 padding: const EdgeInsets.only(right: 5),
                 child: GestureDetector(
                   onTap: () async {
-                    if (await Permission.camera.isGranted ||
-                        await Permission.camera.request().isGranted) {
+                    if (
+                    await Permission.camera.isDenied
+                     //   await Permission.camera.request().isGranted
+                    ) {
+                      Permission.camera.request();
+                    }
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -74,7 +78,7 @@ class _Story extends State<Story> {
                                       userId: userId))).then((value) {
                         if (value == null || value == true) setState(() {});
                       });
-                    }
+
                   },
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 10),

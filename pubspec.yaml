@@ -5,7 +5,7 @@ description: A new Flutter application.
 # pub.dev using `pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-#last ios version: 1.0.21
+#last ios version: 1.0.22
 version: 1.1.1+9
 
 environment:
@@ -59,6 +59,7 @@ dependencies:
   video_trimmer: ^0.5.4
   story_view: ^0.13.1
   video_player: ^2.1.12
+  ext_storage: ^1.0.3
 
 
 dev_dependencies:

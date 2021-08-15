@@ -26,7 +26,7 @@ class _ImageStoryEditor extends State<ImageStoryEditor> {
 
   bool isFileUploading = false;
 
-  // ActiceItem
+  // ActiveItem
   EditableItem _activeItem;
 
   // item initial position
@@ -96,7 +96,7 @@ class _ImageStoryEditor extends State<ImageStoryEditor> {
 
   @override
   void dispose() {
-    print("file Path "+ widget.filePath);
+    //print("file Path: "+ widget.filePath);
     File(widget.filePath)?.deleteSync();
     super.dispose();
   }
@@ -108,12 +108,12 @@ class _ImageStoryEditor extends State<ImageStoryEditor> {
     RenderRepaintBoundary boundary =
         previewContainer.currentContext.findRenderObject();
     ui.Image image = await boundary.toImage();
-    final directory = (await getApplicationDocumentsDirectory()).path;
+    final directory = (await getApplicationSupportDirectory()).path;
     ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
     Uint8List pngBytes = byteData.buffer.asUint8List();
+    File imgFile = new File('$directory/' + DateTime.now().toString() + '.png');
 
-    File imgFile = new File('$directory' + DateTime.now().toString() + '.png');
-    print("file path " + imgFile.path);
+    print("file path ====> " + imgFile.path);
     return await imgFile.writeAsBytes(pngBytes);
   }
 
