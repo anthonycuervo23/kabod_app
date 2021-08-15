@@ -25,7 +25,6 @@ class _StoryCreateState extends State<StoryCreate> {
   Timer timer;
   bool timerVisibility = false;
 
-
   void onNewCameraSelected(List<CameraDescription> cameraDescription) async {
     if (controller != null) {
       await controller.dispose();

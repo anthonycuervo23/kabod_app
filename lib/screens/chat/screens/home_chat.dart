@@ -141,9 +141,17 @@ class _HomeChatScreenState extends State<HomeChatScreen> {
               child: checkUrl(profileUrl),
             ),
             SizedBox(width: 12),
-            Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [Text(name), Text(email)])
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name),
+                    Text(
+                      email,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ]),
+            )
           ],
         ),
       ),

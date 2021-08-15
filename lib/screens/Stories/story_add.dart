@@ -57,7 +57,10 @@ class _AddStory extends State<AddStory> {
                         uploadFile(file, userRepository?.userModel);
                       }
                     },
-               child: Text("Done",style: TextStyle(fontWeight: FontWeight.bold),))
+              child: Text(
+                "Done",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ))
         ],
       ),
       body: Column(

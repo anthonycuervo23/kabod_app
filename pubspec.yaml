@@ -59,7 +59,6 @@ dependencies:
   video_trimmer: ^0.5.4
   story_view: ^0.13.1
   video_player: ^2.1.12
-  ext_storage: ^1.0.3
 
 
 dev_dependencies:
