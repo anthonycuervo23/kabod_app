@@ -165,15 +165,16 @@ class _StoryCreateState extends State<StoryCreate> {
                                               filePath: value.paths[0],
                                             )));
                               } else if (value.files.first.extension == "mp4" ||
-                                  value.files.first.extension == "mkv") {
+                                  value.files.first.extension == "mkv" || value.files.first.extension == 'mov') {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (_) => VideoStoryEditor(
                                             File(value.paths[0]))));
                               } else {
+                                print('error =====> ${value.files.first.extension}');
                                 final snackBar = SnackBar(
-                                    content: Text('File format not supported'));
+                                    content: Text(value.files.first.extension));
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   snackBar,
                                 );
