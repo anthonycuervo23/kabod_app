@@ -55,19 +55,19 @@ class ClassesRepository {
     return null;
   }
 
-  // Stream<List<UserModel>> getListOfUsers({@required List<dynamic> listUid}) {
-  //   var ref = _firestore.collection('users');
-  //   if (listUid.isNotEmpty)
-  //     return ref
-  //         .where('user_id', whereIn: listUid)
-  //         .snapshots()
-  //         .map((QuerySnapshot snapshot) {
-  //       return snapshot.docs
-  //           .map(
-  //             (document) => UserModel.fromMap(document.id, document.data()),
-  //           )
-  //           .toList();
-  //     });
-  //   return null;
-  // }
+  Future<List<UserModel>> getUserDetailsById(List ids) async {
+    try {
+      List<UserModel> users = [];
+      for (var id in ids) {
+        print(id);
+        final DocumentSnapshot documentSnapshot =
+            await _firestore.collection('users').doc(id).get();
+        users.add(UserModel.fromMap(id, documentSnapshot.data()));
+      }
+      return users;
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
 }
